@@ -18,7 +18,7 @@ class UsersController < ApplicationController
 			session[:user_id] = @user.id
 			redirect_to mains_index_path
 		else
-			flash[:notice] = "Your email or password not correctly"
+			flash[:alert] = "Your email or password not correctly"
 			redirect_to users_sign_in_path
 
 		end
@@ -37,6 +37,7 @@ class UsersController < ApplicationController
 			flash[:notice] = "Your Sign Up was successfully"
 			redirect_to mains_index_path
 		else
+			flash[:alert] = "Your Sign Up has failed, please try again"
 			render 'new'
 		end
 

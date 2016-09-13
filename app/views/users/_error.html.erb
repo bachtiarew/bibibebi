@@ -1,12 +1,16 @@
 <!-- partial error message page -->
-
 <% if @user.errors.any? %>
-<h2>Warning!!</h2>
-<h3><%= pluralize(@user.errors.count, "error") %> happened, read below </h3>
-<ul>
-	<% @user.errors.full_messages.each do |msg| %>
-		<li><%= msg %></li>
-	<% end %>
-</ul>
-<hr>
+<div class="panel panel-default">
+	<div class="panel-heading">
+	Warning !! <%= pluralize(@user.errors.count, "error") %> happened, read below 
+	</div>
+
+	<div class="panel-body">
+		<ul>
+		<% @user.errors.full_messages.each do |msg| %>
+			<li><%= msg %></li>
+		<% end %>
+		</ul>
+	</div>
+</div>
 <% end %>

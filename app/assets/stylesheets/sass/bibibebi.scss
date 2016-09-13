@@ -1,2 +1,14 @@
 @import 'modules/users';
 @import 'modules/babysitters';
+
+$font-title : helvetica,sans-serif;
+$font-notice : segoe ui;
+
+.alert{
+	font-size: 14px;
+	font-family: $font-notice;
+}
+
+.nav{
+	padding-right:20px;
+}
