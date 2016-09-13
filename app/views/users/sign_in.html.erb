@@ -1,0 +1,11 @@
+<%= render 'error' %>
+<h1>Sign In</h1>
+	<%= form_for :users, url: users_login_path do |f| %>
+	<%= f.email_field :email, placeholder: "Your Email address" %><br>
+	<%= f.password_field :password, placeholder: "Password" %><br>
+	<%= f.submit "Sign In" %>
+<% end %>
+
+<%= link_to "haven't account", new_user_path %>
+<%= link_to "Back_to_homepage", root_path %>
+<%= link_to "Forget Password" %>

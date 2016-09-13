@@ -1,0 +1,15 @@
+<%= render "error" %>
+<h1>Sign Up</h1>
+<%= form_for :users, url: users_path do |f| %>
+	<%= f.text_field :firstname, placeholder: "FirstName" %><br>
+	<%= f.text_field :lastname, placeholder: "Lastname" %><br>
+	<%= f.text_field :bornplace, placeholder: "Place your born" %><br>
+	<%= f.date_field :borndate, placeholder: "Your born day" %><br>
+	<%= f.text_area :address %><br><br>
+	<%= f.email_field :email, placeholder: "Your Email address" %><br>
+	<%= f.password_field :password, placeholder: "Password" %><br>
+	<%= f.password_field :password_confirmation, placeholder: "Password Confirmation" %><br>
+	<%= f.submit "Register" %>
+<% end %>
+<%= link_to "Sign In" , users_sign_in_path %>
+<%= link_to "Back to homepage", root_path %>
