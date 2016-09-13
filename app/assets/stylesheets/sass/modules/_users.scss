@@ -1,0 +1,15 @@
+$font-stack: segoe ui,sans-serif;
+
+.users {
+
+  .panel{
+    width: 500px;
+    margin: auto;
+  }
+  .panel-heading {
+    font-family: $font-stack;
+    color: "#000";
+    font-size: 32px;
+  }
+
+}

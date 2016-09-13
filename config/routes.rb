@@ -4,11 +4,9 @@ Rails.application.routes.draw do
   get "users/logout"
   post "users/login"
   resources :users
-  resources :mains do
-    resources :babysitters
-  end
+  resources :babysitters
   root "homepages#index"
-  
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

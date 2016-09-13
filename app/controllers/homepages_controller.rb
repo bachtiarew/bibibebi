@@ -1,5 +1,5 @@
 class HomepagesController < ApplicationController
-	
+
 	#control homepage
 	def index
 		if session[:user_id] != nil

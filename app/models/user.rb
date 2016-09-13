@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 	validates :email , uniqueness: true
 
 	has_one :babysitter
+	
 	has_secure_password
 
 
