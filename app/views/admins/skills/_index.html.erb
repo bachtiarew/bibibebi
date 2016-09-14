@@ -1,0 +1,36 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    Data Skills
+  </div>
+
+  <div class="panel-body">
+    <div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>No</th>
+          <th>Skill Name</th>
+          <th>Description</th>
+          <th>Score</th>
+          <th>#Option</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% i = 1 %>
+        <% @skills.each do |skill| %>
+          <tr>
+            <td><%= i %></td>
+            <td><%= skill.name %></td>
+            <td><%= skill.description %></td>
+            <td><%= skill.score %></td>
+            <td>
+              <%= link_to "Delete", admins_skill_path(skill.id), method: :delete, class: "btn btn-sm btn-danger" %>
+              <%= link_to "Edit", admins_skill_path(skill.id), method: :patch, class: "btn btn-sm btn-warning" %>
+            </td>
+            <% i+=1 %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

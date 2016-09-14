@@ -4,8 +4,8 @@ class AdminsController < ApplicationController
 
   end
 
-  def add_skill
-    
+  def new
+
   end
 
   def create
