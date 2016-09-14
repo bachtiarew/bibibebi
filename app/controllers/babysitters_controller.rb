@@ -1,7 +1,8 @@
 class BabysittersController < ApplicationController
 
 	def new
-
+		@babysitter = Babysitter.new
+		@skill = Skill.all
 	end
 
 	def create
