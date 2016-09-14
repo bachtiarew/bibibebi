@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   post "users/login"
   resources :users
   resources :babysitters
+  get "admins/index"
+  get "admins/skills/add_skill"
+  post "admins/skills/create"
   root "homepages#index"
 
 

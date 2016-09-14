@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160913170415) do
+ActiveRecord::Schema.define(version: 20160914023035) do
+
+  create_table "babysitter_has_skills", force: :cascade do |t|
+    t.integer "babysitter_id", limit: 4
+    t.integer "skill_id",      limit: 4
+  end
+
+  add_index "babysitter_has_skills", ["babysitter_id"], name: "index_babysitter_has_skills_on_babysitter_id", using: :btree
+  add_index "babysitter_has_skills", ["skill_id"], name: "index_babysitter_has_skills_on_skill_id", using: :btree
 
   create_table "babysitters", force: :cascade do |t|
     t.string   "nik",         limit: 255
@@ -26,13 +34,10 @@ ActiveRecord::Schema.define(version: 20160913170415) do
   add_index "babysitters", ["user_id"], name: "index_babysitters_on_user_id", using: :btree
 
   create_table "skills", force: :cascade do |t|
-    t.string  "name",          limit: 255
-    t.text    "description",   limit: 65535
-    t.integer "score",         limit: 4
-    t.integer "babysitter_id", limit: 4
+    t.string  "name",        limit: 255
+    t.text    "description", limit: 65535
+    t.integer "score",       limit: 4
   end
-
-  add_index "skills", ["babysitter_id"], name: "index_skills_on_babysitter_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "email",           limit: 255
