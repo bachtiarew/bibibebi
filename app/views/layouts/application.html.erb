@@ -9,7 +9,7 @@
 <body class="<%= controller_name %>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" >
 	<% if !flash[:notice].blank? %>
-		<div class="alert alert-success">
+		<div class="alert alert-success alert-dismisable">
 			<%= flash[:notice] %>
 		</div>
 	<% end %>
