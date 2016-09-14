@@ -7,14 +7,17 @@
   <%= csrf_meta_tags %>
 </head>
 <body class="<%= controller_name %>">
-<div class="container">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" >
 	<% if !flash[:notice].blank? %>
-		<div class="flash_notice">
-			<h5><%= flash[:notice] %></h5>
+		<div class="alert alert-success">
+			<%= flash[:notice] %>
+		</div>
+	<% end %>
+	<% if !flash[:alert].blank? %>
+		<div class="alert alert-danger">
+		<%= flash[:alert] %>
 		</div>
 	<% end %>
 	<%= yield %>
-</div>
 </body>
 </html>

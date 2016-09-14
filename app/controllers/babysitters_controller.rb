@@ -9,7 +9,6 @@ class BabysittersController < ApplicationController
 				params[:babysitter][:user_id] = session[:user_id]
 			end
 			@babysitter = Babysitter.new(babysitter_params)
-			byebug
 			if @babysitter.save
 				redirect_to mains_index_path
 			else

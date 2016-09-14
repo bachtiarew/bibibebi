@@ -1,5 +1,4 @@
 <%= render "error" %>
-<%= render "layouts/navbar" %>
 <div class="panel panel-default">
 	<div class="panel-heading">Sign Up
 	</div>
@@ -11,7 +10,7 @@
 		</div>
 
 		<div class="form-group">
-			<%= f.text_field :lastname, placeholder: "Lastname", class: "form-control" %><br>
+			<%= f.text_field :lastname, placeholder: "Lastname", class: "form-control" %>
 		</div>
 
 		<div class="form-group">
@@ -41,8 +40,9 @@
 		</div>
 
 		<div class="form-group">
-			<%= f.submit "Register", class: "btn btn-md btn-info"%>
+			<%= f.submit "Register", class: "btn btn-md btn-info long_btn"%>
 		</div>
 
 <% end %>
-<%= link_to "Sign In" , users_sign_in_path %>
+<%= link_to "Sign In" , users_sign_in_path %><br>
+<%= link_to "Back to homepage", root_path %>

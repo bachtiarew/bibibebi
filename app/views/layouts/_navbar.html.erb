@@ -4,7 +4,21 @@
       <a class="navbar-brand" href="#">Bibibebi</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><%= link_to "Home", root_path %></li>
+      <li class="active"><%= link_to "Home", mains_index_path %></li>
+      <li><%= link_to "Pages", mains_index_path %></li>
+      <li><%= link_to "About", mains_index_path %></li>
+      <li ><%= link_to "Service", mains_index_path %></li>
+      <li ><%= link_to "Blog", mains_index_path %></li>
+      <li ><%= link_to "Galery", mains_index_path %></li>
+      <li ><%= link_to "Contact", mains_index_path %></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+    	<li class="dropdown">
+    		<a href="dropdown-toggle" data-toggle="dropdown">User <b class="caret"></b></a>
+    		<ul class="dropdown-menu">
+    			<li><%= link_to "Log-out", users_logout_path %></li>
+    		</ul>
+    	</li>
     </ul>
   </div>
 </nav>
