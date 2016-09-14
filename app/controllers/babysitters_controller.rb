@@ -15,8 +15,6 @@ class BabysittersController < ApplicationController
 			else
 				render_to 'new'
 			end
-
-
 	end
 
 	private
