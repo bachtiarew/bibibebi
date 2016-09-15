@@ -9,8 +9,14 @@ class BabysittersController < ApplicationController
 			if current_user
 				params[:babysitter][:user_id] = session[:user_id]
 			end
+			skill_ids = params[:babysitter].delete("skill_ids")
+			selected_skills = []
+
+			selected_skills = skill_ids.collect{ |skil_id| Skill.find(skil_id)}
+
 			@babysitter = Babysitter.new(babysitter_params)
 			if @babysitter.save
+				@babysitter.skills = selected_skills
 				redirect_to mains_index_path
 			else
 				render_to 'new'
