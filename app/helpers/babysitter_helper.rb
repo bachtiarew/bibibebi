@@ -5,7 +5,7 @@ module BabysitterHelper
     unless @babysitter
       link_to 'Create New Babysitter' , new_babysitter_path
   	else
-  	  link_to "Babysitter Profile", babysitters_path(@babysitter.id)
+  	  link_to "Babysitter Profile", babysitter_path(@babysitter.id)
     end
 
   end

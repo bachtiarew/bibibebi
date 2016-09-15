@@ -17,10 +17,17 @@ class BabysittersController < ApplicationController
 			@babysitter = Babysitter.new(babysitter_params)
 			if @babysitter.save
 				@babysitter.skills = selected_skills
+
 				redirect_to mains_index_path
 			else
 				render_to 'new'
 			end
+	end
+
+	def show
+		
+		@babysitters = Babysitter.find(params[:id])
+
 	end
 
 	private
