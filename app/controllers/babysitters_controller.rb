@@ -25,9 +25,8 @@ class BabysittersController < ApplicationController
 	end
 
 	def show
-		
-		@babysitters = Babysitter.find(params[:id])
-
+		@babysitter = Babysitter.find(params[:id])
+		@skills = @babysitter.skills
 	end
 
 	private

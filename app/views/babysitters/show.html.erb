@@ -6,29 +6,31 @@
 		<div class="col-md-8">
 			<div class="form-group">
 				<h4><strong>Identity Number :</strong></h4>
-				<h5><%= @babysitters.nik %></h5>
+				<h5><%= @babysitter.nik %></h5>
 			</div>
 
 			<div class="form-group">
 				<h4><strong>Age :</strong></h4>
-				<h5><%= @babysitters.age %></h5>
+				<h5><%= @babysitter.age %></h5>
 			</div>
 
 			<div class="form-group">
 				<h4><strong>Description :</strong></h4>
-				<h5><%= @babysitters.description %></h5>
+				<h5><%= @babysitter.description %></h5>
 			</div>
 
 			<div class="form-group">
 				<h4><strong>Skills :</strong></h4>
 				<ul>
-					
+					<% @skills.each do |skill| %>
+					<li><%= skill.name %></li>
+					<% end %>
 				</ul>
 			</div>
 		</div>
 
 		<div class="col-md-4 text-right">
-			<img style="width:250px;height:250px;" src=<%= @babysitters.photos.url %> >
+			<img style="width:250px;height:250px;" src=<%= @babysitter.photos.url %> >
 		</div>
 	</div>
 </div>
