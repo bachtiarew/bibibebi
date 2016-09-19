@@ -34,3 +34,5 @@
 		</div>
 	</div>
 </div>
+<%= link_to "Update Profile" , edit_babysitter_path(@babysitter) %> <br>
+<%= link_to "Delete Profile" ,babysitter_path(@babysitter), method: :delete, data: {confirm: "Are you sure to delete your profile ?"} %> <br>
