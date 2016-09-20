@@ -34,7 +34,7 @@ gem 'autoprefixer-rails'
 #gem upload
 gem 'carrierwave'
 #gem for asset
-#gem react-rails
+# gem 'react-rails'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

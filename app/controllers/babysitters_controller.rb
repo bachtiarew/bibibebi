@@ -39,18 +39,17 @@ class BabysittersController < ApplicationController
 		if current_user
 			params[:babysitter][:user_id] = session[:user_id]
 		end
-	@babysitter_skills = Babysitter_skills.find_by_babysitter_id(params[:babysitter][:id])
-	@babysitter_skills.destroy
-	@babysitter = Babysitter.find(params[:id])
-	skill_ids = params[:babysitter].delete("skill_ids")
-	selected_skills = skill_ids.collect{ |skil_id| Skill.find(skil_id)}	
-	@babysitter = @babysitter.update(babysitter_params)
-	if @babysitter.update
+	
+	skill_ids = params[:babysitter].delete("skills_ids")
+	selected_skills = skill_ids.collect{ |skil_id| Skill.find(skil_id)}
+	@babysitter = Babysitter.find(params[:id])	
+	
+	if 	@babysitter.update_attributes(babysitter_params)
 		@babysitter.skills = selected_skills
 		flash[:notice]="Your baby profile has been updated"
 		redirect_to mains_index_path
 	else
-		flash[:aler]="your baby profile failed to update"
+		flash[:alert]="your baby profile failed to update"
 		redirect_to edit_babysitter_path
 	end
 	end
@@ -70,7 +69,7 @@ class BabysittersController < ApplicationController
 
 	private
 	def babysitter_params
-		params.require(:babysitter).permit(:nik, :age, :description, :photos, :user_id)
+		params.require(:babysitter).permit(:nik, :age, :description, :photos, :user_id, :skills_ids)
 	end
 
 end
