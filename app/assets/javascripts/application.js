@@ -14,6 +14,15 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require bootstrap-sprockets
+//= require lodash
+//= require flux
+//= require fbemitter
+//= require react
+//= require react_ujs
+//= require components
+//= require_tree ./store
+//= require components/homepages/homepages
+//= require components/Parents/ParentsApp
 //= require_tree .
 
 <script type="text/javscript">

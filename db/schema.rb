@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160915043241) do
+ActiveRecord::Schema.define(version: 20161002132401) do
 
   create_table "babysitter_skills", id: false, force: :cascade do |t|
     t.integer "babysitter_id", limit: 4
@@ -33,6 +33,27 @@ ActiveRecord::Schema.define(version: 20160915043241) do
 
   add_index "babysitters", ["user_id"], name: "index_babysitters_on_user_id", using: :btree
 
+  create_table "kids", force: :cascade do |t|
+    t.string   "name",        limit: 255
+    t.string   "gender",      limit: 255
+    t.integer  "age",         limit: 4
+    t.text     "description", limit: 65535
+    t.integer  "parent_id",   limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "kids", ["parent_id"], name: "index_kids_on_parent_id", using: :btree
+
+  create_table "parents", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "photos",     limit: 255
+  end
+
+  add_index "parents", ["user_id"], name: "index_parents_on_user_id", using: :btree
+
   create_table "skills", force: :cascade do |t|
     t.string  "name",        limit: 255
     t.text    "description", limit: 65535
@@ -50,6 +71,8 @@ ActiveRecord::Schema.define(version: 20160915043241) do
     t.text     "address",         limit: 65535
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "gender",          limit: 255
+    t.string   "phone_number",    limit: 255
   end
 
 end

@@ -5,11 +5,14 @@ Rails.application.routes.draw do
   post "users/login"
   resources :users
   resources :babysitters
+  get "parents/get_user", to: "parents#get_user"
+  resources :parents, except: [:index]
   root "homepages#index"
-  get 'admins/index'
+  get 'admins/index'  
   namespace :admins do
-  resources :skills
+    resources :skills
   end
+
 
 
   # The priority is based upon order of creation: first created -> highest priority.

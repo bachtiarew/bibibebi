@@ -19,7 +19,14 @@ module Bibibebi
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
-
+    # Settings for the pool of renderers:
+      config.react.server_renderer_pool_size  ||= 1  # ExecJS doesn't allow more than one on MRI
+      config.react.server_renderer_timeout    ||= 20 # seconds
+      config.react.server_renderer = React::ServerRendering::SprocketsRenderer
+      config.react.server_renderer_options = {
+        files: ["react-server.js", "components.js"], # files to load for prerendering
+        replay_console: true,                 # if true, console.* will be replayed client-side
+      }
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
   end

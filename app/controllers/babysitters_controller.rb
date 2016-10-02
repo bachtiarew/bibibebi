@@ -6,6 +6,7 @@ class BabysittersController < ApplicationController
 	end
 
 	def create
+		
 		if current_user
 			params[:babysitter][:user_id] = session[:user_id]
 		end

@@ -18,13 +18,13 @@
 
     <div class="form-group">
       <% @skill.each do |skill| %>
-        <%= check_box_tag 'babysitter[skills_ids][]', skill.id %>
+      <input type="checkbox" name="babysitter[skills_ids][]" value=<%= skill.id %>
         <% @babysitter_skills.each do |b_skill| %>
           <% if b_skill.id == skill.id %>
-              <%= "true" %>
+              <%= "checked" %>
               <% break %>
           <% end %>
-        <% end %>
+        <% end %>>
         <%= label_tag(skill.id, skill.name) %>
       <% end %>
     </div>
