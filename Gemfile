@@ -38,6 +38,7 @@ gem 'carrierwave'
 gem 'react-rails'
 gem 'flux-rails'
 gem 'sprockets-coffee-react'
+gem 'classnames-rails'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

@@ -11,15 +11,16 @@ class UsersController < ApplicationController
 	end
 
 	def login
-		@p = params[:users]
-		@user = User.find_by(email: @p[:email])
-		if @user && @user.authenticate(@p[:password])
+		email = params[:email]
+		password = params[:password]
+		@user = User.find_by(email: email)
+		if @user && @user.authenticate(password)
 			flash[:notice] = "Your sign in was successfully"
 			session[:user_id] = @user.id
 			redirect_to mains_index_path
 		else
 			flash[:alert] = "Your email or password not correctly"
-			redirect_to users_sign_in_path
+			redirect_to root_path
 
 		end
 
@@ -30,6 +31,7 @@ class UsersController < ApplicationController
 	end
 
 	def create
+		byebug
 		@user = User.new(user_params)
 		if @user.save
 			UserMailer.welcome_email(@user).deliver_now
@@ -46,7 +48,7 @@ class UsersController < ApplicationController
 	#any params must be permitted before save to database
 	private
 	def user_params
-		params[:users][:role] = "user"
+		# params[:users][:role] = "user"
 		params.require(:users).permit(:firstname, :lastname, :gender, :bornplace, :borndate, :email, :password, :password_confirmation, :role, :address, :phone_number)
 	end
 

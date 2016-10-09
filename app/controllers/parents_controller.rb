@@ -10,18 +10,17 @@ class ParentsController < ApplicationController
 	end
 
 	def create
-
 		if current_user
 			params[:parent][:user_id] = session[:user_id]
 		end
 	
 		@child_items = params[:parent].delete('child_items')
-		
+		@childs = selection_child(@child_items)
 		@parent = Parent.new(parent_params)
 
 		if @parent.save
 			parent_id = @parent.id
-			@child_items.each do |child|
+			@childs.each do |child|
 				Kid.create(
 					name: child[:name],
 					gender: child[:gender],
@@ -41,7 +40,8 @@ class ParentsController < ApplicationController
 	end
 
 	def show
-		
+		@parent = Parent.find(params[:id])
+		@childs = @parent.kids
 	end
 
 	private

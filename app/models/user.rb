@@ -10,5 +10,4 @@ class User < ActiveRecord::Base
 	has_one :parentchild
 	has_secure_password
 
-
 end

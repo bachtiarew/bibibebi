@@ -10,7 +10,7 @@ window.ParentStore = _.assign(new EventEmitter(), {
 
 	addBlankItem: ->
 		key = @generate_key()
-		@childs.push({key: key})
+		@childs.push({key: key, _destroy: 0 })
 		@emitChange()
 
 	generate_key: () ->
@@ -19,11 +19,9 @@ window.ParentStore = _.assign(new EventEmitter(), {
 		key += len
 
 	removeItem: (childItem) ->
-		console.log("remove")
-		console.log("childItem arg",childItem)
 		childItem = _.find(@childs, (_item) -> _item.key == childItem.key)
-		console.log("childItem",childItem)
 		childItem._destroy = 1
+		console.log("remove",childItem)
 		@emitChange()
 
 	emitChange: ->
@@ -31,7 +29,6 @@ window.ParentStore = _.assign(new EventEmitter(), {
 
 	addChangeListener: (callback) ->
 		@addListener(CHANGE_EVENT, callback)
-		
 
 	removeChangeListener: ->
 		@removeAllListener(CHANGE_EVENT)
