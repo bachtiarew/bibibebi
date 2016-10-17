@@ -1,3 +1,22 @@
+CobaForm = React.createClass
+	coba: ->
+		$.ajax
+			url: "users/coba"
+			type: "get"
+			data: user:{name: "bachtiar", age: 24}
+			success: (payload) ->
+				console.log("Payload", payload)
+
+	render: ->
+		<div>
+			<button className="btn btn-md btn-danger" onClick={@coba}>
+				Submit
+			</button>
+			<button id="nyoba" className="btn btn-sm btn-default">
+				nyoba
+			</button>
+		</div>
+
 Footer = React.createClass
 	render: ->
 		<div className="footer">
@@ -12,7 +31,7 @@ Procedure = React.createClass
 
 Benefit = React.createClass
 	render: ->
-		<div className="container">
+		<div id="cobacoba" className="container">
 			<h3>Benefit</h3>
 		</div>
 
@@ -39,7 +58,7 @@ Promo = React.createClass
 ImageContainer = React.createClass 
 	render: ->
 		<div className="imageBox">
-			
+			<img src="<%= asset_path('babysitting.jpg') %>" />
 		</div>
 
 Menu = React.createClass
@@ -123,7 +142,6 @@ Homepages = React.createClass
 		HomepageStore.removeChangeListener(@onChange)
 
 	onChange: ->
-		console.log("hayo aku harus dipanggil")
 		@setState(
 			status: HomepageStore.status
 			modal: HomepageStore.modal
@@ -145,6 +163,7 @@ Homepages = React.createClass
 	  			modal={modal}
 	  			requesting={requesting}
 	  			user={user}/>
+	  	<CobaForm />
 	  			
 	  </div>
   	

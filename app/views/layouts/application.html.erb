@@ -8,16 +8,7 @@
 </head>
 <body class="<%= controller_name %>">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-	<% if !flash[:notice].blank? %>
-		<div class="alert alert-success alert-dismisable">
-			<%= flash[:notice] %>
-		</div>
-	<% end %>
-	<% if !flash[:alert].blank? %>
-		<div class="alert alert-danger">
-		<%= flash[:alert] %>
-		</div>
-	<% end %>
+	<%= react_component "AlertApp" %>
 	<%= yield %>
 </body>
 </html>

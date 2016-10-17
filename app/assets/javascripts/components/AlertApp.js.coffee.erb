@@ -1,0 +1,37 @@
+AlertApp = React.createClass
+	
+	getInitialState: ->
+		alert: {}
+
+	componentDidMount: ->
+		alert = {}
+		if <% !flash[:error].blank? %>
+			alert = {alert_type: "error", alert_label: flash[:error]}
+		if <% !flash[:notice].blank? %>
+			alert = {alert_type: "notify", alert_label: flash[:notice]}
+		if alert
+			@setAlert(alert)
+
+	setAlert: (attributes) ->
+		@setState(
+			alert: attributes
+		)
+
+	render: ->
+		{alert_type, alert_label} = @state.alert
+
+		alert_class = classNames("alertApp alert ",
+			{"alert-success " : if alert_type == "notify"},
+			{"alert-danger " : if alert_type == "error"},
+			"alert-dismissable ",
+			{"show" : if @state.alert })
+
+		<div id="alertApp" className={alert_class}>
+			<button type="button" className="close" data-dismiss="alert" aria-hidden="true">
+				&times;
+			</button>
+			{alert_label}
+		</div>
+
+
+window.AlertApp = AlertApp

@@ -31,7 +31,8 @@ class UsersController < ApplicationController
 	end
 
 	def create
-		byebug
+		params[:user][:password] = params[:password]
+		params[:user][:password_confirmation] = params[:password_confirmation]
 		@user = User.new(user_params)
 		if @user.save
 			UserMailer.welcome_email(@user).deliver_now
@@ -39,17 +40,30 @@ class UsersController < ApplicationController
 			flash[:notice] = "Your Sign Up was successfully"
 			redirect_to mains_index_path
 		else
-			flash[:alert] = "Your Sign Up has failed, please try again"
-			render 'new'
+			payload = {error: "Your sign up has been failed , please fill field correctly!"}
+			payload.to_json
+
 		end
 
+	end
+
+	def coba
+		nama = params[:user][:name]
+		jsonku = {nama: nama, age: 24}
+		@user = User.last
+		
+		respond_to do |format|	
+			format.json { render json: @user }
+		end		
+		
+	
 	end
 
 	#any params must be permitted before save to database
 	private
 	def user_params
 		# params[:users][:role] = "user"
-		params.require(:users).permit(:firstname, :lastname, :gender, :bornplace, :borndate, :email, :password, :password_confirmation, :role, :address, :phone_number)
+		params.require(:user).permit(:firstname, :lastname, :gender, :bornplace, :borndate, :email, :password, :password_confirmation, :role, :address, :phone_number)
 	end
 
 

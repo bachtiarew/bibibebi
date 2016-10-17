@@ -5,9 +5,10 @@ CHANGE_EVENT = 'change'
 
 window.HomepageStore = _.assign(new EventEmitter(),{ 
 	user: {}
+	error: null
 	status: null
 	modal: false
-	requesting: false
+	requesting: {type: null, status: false, submitting: false}
 
 	createBlankForm: ->
 		@user = {
@@ -64,5 +65,5 @@ dispatcher.register (payload) ->
 		HomepageStore.emitChange()
 
 	if payload.actionType == "set-requesting"
-		HomepageStore.requesting = true
+		HomepageStore.requesting = payload.attributes
 		HomepageStore.emitChange()

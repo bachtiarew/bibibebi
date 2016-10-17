@@ -71,6 +71,11 @@ $dark-blue: #021025;
 		max-width: 100%;
 		height: 500px;
 		background-color: #dedede;
+
+		img{
+			width:100%;
+			height:100%;
+		}
 	}
 
 	.overlay{
@@ -133,6 +138,18 @@ $dark-blue: #021025;
 			.form-border{
 				border-right: 1px solid #dedede;
 			}
+
+			.weak,.normal,.strong{
+				margin-top: 2px;
+				font-size: 10px;
+				text-align: right;
+			}
+
+			.weak{color: red}
+
+			.normal{color: orange}
+
+			.strong{color: green}
 		}
 
 		.panel-footer{

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161002132401) do
+ActiveRecord::Schema.define(version: 20161002132217) do
 
   create_table "babysitter_skills", id: false, force: :cascade do |t|
     t.integer "babysitter_id", limit: 4
@@ -49,7 +49,6 @@ ActiveRecord::Schema.define(version: 20161002132401) do
     t.integer  "user_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "photos",     limit: 255
   end
 
   add_index "parents", ["user_id"], name: "index_parents_on_user_id", using: :btree

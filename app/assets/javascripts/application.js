@@ -22,6 +22,8 @@
 //= require react_ujs
 //= require components
 //= require_tree ./store
+//= require homepages
+//= require components/AlertApp
 //= require components/Homepages/Homepages
 //= require components/Homepages/Modal
 //= require components/Parents/ParentsApp

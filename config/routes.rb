@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   get "users/sign_in"
   get "mains/index"
   get "users/logout"
+  get "users/coba"
   post "users/login"
   resources :users
   resources :babysitters
@@ -9,6 +10,7 @@ Rails.application.routes.draw do
   resources :parents, except: [:index]
   root "homepages#index"
   get 'admins/index'  
+
   namespace :admins do
     resources :skills
   end

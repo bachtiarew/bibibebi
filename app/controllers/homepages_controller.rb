@@ -7,5 +7,4 @@ class HomepagesController < ApplicationController
 		end
 	end
 
-
 end
