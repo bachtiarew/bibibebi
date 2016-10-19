@@ -5,7 +5,6 @@ CobaForm = React.createClass
 			type: "get"
 			data: user:{name: "bachtiar", age: 24}
 			success: (payload) ->
-				console.log("Payload", payload)
 
 	render: ->
 		<div>
@@ -131,7 +130,6 @@ Homepages = React.createClass
 		user: {}	
 
 	componentDidMount: ->
-		console.log("hello iam did mount")
 		HomepageStore.createBlankForm()
 		HomepageStore.status = null
 		HomepageStore.modal = false
@@ -151,7 +149,6 @@ Homepages = React.createClass
 
 	render: ->
 	  {status, modal, user,requesting} = @state
-	  console.log("user homepage view",user)
 	  <div className="container-fluid homepages">
 	  	<Header/>
 	  	<ImageContainer/>

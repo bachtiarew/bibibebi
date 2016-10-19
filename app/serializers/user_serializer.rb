@@ -1,4 +1,4 @@
-class UserSerializer < ApplicationSerializer
-  attributes(:firstname, :lastname)
+class UserSerializer < ActiveModel::Serializer
+  attributes :firstname, :lastname
   #virtual attributes
 end

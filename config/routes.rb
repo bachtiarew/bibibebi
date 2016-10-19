@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   get "users/sign_in"
   get "mains/index"
   get "users/logout"
-  get "users/coba"
+  get "homepages/coba"
   post "users/login"
   resources :users
   resources :babysitters

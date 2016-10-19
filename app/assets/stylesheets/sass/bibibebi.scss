@@ -6,8 +6,13 @@ $font-title : helvetica,sans-serif;
 $font-notice : segoe ui;
 
 .alert{
-	font-size: 14px;
-	font-family: $font-notice;
+	height: 22px;
+	text-align: center;
+	font-size: 12px;
+	font-family: segoe ui;
+	border-radius: 0px;
+	padding: 2px;
+	margin-bottom: 0px
 }
 
 .nav{

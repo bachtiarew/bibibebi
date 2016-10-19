@@ -71,11 +71,7 @@ Modal = React.createClass
 							submitting: false
 						}
 				success: (payload) ->
-					if payload.error
-						@setState(
-							@state.error = payload.error
-						)
-						
+					console.log("berhasil")
 			)
 		else 
 			dispatcher.dispatch
@@ -85,6 +81,9 @@ Modal = React.createClass
 					status: false
 					submitting: true
 				}
+			@setState(
+				error : "Pastikan Kolom input yang berwarna merah telah terisi!"
+			)
 
 	submitLogin: ->
 		user = {}
@@ -185,7 +184,13 @@ Modal = React.createClass
 				passwordConfirmValidation: null
 				passwordConfirmValidationColor: null
 			)
-		
+
+	inputRequired: (submitting, inputField) ->
+		if submitting == true && inputField == ""
+			classNames("form-control red-border")
+		else
+			classNames("form-control")
+
 	render: ->
 		{status, modal, user, requesting} = @props
 		{passwordValidation, passwordConfirmValidation, 
@@ -248,13 +253,7 @@ Modal = React.createClass
 					<div className="col-sm-4">
 						<div className="form-group">
 							<label>Nama Depan</label>
-							<input id="firstname" type="text" className="form-control" placeholder="Masukan Nama Depan Anda" onChange={@inputChange} />
-							<p className="text-right weak">
-							{
-								if requesting.submitting == true && user.firstname == ""
-									"kolom ini wajib di isi"
-							}
-							</p>	
+							<input id="firstname" type="text" className={@inputRequired(requesting.submitting, user.firstname)} placeholder="Masukan Nama Depan Anda" onBlur={@inputChange} />	
 						</div>
 		
 						<div className="form-group">
@@ -263,8 +262,8 @@ Modal = React.createClass
 						</div>
 						<div className="form-group">
 							<label>Tempat & Tgl Lahir</label>
-							<input type="text" id="bornplace" className="form-control" placeholder="Place your born" required/>
-							<input type="date" id="borndate" className="form-control top" placeholder="YYYY-MM-DD" />
+							<input type="text" id="bornplace" className={@inputRequired(requesting.submitting, user.bornplace)} onBlur={@inputChange} placeholder="Place your born" required/>
+							<input type="date" id="borndate" className={@inputRequired(requesting.submitting, user.bordate)} onChange={@inputChange} placeholder="YYYY-MM-DD" />
 						</div>
 					</div>
 					<div className="col-sm-4 form-border">
@@ -289,28 +288,28 @@ Modal = React.createClass
 						</div>
 						<div className="form-group">
 							<label>No Telepon</label>
-							<input type="number" id="phone_number" className="form-control" placeholder="No Telepon anda" />
+							<input type="text" id="phone_number" className={@inputRequired(requesting.submitting, user.phone_number)} onBlur={@inputChange} placeholder="No Telepon anda" />
 						</div>
 						<div className="form-group">
 							<label>Alamat</label>
-							<textarea id="address" className="form-control" rows=5 placeholder="Ketik disini..." />
+							<textarea id="address" className={@inputRequired(requesting.submitting, user.address)} rows=5 onBlur={@inputChange} placeholder="Ketik disini..." />
 						</div>
 					</div>
 					<div className="col-sm-4">
 						<div className="form-group">
 							<label>Email</label>
-							<input type="email" id="email" className="form-control" placeholder="Masukan email anda" required/>
+							<input type="email" id="email" className={@inputRequired(requesting.submitting, user.email)} onBlur={@inputChange} placeholder="Masukan email anda" required/>
 						</div>
 						<div className="form-group">
 							<label>Password</label>
-							<input type="password" id="password" ref="password" className="form-control"  onChange={@passwordOnChange} placeholder="Password" required/>
+							<input type="password" id="password" ref="password" className="form-control" onBlur={@inputChange} onChange={@passwordOnChange} placeholder="Password" required/>
 							<p className={passwordValidationClass}>{passwordValidation}</p>
 							<input type="password" id="password_confirmation" ref="passwordConfirm" className="form-control top" onChange={@passwordConfirmValidationOnChange} placeholder="konfirmasi Password" required/>
 							<p className={passwordConfirmValidationColor}>{passwordConfirmValidation}</p>
 						</div>
-						<div className="text-center">
+						<div>
 							{if error
-								<a href="javascript:void(0)" className="alert alert-danger">{error}</a>
+								<p className="weak">{error}</p>
 							}
 						</div>
 					</div>

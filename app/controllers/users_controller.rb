@@ -40,9 +40,8 @@ class UsersController < ApplicationController
 			flash[:notice] = "Your Sign Up was successfully"
 			redirect_to mains_index_path
 		else
-			payload = {error: "Your sign up has been failed , please fill field correctly!"}
-			payload.to_json
-
+			flash[:alert] = "Your Sign Up has been failed , please fill correctly"
+			redirect_to mains_index_path
 		end
 
 	end
