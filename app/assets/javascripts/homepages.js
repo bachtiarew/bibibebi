@@ -1,6 +1,13 @@
 $(document).ready(function(){
-	$("#jangkrik").click(function(){
-		$(this).hide()
-		$("#cobacoba").hide()
-	})	
+	$(window).scroll(function(){
+		if($(this).scrollTop()>500){
+			$("#img1").hide();
+			$("#img2").show();
+			
+		}else{
+			$("#img1").show();
+			$("#img2").hide();
+		}
+		
+	});
 })

@@ -32,7 +32,7 @@ gem 'bcrypt', '~> 3.1.7'
 #assets
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'autoprefixer-rails'
-
+gem 'font-awesome-rails'
 
 #gem upload
 gem 'carrierwave'
@@ -43,6 +43,9 @@ gem 'sprockets-coffee-react'
 gem 'classnames-rails'
 # Use Unicorn as the app server
 # gem 'unicorn'
+
+# Authorization
+gem 'pundit'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
@@ -59,6 +62,11 @@ group :development do
   # Access an IRB console on exception pages or by using <%= console %> in views
   gem 'web-console', '~> 2.0'
   gem 'letter_opener'
+end
+
+group :production do
+  gem 'pg', '0.17.1'
+  gem 'rails_12factor', '0.0.2'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

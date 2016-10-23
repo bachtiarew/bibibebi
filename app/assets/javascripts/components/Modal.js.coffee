@@ -1,7 +1,8 @@
 Modal = React.createClass
 	
 	getInitialState: ->
-		error : null
+		error: null
+		validEmail: false
 		passwordValidation: null
 		passwordConfirmValidation: null
 		passwordValidationColor: null
@@ -46,9 +47,19 @@ Modal = React.createClass
 		{firstname, bornplace, borndate, gender, phone_number,
 			address, email, password, password_confirmation} = data
 		if firstname == "" || bornplace == "" || borndate == "" || gender == "" || phone_number == "" || address == "" || email == "" || password == "" && password_confirmation == ""			
+			@setState(
+				error: "Pastikan Kolom input yang berwarna merah telah terisi!"
+			)
 			return false
 		else
-			return true 
+			{validEmail, validPhoneNumber} = @state
+			if validEmail && validPhoneNumber
+				return true 
+			else
+				@setState(
+					error: "Alamat dan nomor telephone harus valid"
+				)
+				return false
 		
 	submitFormSignUp: ->
 		user = {}
@@ -81,9 +92,7 @@ Modal = React.createClass
 					status: false
 					submitting: true
 				}
-			@setState(
-				error : "Pastikan Kolom input yang berwarna merah telah terisi!"
-			)
+			
 
 	submitLogin: ->
 		user = {}
@@ -191,10 +200,48 @@ Modal = React.createClass
 		else
 			classNames("form-control")
 
+	onValidateEmail: ->
+		inputEmailSignUp = @refs.emailSignUp.value
+		re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+		
+		if re.test(inputEmailSignUp)
+			@setState(
+				validEmail : true
+			)
+
+		else
+			@setState(
+				validEmail : false
+			)
+
+		dispatcher.dispatch
+			actionType: "user-view-change"
+			attributes: { email: inputEmailSignUp }
+	
+	onValidatePhoneNumber: ->
+		inputPhoneNumber = @refs.phoneNumber.value
+		console.log("tipe data input phone number",typeof(inputPhoneNumber))
+		re = /^[0-9]+$/
+
+		if re.test(inputPhoneNumber)
+			@setState(
+				validPhoneNumber: true
+			)		
+		else
+			@setState(
+				validPhoneNumber: false
+			)
+
+		dispatcher.dispatch
+			actionType: "user-view-change"
+			attributes: {phone_number: inputPhoneNumber}
+
 	render: ->
 		{status, modal, user, requesting} = @props
 		{passwordValidation, passwordConfirmValidation, 
-		 passwordValidationColor, passwordConfirmValidationColor, error} = @state
+		 passwordValidationColor, passwordConfirmValidationColor,
+		 error, validEmail, validPhoneNumber} = @state
+
 		overlayClass = classNames("overlay",
 			{"hide": (modal == false)},
 			{"show": (modal == true)}
@@ -212,8 +259,7 @@ Modal = React.createClass
 
 		passwordValidationClass = classNames(passwordValidationColor)
 		passwordConfirmValidationClass = classNames(passwordConfirmValidationColor)
-		console.log("user", user.firstname)
-		console.log("submitting", requesting.submitting)
+
 		header = if status == "parent" then "Orang Tua" else "Pengasuh"
 		<div>
 			<div className={overlayClass} onClick={@closeModal}></div>
@@ -288,7 +334,13 @@ Modal = React.createClass
 						</div>
 						<div className="form-group">
 							<label>No Telepon</label>
-							<input type="text" id="phone_number" className={@inputRequired(requesting.submitting, user.phone_number)} onBlur={@inputChange} placeholder="No Telepon anda" />
+							<input type="tel" id="phone_number" className={@inputRequired(requesting.submitting, user.phone_number)} ref="phoneNumber" onBlur={@inputChange} onChange={@onValidatePhoneNumber} placeholder="No Telepon anda" />
+							<p className="weak">
+								{
+									if !validPhoneNumber && user.phone_number != null && user.phone_number != ""
+										"Nomor Telephone harus di isi angka"
+								}
+							</p>
 						</div>
 						<div className="form-group">
 							<label>Alamat</label>
@@ -298,7 +350,14 @@ Modal = React.createClass
 					<div className="col-sm-4">
 						<div className="form-group">
 							<label>Email</label>
-							<input type="email" id="email" className={@inputRequired(requesting.submitting, user.email)} onBlur={@inputChange} placeholder="Masukan email anda" required/>
+							<input type="email" id="email" className={@inputRequired(requesting.submitting, user.email)} ref="emailSignUp" onBlur={@inputChange} onChange={@onValidateEmail} placeholder="Masukan email anda" required/>
+							<p className="weak">
+								{
+									console.log("user email", user.email)
+									if !validEmail && user.email != null && user.email != ""
+										"Alamat Email tidak benar"
+								}
+							</p>
 						</div>
 						<div className="form-group">
 							<label>Password</label>

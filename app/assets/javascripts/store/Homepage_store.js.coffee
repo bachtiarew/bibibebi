@@ -64,6 +64,10 @@ dispatcher.register (payload) ->
 		HomepageStore.user = payload.user
 		HomepageStore.emitChange()
 
+	if payload.actionType == "user-view-change"
+		_.assign(HomepageStore.user, payload.attributes)
+		HomepageStore.emitChange()
+
 	if payload.actionType == "set-requesting"
 		HomepageStore.requesting = payload.attributes
 		HomepageStore.emitChange()
