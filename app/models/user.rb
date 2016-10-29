@@ -10,4 +10,12 @@ class User < ActiveRecord::Base
 	has_one :parentchild
 	has_secure_password
 
+	def is_babysitter?
+		self.role == "babysitter" ? true : false
+	end
+
+	def is_parent?
+		self.role == "parent" ? true : false
+	end
+
 end

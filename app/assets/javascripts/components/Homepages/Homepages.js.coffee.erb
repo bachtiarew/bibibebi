@@ -1,13 +1,50 @@
 Footer = React.createClass
 	render: ->
-		<div className="footer">
-			<h3>Footer</h3>
+		<div className="footer text-center">
+			<i className="fa fa-facebook-square"></i>
+			<i className="fa fa-instagram"></i>
+			<i className="fa fa-twitter-square"></i>
+			<i className="fa fa-pinterest"></i>
+		</div>
+
+VideoAdvertise = React.createClass
+	render: ->
+		
+		<div className="videoAdvertise text-center">
+			<iframe className="videoFrame" src="http://www.youtube.com/embed/"></iframe>
 		</div>
 
 Procedure = React.createClass
 	render: ->
 		<div className="procedure container">
-			<h3>Procedure</h3>
+			<div className="procedure-content text-center container-fluid">
+				<div>
+					<h3>Ingin Tahu Bagaimana Cara Kerjanya ?</h3>
+				</div>
+				<div className="box-flow">
+					<i className="fa fa-mobile-phone ikon"></i>
+					<i className="fa fa-mail-forward flow"></i>
+					<i className="fa fa-tasks ikon"></i>
+					<i className="fa fa-mail-forward flow "></i>
+					<i className="fa fa-thumbs-up ikon"></i>
+					<i className="fa fa-mail-forward flow "></i>
+					<i className="fa fa-user ikon"></i>
+				</div>
+				<div className="row">
+					<div className="col-md-3">
+						<p>Daftar dan isi profil anda, lalu posting iklan anda sebagai pencari pengasuh atau orang tua</p>
+					</div>
+					<div className="col-md-3">
+						<p>Temukan Profil Pengasuh yang cocok dengan kebutuhan anda</p>
+					</div>
+					<div className="col-md-3">
+						<p>Pilih pengasuh yang cocok dengan kebutuhan anda, dan pengasuh mengkonfirmasi</p>
+					</div>
+					<div className="col-md-3">
+						<p>Selamat ! Anda telah mendapatkan Pengasuh Terbaik sesuai dengan keinginan anda</p>
+					</div>
+				</div>
+			</div>
 		</div>
 
 Benefit = React.createClass
@@ -105,7 +142,7 @@ ImageContainer = React.createClass
 	render: ->
 		<div className="imageBox">
 			<img id="img1" src="<%= asset_path('nanny.jpg') %>" />
-			<img id="img2" src="<%= asset_path('nanny2.jpg') %>" />
+			<img id="img2" src="<%= asset_path('nanny3.jpg') %>" />
 		</div>
 
 Menu = React.createClass
@@ -204,6 +241,7 @@ Homepages = React.createClass
 	  	<Promo/>
 	  	<Benefit/>
 	  	<Procedure/>
+	  	<VideoAdvertise/>
 	  	<Footer/>
 	  	<Modal status={status}
 	  			modal={modal}

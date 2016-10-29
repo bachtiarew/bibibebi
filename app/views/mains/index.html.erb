@@ -5,3 +5,9 @@
 
 <h3>Are you looking for a babysitter ?</h3>
 <%= has_parent? %>
+
+<% if @user.is_babysitter? %>
+	<h2>yes iam babysitter</h2>
+<% else %>
+	<h2>yes iam parent </h2>cmd
+<% end %>
