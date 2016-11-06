@@ -15,11 +15,11 @@ class UsersController < ApplicationController
 		password = params[:password]
 		@user = User.find_by(email: email)
 		if @user && @user.authenticate(password)
-			flash[:notice] = "Your sign in was successfully"
+			flash[:notice] = "Anda berhasil masuk"
 			session[:user_id] = @user.id
 			redirect_to mains_index_path
 		else
-			flash[:alert] = "Your email or password not correctly"
+			flash[:alert] = "Email atau password anda salah, silahkan coba kembali"
 			redirect_to root_path
 
 		end
@@ -31,6 +31,7 @@ class UsersController < ApplicationController
 	end
 
 	def create
+		role = params[:role]
 		params[:user][:password] = params[:password]
 		params[:user][:password_confirmation] = params[:password_confirmation]
 		@user = User.new(user_params)
@@ -38,10 +39,14 @@ class UsersController < ApplicationController
 			UserMailer.welcome_email(@user).deliver_now
 			session[:user_id] = @user.id
 			flash[:notice] = "Your Sign Up was successfully"
-			redirect_to mains_index_path
+			if role == "parent"
+				redirect_to new_parent_path
+			else
+				redirect_to new_babysitter_path
+			end
 		else
 			flash[:alert] = "Your Sign Up has been failed , please fill correctly"
-			redirect_to mains_index_path
+			redirect_to root_path
 		end
 
 	end

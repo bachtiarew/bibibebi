@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.raty
+//= require ratyrate
 //= require turbolinks
 //= require bootstrap-sprockets
 //= require lodash
@@ -27,4 +29,7 @@
 //= require components/Homepages/Homepages
 //= require components/Homepages/Modal
 //= require components/Parents/ParentsApp
+//= require components/Mains/Thumbnail
+//= require components/Mains/Sidebar
+//= require components/Mains/Profile
 //= require_tree .

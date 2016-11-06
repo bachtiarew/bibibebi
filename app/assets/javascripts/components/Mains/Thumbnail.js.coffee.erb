@@ -1,0 +1,80 @@
+Rating = React.createClass
+	propTypes:
+		thumbs: React.PropTypes.array
+
+	render: ->
+		<div className="rating">
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+		</div>
+
+Thumbnails = React.createClass
+	
+	getInitialState: ->
+		userThumbs: @props.thumbs
+		lenThumb: null
+		rowThumb: null
+		colThumb: null
+
+	setThumbRowCol: (thumbs) ->
+		length = thumbs.length
+		remain = length % 3
+
+		if length > 3
+			if remain != 0
+				length -= remain
+				col = (length / 3) + 1
+
+			else
+				col = length / 3
+		else
+			row = length
+			col = 1
+
+		@setState(
+			lenThumb: thumbs.length
+			rowThumb: row
+			colThumb: col 
+		)
+
+	componentDidMount: ->
+
+
+	render: ->
+		{userThumbs, lenThumb, rowThumb, colThumb} = @state
+		i = 0
+		
+		Thumbnail = (e, key) =>
+			if e.babysitter?
+				viewProfileUrl = "/babysitters/"+e.babysitter?.id
+			else
+				viewProfileUrl = "/parents/"+e.parent?.id
+			
+			<div key={key} className="thumbnail pull-left">
+				<div className="thumb-img text-center">
+					<i className="fa fa-camera"></i>
+				</div>
+				<div className="thumb-label">
+					<label>{e.firstname} {e.lastname}</label>
+					<p>{e.phone_number}</p>
+				</div>
+				<div className="thumb-rating text-right row">
+					<div className="col-sm-6">
+						<a href={viewProfileUrl}>
+							view profile
+						</a>
+					</div>
+					<div className="col-sm-6">
+						<Rating/>
+					</div>
+				</div>
+			</div>
+
+		<div>
+			{userThumbs.map(Thumbnail)}
+		</div>
+
+window.Thumbnail = Thumbnails

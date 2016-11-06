@@ -27,7 +27,10 @@ gem 'active_model_serializers', '0.8.1'
 gem 'sdoc', '~> 0.4.0', group: :doc
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7'
+# gem 'bcrypt', '~> 3.1.7'
+
+# user authentication
+gem 'devise'
 
 #assets
 gem 'bootstrap-sass', '~> 3.3.6'
@@ -47,6 +50,11 @@ gem 'classnames-rails'
 # Authorization
 gem 'pundit'
 
+# queue processing /schedule engine
+gem 'sidekiq', '3.2.5'
+
+# use for rating
+gem 'ratyrate'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

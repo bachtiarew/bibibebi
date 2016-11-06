@@ -1,6 +1,20 @@
 <%= render 'layouts/navbar' %>
-<h1>Welcome to bibibebi Main Page</h1>
-<h3>hello !, wanna be babysitter ?</h3>
+<div class="mainpages">
+	<div class="row">
+		<div class="col-sm-2">
+			<%= react_component "Sidebar" %>
+		</div>	
+		<div class="col-sm-6">
+			<%= react_component "Thumbnail", thumbs: @thumbs %>
+		</div>
+	<div class="col-sm-4">
+			<%= react_component "Profile" %>
+		</div>
+	</div>
+</div>
+
+<%= rating_for @thumbs[0][:babysitter], "original_score" %>
+<!-- <h3>hello !, wanna be babysitter ?</h3>
 <%= has_babysitter? %>
 
 <h3>Are you looking for a babysitter ?</h3>
@@ -10,4 +24,4 @@
 	<h2>yes iam babysitter</h2>
 <% else %>
 	<h2>yes iam parent </h2>cmd
-<% end %>
+<% end %> -->

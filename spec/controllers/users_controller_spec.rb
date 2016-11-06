@@ -38,7 +38,7 @@ describe UsersController do
 	end
 
 	describe "POST #create" do
-		it "registration successfully , redirect to main index" do
+		it "registration successfully , redirect to main babysitter" do
 			user = FactoryGirl.build(:user)
 			post :create, {
 				user: {
@@ -54,8 +54,9 @@ describe UsersController do
 					gender: user.gender,
 					phone_number: user.phone_number
 				}
-			}	
-			expect(response).to have_http_status(:success)
+			}
+			byebug
+			expect(response).to redirect_to root_path
 		end
 	end
 end

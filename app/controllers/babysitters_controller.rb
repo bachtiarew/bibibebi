@@ -1,4 +1,5 @@
 class BabysittersController < ApplicationController
+	before_action :current_user
 
 	def new
 		@babysitter = Babysitter.new
@@ -25,7 +26,7 @@ class BabysittersController < ApplicationController
 		end
 	end
 
-	def show
+	def show 
 		@babysitter = Babysitter.find(params[:id])
 		@skills = @babysitter.skills
 	end

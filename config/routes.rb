@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+ 
   get "users/sign_in"
   get "mains/index"
   get "users/logout"
@@ -10,12 +11,10 @@ Rails.application.routes.draw do
   resources :parents, except: [:index]
   root "homepages#index"
   get 'admins/index'  
-
+  post '/rate' => 'rater#create', as: 'rate'
   namespace :admins do
     resources :skills
   end
-
-
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

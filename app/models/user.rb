@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+	ratyrate_rater
 	#for field validation : field should'n be empty
 	validates :firstname, :lastname, :gender, :bornplace, :borndate, :address, :email, :password, :password_confirmation, presence: true
 	#validation for password : confirmation must matched
@@ -17,5 +18,6 @@ class User < ActiveRecord::Base
 	def is_parent?
 		self.role == "parent" ? true : false
 	end
+
 
 end
