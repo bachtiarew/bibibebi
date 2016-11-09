@@ -8,9 +8,9 @@ class User < ActiveRecord::Base
 	validates :email , uniqueness: true
 
 	has_one :babysitter
-	has_one :parentchild
+	has_one :ortu
 	has_secure_password
-
+	
 	def is_babysitter?
 		self.role == "babysitter" ? true : false
 	end
@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
 	end
 
 	def has_parent?
-		self.try(:parent) ? true : false
+		self.try(:ortu) ? true : false
 	end
 
 

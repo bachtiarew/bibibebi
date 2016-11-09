@@ -14,7 +14,7 @@ Rating = React.createClass
 Thumbnails = React.createClass
 	
 	getInitialState: ->
-		userThumbs: @props.thumbs
+		roleThumbs: @props.thumbs
 		lenThumb: null
 		rowThumb: null
 		colThumb: null
@@ -44,22 +44,24 @@ Thumbnails = React.createClass
 
 
 	render: ->
-		{userThumbs, lenThumb, rowThumb, colThumb} = @state
+		{roleThumbs, lenThumb, rowThumb, colThumb} = @state
 		i = 0
-		
+		console.log("role thumbs", roleThumbs)
 		Thumbnail = (e, key) =>
-			if e.babysitter?
-				viewProfileUrl = "/babysitters/"+e.babysitter?.id
-			else
-				viewProfileUrl = "/parents/"+e.parent?.id
+			{user} = e
 			
+			if user.role == "babysitter"
+				viewProfileUrl = "/babysitters/"+e.id
+			else
+				viewProfileUrl = "/parents/"+e.id
+		
 			<div key={key} className="thumbnail pull-left">
 				<div className="thumb-img text-center">
 					<i className="fa fa-camera"></i>
 				</div>
 				<div className="thumb-label">
-					<label>{e.firstname} {e.lastname}</label>
-					<p>{e.phone_number}</p>
+					<label>{user.firstname} {user.lastname}</label>
+					<p>{user.phone_number}</p>
 				</div>
 				<div className="thumb-rating text-right row">
 					<div className="col-sm-6">
@@ -74,7 +76,7 @@ Thumbnails = React.createClass
 			</div>
 
 		<div>
-			{userThumbs.map(Thumbnail)}
+			{roleThumbs.map(Thumbnail)}
 		</div>
 
 window.Thumbnail = Thumbnails

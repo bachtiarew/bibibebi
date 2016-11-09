@@ -8,4 +8,16 @@ module ApplicationHelper
 		return {alertLabel: alert, alertType: "notify"}
 	end
 
+	def user_email
+		current_user.email
+	end
+
+	def get_thumbs
+		if current_user.is_babysitter?
+			get_parents
+		else
+			get_babysitters
+		end
+	end
+
 end

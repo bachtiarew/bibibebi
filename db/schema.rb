@@ -47,12 +47,12 @@ ActiveRecord::Schema.define(version: 20161108155759) do
     t.string   "gender",      limit: 255
     t.integer  "age",         limit: 4
     t.text     "description", limit: 65535
-    t.integer  "parent_id",   limit: 4
+    t.integer  "ortu_id",   limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "kids", ["parent_id"], name: "index_kids_on_parent_id", using: :btree
+  add_index "kids", ["parent_id"], name: "index_kids_on_ortu_id", using: :btree
 
   create_table "overall_averages", force: :cascade do |t|
     t.integer  "rateable_id",   limit: 4
@@ -62,14 +62,14 @@ ActiveRecord::Schema.define(version: 20161108155759) do
     t.datetime "updated_at"
   end
 
-  create_table "parentchilds", force: :cascade do |t|
+  create_table "ortus", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "photos",     limit: 255
   end
 
-  add_index "parentchilds", ["user_id"], name: "index_parentchilds_on_user_id", using: :btree
+  add_index "ortus", ["user_id"], name: "index_ortus_on_user_id", using: :btree
 
   create_table "rates", force: :cascade do |t|
     t.integer  "rater_id",      limit: 4

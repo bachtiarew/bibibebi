@@ -1,5 +1,10 @@
 class ParentsController < ApplicationController
 	
+	def index
+		@babysitters = Babysitter.all
+		@thumbs = @babysitters
+	end
+
 	def new
 		
 	end
@@ -16,7 +21,7 @@ class ParentsController < ApplicationController
 	
 		@child_items = params[:parent].delete('child_items')
 		@childs = selection_child(@child_items)
-		@parent = Parent.new(parent_params)
+		@parent = Ortu.new(parent_params)
 
 		if @parent.save
 			parent_id = @parent.id
@@ -26,12 +31,12 @@ class ParentsController < ApplicationController
 					gender: child[:gender],
 					age: child[:age],
 					description: child[:description],
-					parent_id: parent_id
+					ortu_id: parent_id
 					)
 			end
 
 			flash[:notice] = "Parents child data has been saved!"
-			redirect_to mains_index_path
+			redirect_to parents_path
 		else
 			flash[:alert] = "Parent child data failed to save, please try again!"
 			redirect_to new_parent_path
@@ -40,7 +45,7 @@ class ParentsController < ApplicationController
 	end
 
 	def show
-		@parent = Parent.find(params[:id])
+		@parent = Ortu.find(params[:id])
 		@childs = @parent.kids
 	end
 

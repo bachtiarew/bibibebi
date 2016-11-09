@@ -10,5 +10,9 @@ module BabysitterHelper
 
   end
 
+  def get_babysitters
+  	babysitters = Babysitter.all
+	babysitters.as_json(include: :user, except: [:password_digest])
+  end
 
 end
