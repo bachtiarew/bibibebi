@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   resources :users
   resources :babysitters
   get "parents/get_user", to: "parents#get_user"
-  resources :parents, except: [:index]
+  resources :parents
   root "homepages#index"
   get 'admins/index'  
   post '/rate' => 'rater#create', as: 'rate'

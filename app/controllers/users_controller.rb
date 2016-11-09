@@ -17,11 +17,20 @@ class UsersController < ApplicationController
 		if @user && @user.authenticate(password)
 			flash[:notice] = "Anda berhasil masuk"
 			session[:user_id] = @user.id
-			redirect_to mains_index_path
+			status = @user.has_finish_account?
+
+			if status == "parent_finish"
+				redirect_to parents_path
+			elsif status == "babysitter_finish"
+				redirect_to babysitters_path
+			elsif status == "parent_not_finish"
+				redirect_to new_parent_path
+			elsif status == "babysitter_not_finish"
+				redirect_to new_babysitter_path
+			end	
 		else
 			flash[:alert] = "Email atau password anda salah, silahkan coba kembali"
 			redirect_to root_path
-
 		end
 
 	end

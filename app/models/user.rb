@@ -19,5 +19,21 @@ class User < ActiveRecord::Base
 		self.role == "parent" ? true : false
 	end
 
+	def has_finish_account?
+		if self.role == "parent"
+			self.has_parent? ? "parent_finish" : "parent_not_finish"
+		else
+			self.has_babysitter? ? "babysitter_finish" : "babysitter_not_finish"
+		end
+	end
+
+	def has_babysitter?
+		self.try(:babysitter) ? true : false
+	end
+
+	def has_parent?
+		self.try(:parent) ? true : false
+	end
+
 
 end

@@ -2,6 +2,6 @@ class Kid < ActiveRecord::Base
 	
 	validates :name, :gender, :age, :description, presence: true
 
-	belongs_to :parent
+	belongs_to :ortu
 	
 end

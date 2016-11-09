@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161103135708) do
+ActiveRecord::Schema.define(version: 20161108155759) do
 
   create_table "average_caches", force: :cascade do |t|
     t.integer  "rater_id",      limit: 4
@@ -62,14 +62,14 @@ ActiveRecord::Schema.define(version: 20161103135708) do
     t.datetime "updated_at"
   end
 
-  create_table "parents", force: :cascade do |t|
+  create_table "parentchilds", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "photos",     limit: 255
   end
 
-  add_index "parents", ["user_id"], name: "index_parents_on_user_id", using: :btree
+  add_index "parentchilds", ["user_id"], name: "index_parentchilds_on_user_id", using: :btree
 
   create_table "rates", force: :cascade do |t|
     t.integer  "rater_id",      limit: 4
