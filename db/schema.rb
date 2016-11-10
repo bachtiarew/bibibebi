@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161108155759) do
+ActiveRecord::Schema.define(version: 20161109172656) do
 
   create_table "average_caches", force: :cascade do |t|
     t.integer  "rater_id",      limit: 4
@@ -47,17 +47,15 @@ ActiveRecord::Schema.define(version: 20161108155759) do
     t.string   "gender",      limit: 255
     t.integer  "age",         limit: 4
     t.text     "description", limit: 65535
-    t.integer  "ortu_id",   limit: 4
+    t.integer  "ortu_id",     limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "kids", ["parent_id"], name: "index_kids_on_ortu_id", using: :btree
-
-  create_table "overall_averages", force: :cascade do |t|
-    t.integer  "rateable_id",   limit: 4
-    t.string   "rateable_type", limit: 255
-    t.float    "overall_avg",   limit: 24,  null: false
+  create_table "nyobas", force: :cascade do |t|
+    t.string   "product_name", limit: 255
+    t.integer  "qty",          limit: 4
+    t.integer  "price",        limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -70,6 +68,14 @@ ActiveRecord::Schema.define(version: 20161108155759) do
   end
 
   add_index "ortus", ["user_id"], name: "index_ortus_on_user_id", using: :btree
+
+  create_table "overall_averages", force: :cascade do |t|
+    t.integer  "rateable_id",   limit: 4
+    t.string   "rateable_type", limit: 255
+    t.float    "overall_avg",   limit: 24,  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "rates", force: :cascade do |t|
     t.integer  "rater_id",      limit: 4
