@@ -1,4 +1,12 @@
 <div class="Header"><h1>New Parent Child</h1></div>
 <%= form_for :parent, url: parents_path do |f| %>
+<%= f.file_field :picture_ur, class: "hidden_file" %>
 <%= react_component "ParentsApp" %>
 <% end %>
+
+<script>
+	$(document).ready(function(){
+		$(".hidden_file").hide();	
+	});
+</script>
+

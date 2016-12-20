@@ -82,7 +82,7 @@ Modal = React.createClass
 							submitting: false
 						}
 				success: (payload) ->
-					console.log("berhasil")
+					
 			)
 		else 
 			dispatcher.dispatch
@@ -220,7 +220,7 @@ Modal = React.createClass
 	
 	onValidatePhoneNumber: ->
 		inputPhoneNumber = @refs.phoneNumber.value
-		console.log("tipe data input phone number",typeof(inputPhoneNumber))
+		
 		re = /^[0-9]+$/
 
 		if re.test(inputPhoneNumber)
@@ -353,7 +353,7 @@ Modal = React.createClass
 							<input type="email" id="email" className={@inputRequired(requesting.submitting, user.email)} ref="emailSignUp" onBlur={@inputChange} onChange={@onValidateEmail} placeholder="Masukan email anda" required/>
 							<p className="weak">
 								{
-									console.log("user email", user.email)
+									
 									if !validEmail && user.email != null && user.email != ""
 										"Alamat Email tidak benar"
 								}

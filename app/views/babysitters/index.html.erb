@@ -1,0 +1,14 @@
+<%= render "layouts/navbar" %>
+<div class="mainpages">
+	<div class="row">
+		<div class="col-sm-2 sidebar-frame">
+			<%= react_component "Sidebar" %>
+		</div>	
+		<div class="col-sm-6 thumbnail-frame">
+			<%= react_component "Thumbnail", thumbs: get_thumbs, currentUser: current_user %>
+		</div>
+	<div class="col-sm-4">
+			<%= react_component "Profile" %>	
+		</div>
+	</div>
+</div>

@@ -1,0 +1,143 @@
+Biframe = React.createClass
+	render: ->
+		<div className="biframe">
+			<img src="<%= asset_path('biframe.png') %>"/>
+		</div>
+Error = React.createClass
+	render: ->
+		{error} = @props
+
+		<div className="alert alert-danger alert-dismissable">
+			<button type="button" className="close" data-dismiss="alert" aria-hidden="true">
+				&times
+			</button>
+			{error}
+		</div>
+
+
+Frame = React.createClass
+	getInitialState: ->
+		{
+			statusDisplay: false
+			topic: ""
+			uploadUrl: FrameStore.destUrl
+			error: ""
+		}
+
+	componentDidMount: ->
+		FrameStore.addChangeListener(@_onChange)
+
+	componentWillUnmount: ->
+		FrameStore.removeChangeListener(@_onChange)
+	
+	_onChange: ->
+		@setState(
+			uploadUrl:  FrameStore.destUrl
+		)	
+
+	onClickShowFrame: ->
+		topic = document.getElementById("topic").value
+		imageUrl = document.getElementById("imageUrl").value
+		imageName = document.getElementById("imageUrl").files[0]
+
+		if _.isEmpty(topic) || _.isEmpty(imageUrl)
+			@generateError(topic, imageUrl)
+
+		unless _.isEmpty(topic) || _.isEmpty(imageUrl)
+			@copyImageUrl(imageUrl, imageName)
+			@setTopic(topic)
+			@changeStatusDisplay()
+
+	copyImageUrl: (imageUrl, imageName) ->
+		formData = new FormData()
+		formData.append("attachment", imageName )
+		$.ajax
+			url: "/homepages/copas.js"
+			type: "POST"
+			data: formData
+			cache: false
+			processData: false
+			contentType: false
+
+	changeStatusDisplay: ->
+		@setState(
+			statusDisplay: true
+		)
+
+	onClickEditArtikel: ->
+		@setState(
+			statusDisplay: false
+		)
+
+	setTopic: (topic) ->
+		@setState(
+			topic: topic
+			error: ""
+		)
+
+	onChangeTopic: (event) ->
+		@setState(
+			topic: event.target.value
+		)
+
+	generateError: (topic, imageUrl) ->
+
+		unless _.isEmpty(topic) && _.isEmpty(imageUrl)
+			if _.isEmpty(topic)
+				@setState(error: "topik artikel harus tidak boleh kosong !")
+			else
+				@setState(error: "Anda belum memilih gambar untuk di upload!")
+		else
+			@setState(error: "Pastikan Semuanya telah di isi dengan benar !")
+
+
+	render: ->
+		{statusDisplay, topic, uploadUrl, error} = @state
+		{csrf_token} = @props
+
+		<div>
+			{
+				if error != ""
+					<Error error={error}/>	
+			}
+				
+			{
+				if statusDisplay
+					<div key="tampil-show" className="frame container-fluid">
+						<div className="picture">
+							<Biframe/>
+							<img src={uploadUrl} />
+						</div>
+						<div className="topic">
+							<div className="logo pull-right">
+								<img src="<%= asset_path('biframe.png') %>"/>
+							</div>
+							<strong>{topic}</strong>
+						</div>
+						<br/>
+						<div>
+							<button className="btn btn-md btn-success pull-right" onClick={@onClickEditArtikel}>Edit Artikel</button>
+						</div>
+					</div>
+				else
+					<div key="tampil-edit" className="container-fluid">
+						<h2>Generate Bibibebi Frame</h2>
+						<div className="upload-picture">
+							<label className="label-control">Gambar Artikel</label>
+							<form method="POST" encType="multipart/form-data" action="/frames.js" data-remote="true" className="form-upload" >
+								<input type='hidden' name='authenticity_token' value={csrf_token} />
+								<input type="file" name="frame[attachment]" className="form-control" id="imageUrl" />
+							</form>
+						</div>
+						<br/>
+						<div className="input-topic">
+							<label className="label-control"> Artikel :</label>
+							<textArea type="text" className="form-control" value={topic} onChange={@onChangeTopic} id="topic" rows="8" placeholder="ketik disini"/>
+						</div>
+						<br/>
+						<button className="btn btn-md btn-info pull-right" onClick={@onClickShowFrame}>Show Frame</button>
+					</div>
+			}
+		</div>
+
+window.Frame = Frame

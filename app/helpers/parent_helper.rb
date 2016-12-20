@@ -11,7 +11,11 @@ module ParentHelper
 
 	def get_parents
 		parents = Ortu.all
-		parents.as_json( except: [:password_digest], include: :user)
+		parents.as_json( except: [:password_digest], include: [:user, :pictures])
+	end
+
+	def get_parent
+		current_user.ortu.as_json(include: [:kids, :user])
 	end
 
 end

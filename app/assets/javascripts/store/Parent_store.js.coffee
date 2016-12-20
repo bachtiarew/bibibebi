@@ -21,7 +21,6 @@ window.ParentStore = _.assign(new EventEmitter(), {
 	removeItem: (childItem) ->
 		childItem = _.find(@childs, (_item) -> _item.key == childItem.key)
 		childItem._destroy = 1
-		console.log("remove",childItem)
 		@emitChange()
 
 	emitChange: ->

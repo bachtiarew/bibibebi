@@ -26,7 +26,6 @@ window.HomepageStore = _.assign(new EventEmitter(),{
 		}
 
 	setModal: (status) ->
-		console.log("set modal store")
 		@status = status
 		@modal = !@modal
 		@emitChange()

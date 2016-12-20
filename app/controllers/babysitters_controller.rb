@@ -1,28 +1,43 @@
 class BabysittersController < ApplicationController
 	before_action :current_user
 
+	def index
+
+	end
+
 	def new
 		@babysitter = Babysitter.new
 		@skill = Skill.all
 	end
 
 	def create
-		
 		if current_user
 			params[:babysitter][:user_id] = session[:user_id]
 		end
+
 		skill_ids = params[:babysitter].delete("skill_ids")
 		selected_skills = []
 
-		selected_skills = skill_ids.collect{ |skil_id| Skill.find(skil_id)}
-
+		selected_skills = skill_ids.collect{ |skil_id| Skill.find(skil_id) }
 		@babysitter = Babysitter.new(babysitter_params)
+		
 		if @babysitter.save
 			@babysitter.skills = selected_skills
-
-			redirect_to mains_index_path
+			save_picture!(@babysitter.id, "Babysitter", params[:babysitter][:photos])
+			redirect_to babysitters_path
 		else
 			render_to 'new'
+		end
+	end
+
+	def save_picture! (id, type, url)
+		if url.present?
+			params[:picture] = {}
+			params[:picture][:picture_url] = url
+			params[:picture][:pictureable_id] = id 
+			params[:picture][:pictureable_type] = type
+			@picture = Picture.new(picture_params)
+			@picture.save
 		end
 	end
 
@@ -71,7 +86,10 @@ class BabysittersController < ApplicationController
 
 	private
 	def babysitter_params
-		params.require(:babysitter).permit(:nik, :age, :description, :photos, :user_id, :skills_ids)
+		params.require(:babysitter).permit(:nik, :age, :description, :user_id, :skills_ids)
 	end
 
+	def picture_params
+		params.require(:picture).permit(:picture_url, :pictureable_id, :pictureable_type, )
+	end
 end

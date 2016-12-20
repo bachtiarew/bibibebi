@@ -17,7 +17,6 @@ FormChild = React.createClass
 		ChildItems ||= []
 		console.log("state child items",@state.ChildItems)
 		FormComponentItems = (childItem) ->
-			console.log("index child item", childItem.key)
 			index = childItem.key || childItem._index
 			<FormChildItems childItem={childItem} key={childItem.key} index={index}/>
 
@@ -29,6 +28,7 @@ FormChild = React.createClass
  						<th>Gender</th>
  						<th>Age</th>
  						<th>Description</th>
+ 						<th>Photo</th>
  						<th>#</th>
  					</tr>
 				</thead>
@@ -64,14 +64,16 @@ FormChildItems = React.createClass
 
 	render: ->
 
-		{childItem, index} = @props
-		ParentNamePrefix = "parent"
-		ChildNamePrefix = "#{ParentNamePrefix}[child_items][]"
-		NameChildName = "#{ChildNamePrefix}[name]"
-		GenderChildName = "#{ChildNamePrefix}[gender]"
-		AgeChildName = "#{ChildNamePrefix}[age]"
-		DescriptionChildName = "#{ChildNamePrefix}[description]"
-		idHiddenInputName = "#{ChildNamePrefix}[id]"
+		{childItem, index} 		= @props
+		ParentNamePrefix 		= "parent"
+		ChildNamePrefix 		= "#{ParentNamePrefix}[child_items][]"
+		NameChildName 			= "#{ChildNamePrefix}[name]"
+		GenderChildName 		= "#{ChildNamePrefix}[gender]"
+		AgeChildName 			= "#{ChildNamePrefix}[age]"
+		DescriptionChildName 	= "#{ChildNamePrefix}[description]"
+		PhotoChildInputName		= "#{ParentNamePrefix}[:photo_child][]"
+		idHiddenInputName 		= "#{ChildNamePrefix}[id]"
+
 		
 		if childItem._destroy == 1
 			destroyInputName = "#{ChildNamePrefix}[_destroy]"
@@ -94,19 +96,25 @@ FormChildItems = React.createClass
 			<td>
 				<textarea  name={DescriptionChildName} className="form-control" rows="4"/>
 			</td>
+			<td>
+				<input type="file" name={PhotoChildInputName} className="form-control" />
+			</td>
 			<td><button type="button" onClick={@RemoveItem} className="Btn btn-danger btn-sm">x</button></td>
 		</tr>
 
 
 FormParents = React.createClass 
 	render: ->
+		ParentNamePrefix = "parent"
+		PictureUrlInputName = "#{ParentNamePrefix}[picture_url]"
+
 		<div>			
 			<div className="form-group">
-				<label className="sr-only" for="inputfile">Photos</label>
-					<input type="file" name="parent[photos]" id="parent_photos"/>
+				<label className="sr-only" for="picture_url">Photos</label>
+					<input type="file" name={PictureUrlInputName} id="picture_url" />
 					<p className="help-block">Example block-level help text-here</p>
 			</div>
-			<FormChild/>
+			<FormChild />
 			<div className="form-group">
 				<button type="submit" className="btn btn-md btn-info">Submit</button>
 			</div>

@@ -50,6 +50,11 @@ gem 'classnames-rails'
 # Authorization
 gem 'pundit'
 
+
+# form handle
+gem 'simple_form'
+gem 'nested_form'
+
 # queue processing /schedule engine
 gem 'sidekiq', '3.2.5'
 

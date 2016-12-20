@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
 
 	has_one :babysitter
 	has_one :ortu
+	
 	has_secure_password
 	
 	def is_babysitter?

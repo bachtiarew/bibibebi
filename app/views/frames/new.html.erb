@@ -1,0 +1,6 @@
+<h1> Attachment Picture</h1>
+<%= form_for :frame, url: frames_path, remote: true , authenticity_token: true do |f| %>
+  <%= f.label :attachment , "Picture attachment" %>
+  <%= f.file_field :attachment, class: "form-control" %>
+  <%= f.submit "Submit", class: "btn btn-md btn-success" %>
+<% end %>

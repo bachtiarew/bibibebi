@@ -20,4 +20,12 @@ module ApplicationHelper
 		end
 	end
 
+	def main_page_url
+		if current_user.is_babysitter?
+			babysitters_path
+		else
+			parents_path
+		end
+	end
+
 end

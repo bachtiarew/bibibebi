@@ -1,0 +1,159 @@
+BlankRating = React.createClass
+	render: ->
+		<div className="rating">
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+			<i className="fa fa-star-o"></i>
+		</div>
+
+Rating = React.createClass
+	propTypes:
+		Rate: React.PropTypes.object
+
+	getInitialState: ->
+		Rate: @props.Rate
+
+	createStar: (qty, type) ->
+		starClass = classNames("fa",
+			{"fa-star" : type == "FS"},
+			{"fa-star-half-o" : type == "HS"},
+			{"fa-star-o" : type == "BS"}
+		)
+		i = 0
+		while i < qty
+			ky = type + "-" + i
+			i++
+			<i key={ky} className={starClass}></i>
+			
+
+	generateStarRate: (avg) ->
+		if avg % 1
+			fullStarQty = avg - 1
+			halfStarQty = 1
+		else
+			fullStarQty = avg
+			halfStarQty = 0
+
+		blankStarQty = 5 - Math.ceil avg
+	
+		<div className="rating">
+			{
+				@createStar(fullStarQty,"FS")
+			}
+			{
+				@createStar(halfStarQty,"HS")
+			}
+			{
+				@createStar(blankStarQty,"BS")
+			}
+		</div>
+
+	render: ->
+		{Rate} = @state
+		{id, cacheable_id, cacheable_type, qty, avg, dimension} = Rate
+		
+		@generateStarRate(avg)
+
+Thumbnails = React.createClass
+
+	getInitialState: ->
+		roleThumbs: @props.thumbs
+		currentUser: @props.currentUser
+		lenThumb: null
+		rowThumb: null
+		colThumb: null
+
+	setThumbRowCol: (thumbs) ->
+		length = thumbs.length
+		remain = length % 3
+
+		if length > 3
+			if remain != 0
+				length -= remain
+				col = (length / 3) + 1
+
+			else
+				col = length / 3
+		else
+			row = length
+			col = 1
+
+		@setState(
+			lenThumb: thumbs.length
+			rowThumb: row
+			colThumb: col 
+		)
+
+	componentDidMount: ->
+
+
+	render: ->
+		{roleThumbs, lenThumb, rowThumb, colThumb, currentUser} = @state
+		i = 0
+
+		isBabysitter = if currentUser.role == "babysitter" then true else false
+		isParent = if currentUser.role == "parent" then true else false	
+		console.log("role thumbs", roleThumbs)
+		Thumbnail = (e, key) =>
+			{user, role_ratings, pictures} = e
+			{picture_url} = pictures[0]
+
+			rate = _.find(role_ratings, (e) -> e.dimension == "quality")
+			
+			if user.role == "babysitter"
+				viewProfileUrl = "/babysitters/"+e.id
+			else
+				viewProfileUrl = "/parents/"+e.id
+			<div key={key} className="col-md-4 col-sm-4">
+				<div  className="thumbnail">
+					<div className="thumb-img text-center">
+						{
+							if picture_url?.url
+								<img src={picture_url.url} />
+							else
+								<i className="fa fa-camera"></i>
+						}
+					</div>
+					<div className="thumb-label">
+						<label>{user.firstname} {user.lastname}</label>
+						<p>{user.phone_number}</p>
+					</div>
+					<div className="thumb-rating row">	
+						<div className="col-md-12">
+							<div className="row">			
+								<div className="col-sm-12 text-right">
+									{
+										if isParent
+											if rate?.id
+												<Rating Rate={rate} />
+											else
+												<BlankRating/>	
+									}
+								</div>
+							</div>
+							<div className="row">
+								<div className="col-sm-3 text-left">
+									<a href={viewProfileUrl} target="_blank" className="btn btn-sm btn-success">
+										lihat
+									</a>
+								</div>
+								<div className="col-sm-9 text-right">
+									{
+										if isParent
+											if rate?.id
+												<strong>Rating : {rate?.avg}</strong>
+									}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		<div>
+			{roleThumbs.map(Thumbnail)}
+		</div>
+
+window.Thumbnail = Thumbnails

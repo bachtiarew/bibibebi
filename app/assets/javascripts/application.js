@@ -28,6 +28,7 @@
 //= require components/AlertApp
 //= require components/Homepages/Homepages
 //= require components/Homepages/Modal
+//= require components/Homepages/Frame
 //= require components/Parents/ParentsApp
 //= require components/Mains/Thumbnail
 //= require components/Mains/Sidebar

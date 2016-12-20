@@ -226,6 +226,7 @@ Homepages = React.createClass
 		HomepageStore.requesting = false
 		HomepageStore.addChangeListener(@onChange)
 
+
 	componentWillUnMount: ->
 		HomepageStore.removeChangeListener(@onChange)
 

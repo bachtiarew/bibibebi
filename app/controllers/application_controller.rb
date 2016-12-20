@@ -28,5 +28,15 @@ class ApplicationController < ActionController::Base
 	return childs
 	
   end
+
+  def authenticate_checking
+    if session[:user_id] == nil
+      redirect_to root_path
+    else
+      if current_user == nil
+        redirect_to root_path
+      end 
+    end
+  end
 	
 end

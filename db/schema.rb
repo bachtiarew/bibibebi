@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161109172656) do
+ActiveRecord::Schema.define(version: 20161218135923) do
 
   create_table "average_caches", force: :cascade do |t|
     t.integer  "rater_id",      limit: 4
@@ -37,10 +37,15 @@ ActiveRecord::Schema.define(version: 20161109172656) do
     t.integer  "user_id",     limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "photos",      limit: 255
   end
 
   add_index "babysitters", ["user_id"], name: "index_babysitters_on_user_id", using: :btree
+
+  create_table "frames", force: :cascade do |t|
+    t.string   "attachment", limit: 255
+    t.datetime "created_at",             null: false
+    t.datetime "updated_at",             null: false
+  end
 
   create_table "kids", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -52,19 +57,10 @@ ActiveRecord::Schema.define(version: 20161109172656) do
     t.datetime "updated_at"
   end
 
-  create_table "nyobas", force: :cascade do |t|
-    t.string   "product_name", limit: 255
-    t.integer  "qty",          limit: 4
-    t.integer  "price",        limit: 4
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "ortus", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "photos",     limit: 255
   end
 
   add_index "ortus", ["user_id"], name: "index_ortus_on_user_id", using: :btree
@@ -73,6 +69,14 @@ ActiveRecord::Schema.define(version: 20161109172656) do
     t.integer  "rateable_id",   limit: 4
     t.string   "rateable_type", limit: 255
     t.float    "overall_avg",   limit: 24,  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pictures", force: :cascade do |t|
+    t.string   "picture_url",      limit: 255
+    t.integer  "pictureable_id",   limit: 4
+    t.string   "pictureable_type", limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -101,6 +105,11 @@ ActiveRecord::Schema.define(version: 20161109172656) do
   end
 
   add_index "rating_caches", ["cacheable_id", "cacheable_type"], name: "index_rating_caches_on_cacheable_id_and_cacheable_type", using: :btree
+
+  create_table "role_ratings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "skills", force: :cascade do |t|
     t.string  "name",        limit: 255

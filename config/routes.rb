@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   get "parents/get_user", to: "parents#get_user"
   resources :parents
   root "homepages#index"
-  get 'admins/index'  
+  get 'admins/index'
+  get 'homepages/frame' 
+  post "homepages/copas"
   post '/rate' => 'rater#create', as: 'rate'
   namespace :admins do
     resources :skills

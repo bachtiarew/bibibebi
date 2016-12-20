@@ -1,8 +1,10 @@
 class ParentsController < ApplicationController
-	
+	before_action :authenticate_checking
+	before_action :set_picture, only:[:index]
+	before_action :set_pictures, only:[:index]
+
 	def index
-		@babysitters = Babysitter.all
-		@thumbs = @babysitters
+		
 	end
 
 	def new
@@ -18,23 +20,27 @@ class ParentsController < ApplicationController
 		if current_user
 			params[:parent][:user_id] = session[:user_id]
 		end
-	
+		byebug
 		@child_items = params[:parent].delete('child_items')
 		@childs = selection_child(@child_items)
 		@parent = Ortu.new(parent_params)
-
 		if @parent.save
 			parent_id = @parent.id
 			@childs.each do |child|
-				Kid.create(
+				kid = Kid.create(
 					name: child[:name],
 					gender: child[:gender],
 					age: child[:age],
 					description: child[:description],
 					ortu_id: parent_id
 					)
+				Picture.create(
+					picture_url: child[:photo_child],
+					pictureable_id: kid.id,
+					pictureable_type: "Kid",
+					) if child[:photo_child].present?
 			end
-
+			save_picture!(@parent.id, "Ortu", params[:parent][:picture_url])			
 			flash[:notice] = "Parents child data has been saved!"
 			redirect_to parents_path
 		else
@@ -44,15 +50,38 @@ class ParentsController < ApplicationController
 
 	end
 
+	def save_picture!(id, type, url)
+		if url.present?
+			params[:picture] = {}
+			params[:picture][:picture_url] = url
+			params[:picture][:pictureable_id] = id 
+			params[:picture][:pictureable_type] = type
+			@picture = Picture.new(picture_params)
+			@picture.save
+		end
+	end
+
 	def show
 		@parent = Ortu.find(params[:id])
 		@childs = @parent.kids
 	end
 
-	private
-	def parent_params
-		params.require(:parent).permit(:photos, :user_id)
+	def set_picture
+		@parent = current_user.ortu
+		@picture = Picture.find_by(pictureable_id: @parent.id) 
 	end
 
+	def set_pictures
+		@pictures = Picture.where(pictureable_type: "Babysitter")
+	end
 
+	private
+	def parent_params
+		params.require(:parent).permit(:user_id)
+	end
+
+	private
+	def picture_params
+		params.require(:picture).permit(:picture_url, :pictureable_id, :pictureable_type)
+	end
 end
