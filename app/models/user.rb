@@ -7,8 +7,8 @@ class User < ActiveRecord::Base
 	#validation for email : email that register must uniqueness
 	validates :email , uniqueness: true
 
-	has_one :babysitter
-	has_one :ortu
+	has_one :babysitter, dependent: :destroy
+	has_one :ortu, dependent: :destroy
 	
 	has_secure_password
 	

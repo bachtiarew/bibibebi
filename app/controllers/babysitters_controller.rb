@@ -41,9 +41,25 @@ class BabysittersController < ApplicationController
 		end
 	end
 
-	def show 
+	def show
 		@babysitter = Babysitter.find(params[:id])
 		@skills = @babysitter.skills
+		@user = @babysitter.user
+		@pictures = []
+		pictures = @babysitter.pictures
+		pictures.each do |picture|
+			@pictures << {
+				id: picture.id,
+				pictureId: picture.pictureable_id,
+				pictureType: picture.pictureable_type,
+				pictureUrl: picture.picture_url.url
+			}
+		end
+		respond_to do |format|
+			format.js do
+				render :show
+			end
+		end
 	end
 
 	def edit

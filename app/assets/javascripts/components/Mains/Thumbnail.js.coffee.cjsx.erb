@@ -88,72 +88,97 @@ Thumbnails = React.createClass
 
 	componentDidMount: ->
 
-
 	render: ->
 		{roleThumbs, lenThumb, rowThumb, colThumb, currentUser} = @state
 		i = 0
 
 		isBabysitter = if currentUser.role == "babysitter" then true else false
 		isParent = if currentUser.role == "parent" then true else false	
-		console.log("role thumbs", roleThumbs)
-		Thumbnail = (e, key) =>
-			{user, role_ratings, pictures} = e
-			{picture_url} = pictures[0]
 
-			rate = _.find(role_ratings, (e) -> e.dimension == "quality")
-			
-			if user.role == "babysitter"
-				viewProfileUrl = "/babysitters/"+e.id
-			else
-				viewProfileUrl = "/parents/"+e.id
-			<div key={key} className="col-md-4 col-sm-4">
-				<div  className="thumbnail">
-					<div className="thumb-img text-center">
-						{
-							if picture_url?.url
-								<img src={picture_url.url} />
-							else
-								<i className="fa fa-camera"></i>
-						}
-					</div>
-					<div className="thumb-label">
-						<label>{user.firstname} {user.lastname}</label>
-						<p>{user.phone_number}</p>
-					</div>
-					<div className="thumb-rating row">	
-						<div className="col-md-12">
-							<div className="row">			
-								<div className="col-sm-12 text-right">
-									{
-										if isParent
-											if rate?.id
-												<Rating Rate={rate} />
-											else
-												<BlankRating/>	
-									}
-								</div>
+		Thumbnail = (e, key) =>
+			<Thumb key={key} item={e} 
+			isParent={isParent} 
+			isBabysitter={isBabysitter} />
+
+		if roleThumbs == ""
+			<div></div>
+		else
+			<div>
+				{roleThumbs.map(Thumbnail)}
+			</div>
+
+Thumb = React.createClass
+	propTypes:
+		item: React.PropTypes.object
+		isParent: React.PropTypes.bool
+		isBabysitter: React.PropTypes.bool
+
+	getInitialState: ->
+		item: @props.item
+
+	viewProfile: ->
+		{item} = @state
+		{user} = item
+		if user.role == "babysitter"
+			profileUrl = "/babysitters/"+item.id
+		else
+			profileUrl = "/parents/"+item.id
+
+		$.get(profileUrl)
+		
+	render: ->
+		{item} = @state
+		{isBabysitter, isParent} = @props
+		{user, role_ratings, pictures} = item
+		{picture_url} = pictures[0]
+
+		rate = _.find(role_ratings, (e) -> e.dimension == "quality")
+
+		<div className="col-md-4 col-sm-4">
+			<div  className="thumbnail">
+				<div className="thumb-img text-center">
+					{
+						if picture_url?.url
+							<img src={picture_url.url} />
+						else
+							<i className="fa fa-camera"></i>
+					}
+				</div>
+				<div className="thumb-label">
+					<label>{user.firstname} {user.lastname}</label>
+					<p>{user.phone_number}</p>
+				</div>
+				<div className="thumb-rating row">	
+					<div className="col-md-12">
+						<div className="row">			
+							<div className="col-sm-12 text-right">
+								{
+									if isParent
+										if rate?.id
+											<Rating Rate={rate} />
+										else
+											<BlankRating/>	
+								}
 							</div>
-							<div className="row">
-								<div className="col-sm-3 text-left">
-									<a href={viewProfileUrl} target="_blank" className="btn btn-sm btn-success">
-										lihat
-									</a>
-								</div>
-								<div className="col-sm-9 text-right">
-									{
-										if isParent
-											if rate?.id
-												<strong>Rating : {rate?.avg}</strong>
-									}
-								</div>
+						</div>
+						<div className="row">
+							<div className="col-sm-3 text-left">
+								<a href="javascript:void(0)" onClick={@viewProfile} className="btn btn-sm btn-success">
+									lihat
+								</a>
+							</div>
+							<div className="col-sm-9 text-right">
+								{
+									if isParent
+										if rate?.id
+											<strong>Rating : {rate?.avg}</strong>
+								}
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
-		<div>
-			{roleThumbs.map(Thumbnail)}
 		</div>
+
 
 window.Thumbnail = Thumbnails

@@ -4,7 +4,8 @@ class ParentsController < ApplicationController
 	before_action :set_pictures, only:[:index]
 
 	def index
-		
+		@parent = current_user.ortu
+		@picture = Picture.find_by(pictureable_id: @parent.id, pictureable_type: "Ortu")
 	end
 
 	def new
@@ -20,7 +21,6 @@ class ParentsController < ApplicationController
 		if current_user
 			params[:parent][:user_id] = session[:user_id]
 		end
-		byebug
 		@child_items = params[:parent].delete('child_items')
 		@childs = selection_child(@child_items)
 		@parent = Ortu.new(parent_params)
@@ -33,12 +33,8 @@ class ParentsController < ApplicationController
 					age: child[:age],
 					description: child[:description],
 					ortu_id: parent_id
-					)
-				Picture.create(
-					picture_url: child[:photo_child],
-					pictureable_id: kid.id,
-					pictureable_type: "Kid",
-					) if child[:photo_child].present?
+					)	
+				save_picture!(kid.id, "Kid", child[:picture_url])
 			end
 			save_picture!(@parent.id, "Ortu", params[:parent][:picture_url])			
 			flash[:notice] = "Parents child data has been saved!"

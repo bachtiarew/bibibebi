@@ -1,13 +1,16 @@
 Kid = React.createClass
 	propTypes:
 		kid: React.PropTypes.object
+		picture: React.PropTypes.object
 
 	getInitialState: ->
 		kid: @props.kid
+		picture: @props.picture
 
 	render: ->
-		{kid} = @state
+		{kid, picture} = @state
 		{id, name, age, gender, description} = kid
+		{picture_url} = picture
 
 		<div className="sidebar-childs text-center">
 			<div className="row">
@@ -16,7 +19,12 @@ Kid = React.createClass
 				</div>
 				<div className="col-sm-4">
 					<div className="thumbs-child">
-						<i className="fa fa-photo fa-1x"></i>
+						{
+							if picture_url?.url
+								<img src={picture_url.url} />
+							else
+								<i className="fa fa-photo fa-1x"></i>
+						}
 					</div>
 				</div>
 			</div>
@@ -26,21 +34,25 @@ Sidebar = React.createClass
 	propTypes:
 		parent: React.PropTypes.object
 		picture: React.PropTypes.object
+		Kids: React.PropTypes.array
 
 	getInitialState: ->
 		parent: @props.parent
 		picture: @props.picture
 
+	getPicture: (arrPic, kidId) ->
+		_.find(arrPic, (e) -> e.pictureable_id == kidId)
+
 	render: ->
 		{parent, picture} = @state
-		{user, kids} = parent
+		{kids} = @props
+		{user} = parent
 		{picture_url} = picture
 		{firstname, lastname, phone_number, address} = user
-		
-		console.log("picture", @state.picture)
 
-		kid = (e, key) ->
-			<Kid key={key} kid={e} />
+		kid = (e, key) =>
+			picture = @getPicture(e.picture_child, e.id)
+			<Kid key={key} kid={e} picture={picture} />
 
 		sideBarImageClassNames = classNames(
 			"sidebar-img text-center",
@@ -64,7 +76,7 @@ Sidebar = React.createClass
 					</div>
 					<div className="col-sm-9 text-left">
 						<hr/>
-					</div> 
+					</div>
 				</div>
 				<div className="sidebar-details">
 					<h3><strong>{firstname} {lastname}</strong></h3>
