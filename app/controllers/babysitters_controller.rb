@@ -100,9 +100,13 @@ class BabysittersController < ApplicationController
 		end
 	end
 
+	def update_rate
+
+	end
+
 	private
 	def babysitter_params
-		params.require(:babysitter).permit(:nik, :age, :description, :user_id, :skills_ids)
+		params.require(:babysitter).permit(:nik, :age, :description, :user_id, :skills_id, :price)
 	end
 
 	def picture_params

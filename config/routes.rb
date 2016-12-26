@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   get "homepages/coba"
   post "users/login"
   resources :users
-  resources :babysitters
+  resources :babysitters do 
+    collection do
+      get :update_rate
+    end
+  end
   get "parents/get_user", to: "parents#get_user"
   resources :parents
   root "homepages#index"

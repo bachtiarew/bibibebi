@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161218135923) do
+ActiveRecord::Schema.define(version: 20161225171925) do
 
   create_table "average_caches", force: :cascade do |t|
     t.integer  "rater_id",      limit: 4
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20161218135923) do
     t.integer  "user_id",     limit: 4
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "price",                     precision: 5, scale: 2
   end
 
   add_index "babysitters", ["user_id"], name: "index_babysitters_on_user_id", using: :btree

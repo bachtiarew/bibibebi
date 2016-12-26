@@ -10,7 +10,6 @@ window.BabysitterStore = _.assign(new EventEmitter(),{
 	user: {}
 
 	emitChange: ->
-		console.log("kena emit dong")
 		@emit(CHANGE_EVENT)
 
 	addChangeListener: (callback) ->
@@ -22,9 +21,6 @@ window.BabysitterStore = _.assign(new EventEmitter(),{
 })
 
 dispatcher.register (payload) ->
-	console.log("kena dispatcher")
-	console.log("ppayload babysitter", payload.babysitter)
-	console.log("ppayload skills", payload.babysitterSkills)
 	if payload.actionType == "set-babysitter"
 		_.assign(BabysitterStore.babysitter, payload.babysitter)
 		_.assign(BabysitterStore.user, payload.user)

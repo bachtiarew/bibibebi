@@ -33,4 +33,5 @@
 //= require components/Mains/Thumbnail
 //= require components/Mains/Sidebar
 //= require components/Mains/Profile
+//= require components/Mains/Rateable
 //= require_tree .

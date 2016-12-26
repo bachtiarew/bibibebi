@@ -5,7 +5,7 @@ class Babysitter < ActiveRecord::Base
 
 	has_many :role_ratings, as: :cacheable
 	has_many :pictures, as: :pictureable
-	validates :nik , :age, :description, presence: true
+	validates :nik , :age, :description, :price, presence: true
 
 	ratyrate_rateable "quality"	, "original_score"
 	

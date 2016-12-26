@@ -208,8 +208,15 @@
 				line-height: 50px;
 				border-radius: 50%;
 				text-align: center;
-				border: 1px solid #dedede;
-				
+				border: 1px solid blue;
+			}
+
+			.disabled{
+				color: grey;
+			}
+
+			.enabled{
+				color: lightblue;
 			}
 		}
 
@@ -219,6 +226,7 @@
 				border-radius: 0px;
 			}
 		}
+
 	}
 
 }

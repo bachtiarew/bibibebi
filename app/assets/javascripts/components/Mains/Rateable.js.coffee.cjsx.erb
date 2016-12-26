@@ -1,0 +1,76 @@
+Rateable = React.createClass
+
+	getDefaultProps: ->
+		rating: null
+
+	getInitialState: ->
+		rating: @props.rating
+
+	selectRate: (event) ->
+		{babysitter} = @props
+
+		rate = event.target.value
+
+		$.ajax
+			url: "babysitters/update_rate.json"
+			type: "get"
+			data: {id : babysitter.id, rating: rate} 
+			dataType: "json"
+			success: (rate) =>
+				@setState(rating: rate)
+			error: ->
+
+
+	beforeRating: ->
+		<p>
+			<i key={1} className="fa fa-star-o fa-1x beforeRate" value="1" onClick={@selectRate}></i>
+			<i key={2} className="fa fa-star-o fa-1x beforeRate" value="2" onClick={@selectRate}></i>
+			<i key={3} className="fa fa-star-o fa-1x beforeRate" value="3" onClick={@selectRate}></i>
+			<i key={4} className="fa fa-star-o fa-1x beforeRate" value="4" onClick={@selectRate}></i>
+			<i key={5} className="fa fa-star-o fa-1x beforeRate" value="5" onClick={@selectRate}></i>
+		</p>
+
+	createStar: (qty, type) ->
+		starClass = classNames("fa",
+			{"fa-star" : type == "FS"},
+			{"fa-star-half-o" : type == "HS"},
+			{"fa-star-o" : type == "BS"}
+		)
+		i = 0
+		while i < qty
+			ky = type + "-" + i
+			i++
+			<i key={ky} className={starClass}></i>
+
+
+	generateStarRate: (avg) ->
+		if avg % 1
+			fullStarQty = avg - 1
+			halfStarQty = 1
+		else
+			fullStarQty = avg
+			halfStarQty = 0
+
+		blankStarQty = 5 - Math.ceil avg
+	
+		<div className="rating">
+			{
+				@createStar(fullStarQty,"FS")
+			}
+			{
+				@createStar(halfStarQty,"HS")
+			}
+			{
+				@createStar(blankStarQty,"BS")
+			}
+		</div>
+
+	render: ->
+		{rating} = @state
+
+		if rating
+			@generateStarRate(rating)
+		else
+			@beforeRating()
+
+window.Rateable = Rateable
