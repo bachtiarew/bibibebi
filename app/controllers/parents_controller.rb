@@ -59,7 +59,35 @@ class ParentsController < ApplicationController
 
 	def show
 		@parent = Ortu.find(params[:id])
-		@childs = @parent.kids
+		childs = @parent.kids
+		pictures = @parent.pictures
+		@parent_pictures = []
+		pictures.each do |picture|
+			@parent_pictures << {
+				id: picture.id,
+				pictureId: picture.pictureable_id,
+				pictureUrl: picture.pictureable_type
+			}
+		end
+		@childs = []
+		childs.each do |child|
+			@childs << {
+				name: child.name,
+				gender: child.gender,
+				description: child.description, 
+				picture: {
+					id: child.pictures[0].id,
+					pictureId: child.pictures[0].pictureable_id,
+					pictureUrl: child.pictures[0].pictureable_type
+				}
+			}
+		end
+		@child_pictures = child_picture
+		respond_to.do |format|
+			format.js do
+				render :show
+			end
+		end
 	end
 
 	def set_picture

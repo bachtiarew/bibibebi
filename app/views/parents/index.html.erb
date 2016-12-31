@@ -2,13 +2,13 @@
 <div class="mainpages">
 	<div class="row">
 		<div class="col-sm-2 sidebar-frame">
-		<%= react_component "Sidebar", parent: get_parent, kids: get_kids(@parent.id), picture: @picture %>
+		<%= react_component "Sidebar", person: get_parent, kids: get_kids(@parent.id), picture: @picture %>
 		</div>	
 		<div class="col-sm-6 thumbnail-frame">
 			<%= react_component "Thumbnail", thumbs: get_thumbs, currentUser: current_user %>
 		</div>
 	<div class="col-sm-4">
-			<%= react_component "Profile"  %>	
+			<%= react_component "Profile", currentUser: get_current_user  %>	
 		</div>
 	</div>
 </div>

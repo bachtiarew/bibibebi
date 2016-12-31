@@ -2,7 +2,9 @@ class BabysittersController < ApplicationController
 	before_action :current_user
 
 	def index
-
+		@babysitter = current_user.babysitter	
+		@skills = @babysitter.skills
+		@picture = Picture.find_by(pictureable_id: @babysitter.id, pictureable_type: "Babysitter")
 	end
 
 	def new

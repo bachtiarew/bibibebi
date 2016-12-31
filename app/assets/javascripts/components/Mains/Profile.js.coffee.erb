@@ -1,3 +1,13 @@
+Child = React.createClass
+	propTypes:
+		child: React.PropTypes.object
+
+	getInitialState: ->
+		child: @props.child
+
+	render: ->
+
+
 BabysitterSkills = React.createClass
 	
 	getInitialState: ->
@@ -64,35 +74,47 @@ BabysitterSkills = React.createClass
 		</div>
 
 Profile = React.createClass
-	
+	propTypes:
+		currentUser: React.PropTypes.object
+
 	getInitialState: ->
 		babysitter: BabysitterStore.babysitter
 		skills: BabysitterStore.babysitterSkills
-		pictures: BabysitterStore.pictures
-		user: BabysitterStore.user
+		currentUser: @props.currentUser
+		parent: ParentStore.parent
+		childs: ParentStore.childs
 
 	componentDidMount: ->
 		BabysitterStore.addChangeListener(@onChange)
+		ParenStore.addChangeListener(@_onChange)
 
 	componentWillUnmount: ->
 		BabysitterStore.removeChangeListener(@onChange)
+		ParentStore.removeChangeListener(@_onChange)
 
 	onChange: ->
 		@setState(
 			babysitter: BabysitterStore.babysitter
 			skills: BabysitterStore.babysitterSkills
 			pictures: BabysitterStore.pictures
-			user: BabysitterStore.user
+		)
+
+	_onChange: ->
+		@setState(
+			parent: ParentStore.parent
+			childs: ParentStore.childs
+			parentPicture: ParentStore.parentPicture
+			childPictures: ParentStore.childPictures
 		)
 
 	onChangeHeader: ->
 
-	render: ->
-		{babysitter, pictures, skills, user} = @state
-		{id, nik, age, description, price} = babysitter
-		{firstname, lastname, borndate, bornplace, gender, address, phone_number} = user
-		{pictureId, pictureType, pictureUrl} = pictures
-	
+	babysitterProfile: ->
+		{ babysitter, skills } = @state
+		{ user, pictures } = babysitter
+		{ firstname, lastname, borndate, bornplace, gender, address, phone_number, role } = user
+		{ id, pictureId, pictureableId, pictureableType, pictureUrl } = pictures[0]
+
 		if _.isEmpty(babysitter)
 			<div className="blank-page text-center">
 				<div>
@@ -141,5 +163,57 @@ Profile = React.createClass
 				</div>
 			</div>
 
+
+	parentProfile: ->
+		{ parent , childs } = @state
+		{ user, pictures } = parent 
+		{ firstname, lastname, borndate, bornplace, gender, address, phone_number, role } = user
+		{ id, pictureId, pictureableType, pictureUrl } = pictures[0]
+
+		itemChild = (e, key) ->
+			<Childs key={key} child={e} />
+
+		if _.isEmpty(parent)
+			<div className="blank-page text-center">
+				<div>
+					<h1>No Profile</h1>
+					<h3>you can select the thumbnail to view profile</h3>
+					<i className="fa fa-file"></i>
+				</div>
+			</div>
+		else
+			<div style={border: "1px"} className="profile">
+				<div className="row">
+					<div className="col-sm-5 logo-img text-center">
+						{
+							if pictureUrl?
+								<img src={pictureUrl} />
+							else
+								<i className="fa fa-camera fa-4x"></i>
+						}
+					</div>
+					<div className="col-sm-7 label-profile">
+						<p className="name"><strong>{firstname} {lastname}</strong></p>
+					</div>
+				</div>
+				<div className="detail">
+						<h5>Tempat, Tgl lahir : {bornplace}, {borndate}</h5>
+						<h5>usia : {age} tahun</h5>
+						<h5>NO Telp : {phone_number}</h5>
+						<h5>Alamat : {address}</h5>
+				</div>
+				{childs.map(itemChild)}			
+				<div className="button-action pull-right">
+					<button className="btn btn-md btn-success">Send Message</button>
+					<button className="btn btn-md btn-default">Save To List</button>
+				</div>
+			</div>
+
+
+
+	render: ->
+		{ currentUser } = @states
+
+		
 
 window.Profile = Profile

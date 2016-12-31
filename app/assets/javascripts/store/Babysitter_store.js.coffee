@@ -6,8 +6,6 @@ CHANGE_EVENT = 'change'
 window.BabysitterStore = _.assign(new EventEmitter(),{ 
 	babysitter: {}
 	babysitterSkills: null
-	pictures: {}
-	user: {}
 
 	emitChange: ->
 		@emit(CHANGE_EVENT)
@@ -23,8 +21,8 @@ window.BabysitterStore = _.assign(new EventEmitter(),{
 dispatcher.register (payload) ->
 	if payload.actionType == "set-babysitter"
 		_.assign(BabysitterStore.babysitter, payload.babysitter)
-		_.assign(BabysitterStore.user, payload.user)
-		_.assign(BabysitterStore.pictures, payload.pictures)
+		_.assign(BabysitterStore.babysitter, payload.pictures)
+		_.assign(BabysitterStore.babysitter, payload.user)
 		BabysitterStore.babysitterSkills = payload.babysitterSkills
 
 		BabysitterStore.emitChange()

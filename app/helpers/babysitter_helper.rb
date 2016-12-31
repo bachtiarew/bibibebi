@@ -15,4 +15,9 @@ module BabysitterHelper
 	  babysitters.as_json(include: [:user, :role_ratings, :pictures], except: [:password_digest])
   end
 
+  def get_babysitter
+      babysitter = current_user.babysitter
+      babysitter.as_json(include: [:user, :role_ratings], except: [:password_digest])
+  end
+
 end

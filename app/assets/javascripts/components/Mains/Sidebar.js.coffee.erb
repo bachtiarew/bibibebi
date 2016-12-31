@@ -1,3 +1,42 @@
+Skill = React.createClass
+	propTypes:
+		skill: React.PropTypes.object
+
+	getInitialState: ->
+		skill: @props.skill
+
+	getSkillClassName: ->
+		{ id } = @state.skill
+
+		if id == 1
+			"fa fa-camera fa-2x"
+		else if id == 2
+			"fa fa-photo fa-2x"
+		else if id == 3
+			"fa fa-bath fa-2x"
+		else if id == 4
+			"fa fa-briefcase fa-2x"
+
+	render: ->
+		console.log("harusnya kena skill component")
+		{ skill } = @state
+		{ id, name, description } = skill
+		skillClassNames = @getSkillClassName()
+
+		<div className="sidebar-skill text-center">
+			<div className="row">
+				<div className="col-sm-8 -text-left">
+					<a href="">{name}</a>
+				</div>
+				<div className="col-sm-4">
+					<div className="thumbs-skill">
+						<i className={skillClassNames}></i>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
 Kid = React.createClass
 	propTypes:
 		kid: React.PropTypes.object
@@ -32,27 +71,33 @@ Kid = React.createClass
 
 Sidebar = React.createClass
 	propTypes:
-		parent: React.PropTypes.object
+		person: React.PropTypes.object 
 		picture: React.PropTypes.object
 		Kids: React.PropTypes.array
+		skills: React.PropTypes.array
 
 	getInitialState: ->
-		parent: @props.parent
+		person: @props.person
 		picture: @props.picture
+		skills: @props.skills
 
 	getPicture: (arrPic, kidId) ->
 		_.find(arrPic, (e) -> e.pictureable_id == kidId)
 
 	render: ->
-		{parent, picture} = @state
-		{kids} = @props
-		{user} = parent
-		{picture_url} = picture
-		{firstname, lastname, phone_number, address} = user
+		{ person, picture } = @state
+		{ kids } = @props
+		{ user } = person
+		{ picture_url} = picture
+		{ firstname, lastname, phone_number, address } = user
+		{ skills } = @state
 
 		kid = (e, key) =>
 			picture = @getPicture(e.picture_child, e.id)
 			<Kid key={key} kid={e} picture={picture} />
+
+		skill = (e, key) =>
+			<Skill key={key} skill={e} />
 
 		sideBarImageClassNames = classNames(
 			"sidebar-img text-center",
@@ -82,6 +127,10 @@ Sidebar = React.createClass
 					<h3><strong>{firstname} {lastname}</strong></h3>
 					<h5>{phone_number}</h5>
 					<h5>{address}</h5>
+					{
+						if user.role == "babysitter"
+							<h5>{person?.nik}</h5>
+					}
 				</div>
 				<div className="row label-ikon">
 					<div className="col-sm-3">
@@ -93,7 +142,13 @@ Sidebar = React.createClass
 						<hr/>
 					</div> 
 				</div>
-				{kids.map(kid)}
+				{
+					if user.role == "babysitter"
+						console.log("kena lho")
+						skills.map(skill)
+					else
+						kids.map(kid)
+				}
 			</div>
 			<div className="logout text-center">
 				<i className="fa fa-power-off fa-2x"></i>

@@ -3,6 +3,7 @@
 CHANGE_EVENT = 'change'
 
 window.ParentStore = _.assign(new EventEmitter(), {
+	parent: {}
 	childs: []
 
 	getChilds: ->
@@ -17,6 +18,13 @@ window.ParentStore = _.assign(new EventEmitter(), {
 		len = @childs.length
 		key = 0
 		key += len
+
+	setChilds: (arrObj) ->
+		_.forEach(arrObj, (e) -> 
+			@childs.push(e)
+		)
+
+		ParentStore.emitChange()
 
 	removeItem: (childItem) ->
 		childItem = _.find(@childs, (_item) -> _item.key == childItem.key)
@@ -39,4 +47,11 @@ dispatcher.register (payload) ->
 		ParentStore.addBlankItem(payload.childItem)
 	else if payload.actionType == 'child-item-remove'
 		ParentStore.removeItem(payload.childItem)
+	else if payload.actionType == 'set-parent'
+		_.assign(ParentStore.parent, payload.parent)
+		_.assign(ParentStore.parent, payload.pictures)
+		ParentStore.setChilds(payload.childs)
+
+		ParentStore.emitChange()
+
 
