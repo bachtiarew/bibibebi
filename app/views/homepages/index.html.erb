@@ -1,4 +1,25 @@
 <div id="container" ></div>
+<%= react_component "Greeting" %>
+<%= react_component "HomepagesMobile" %>
 <%= react_component "Homepages" %>
 <%= react_component "Modal" %>
+
+<script>
+	$(document).ready(function(){
+		$(".info-indikator").click(function(){
+			var number = $(this).attr("value");
+			dispatcher.dispatch({
+				actionType: "homepage-mobile-change-number-info",
+				numberInfo: parseInt(number)
+			});
+		});
+
+		var hideGreeting = function(){
+			$(".greeting").hide()
+		};
+
+		setTimeout(hideGreeting, 4000);
+	});
+
+</script>
 

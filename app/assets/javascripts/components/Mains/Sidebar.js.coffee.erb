@@ -18,7 +18,6 @@ Skill = React.createClass
 			"fa fa-briefcase fa-2x"
 
 	render: ->
-		console.log("harusnya kena skill component")
 		{ skill } = @state
 		{ id, name, description } = skill
 		skillClassNames = @getSkillClassName()
@@ -144,7 +143,6 @@ Sidebar = React.createClass
 				</div>
 				{
 					if user.role == "babysitter"
-						console.log("kena lho")
 						skills.map(skill)
 					else
 						kids.map(kid)

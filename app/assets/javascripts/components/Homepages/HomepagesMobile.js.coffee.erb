@@ -1,0 +1,338 @@
+Information = React.createClass
+	propTypes:
+		numberInfo: React.PropTypes.number
+		infos: React.PropTypes.array
+
+	onChangeShowInfo: ->
+		{ numberInfo } = @props
+		dispatcher.dispatch
+			actionType: "homepage-mobile-change-number-info"
+			numberInfo: (parseInt(numberInfo) + 1) % 3
+
+	getInfo: (number, infos) ->
+
+		info = _.find(infos, (e) -> e.id == number)
+
+		ikonClassName = "fa " + info?.ikonName + " ikon-information"
+		infoIndicator  = (e, key) ->
+			indicatorClassName = classNames("info-indikator",
+				{"fa fa-circle" : e.id == number},
+				{"fa fa-circle-o" : e.id != number}
+			)
+
+			<i key={key} className={indicatorClassName} value={e.id}></i>
+
+		<div>
+			<div className="box-information" onClick={@onChangeShowInfo}>
+				<div className="row">
+					<div className="col-xs-4 text-center">
+						<i className={ikonClassName}></i>
+					</div>
+					<div className="col-xs-8">
+						<p className="description text-left">
+							{info?.description}
+						</p>
+					</div>
+				</div>
+			</div>
+			{infos.map(infoIndicator)}
+		</div>
+
+	render: ->
+		{ numberInfo, infos } = @props
+
+		@getInfo(numberInfo, infos)
+
+ButtonLogin = React.createClass
+	
+	onClickShowLoginForm: ->
+		dispatcher.dispatch
+			actionType: "homepage-mobile-change-header"
+			attributes: {showForm: false, showLoginForm: true}
+		dispatcher.dispatch
+			actionType: "homepage-mobile-change-active-button"
+			attributes: {babysitter: false, parent: false}
+
+	render: ->
+		<div className="container floating text-center">
+			<div className="login-button" onClick={@onClickShowLoginForm}>
+				<i className="fa fa-key"></i>
+			</div>
+			<h6 style={color: "lightblue"}>klik disini untuk login</h6>
+		</div>
+
+FormUser = React.createClass
+	render: ->
+		<div>
+			<form>
+				<input type="text" name="user[firstname]" className="form-control" placeholder="nama depan" />
+				<input type="text" name="user[lastname]" className="form-control" placeholder="nama belakang" />
+				<div className="row">
+					<div class="col-xs-6">
+						<input type="text" name="user[bornplace]" className="form-control" placeholder="tempat lahir" />
+					</div>
+					<div className="col-xs-6">
+						<input type="text" name="user[borndate]" className="form-control" placeholder="tanggal lahir" />
+					</div>
+				</div>
+				<select name="user[gender]">
+					<option value="male">Pria</option>
+					<option value="female">Wanita</option>
+				</select>
+				<input type="text" name="user[phone_number]" className="form-control" placeholder="no hp" />
+				<input type="text" name="user[address]" className="form-control" placeholder="alamat rumah" />
+				<button type="submit">Mendaftar</button>
+			</form>
+		</div>
+
+FormLogin = React.createClass
+	render: ->
+		<div className="container form-signup text-center">
+			<form type="post">
+				<div className="form-group">
+					<input type="text" name="user[email]" className="form-control" placeholder="Email" />
+				</div>
+				<div className="form-group">
+					<input type="password" name="user[password]" className="form-control" placeholder="Password" />
+				</div>
+				<div className="form-group">
+					<button type="submit" className="btn btn-md btn-success">Masuk</button>
+				</div>
+				<input type="hidden" name="form-mobile" value={true} />
+			</form>
+		</div>
+
+FormSignUp = React.createClass
+	
+	getInitialState: ->
+		strengPassword: null
+		passwordMatch: false
+		password: null
+		passwordConfirm: null
+
+	onChangePassword: (event) ->
+		@setState(password: event.target.value)
+
+	onChangePasswordConfirm: (event) ->
+		@setState(passwordConfirm: event.target.value)
+ 
+	checkPasswordStrength: ->
+		{ password } = @state
+		strengthPassword = null
+		if password.length >= 5 && password.length < 10
+			strengthPassword = 2
+		else if password.length >= 10
+			strengthPassword = 3
+		else
+			strengthPassword = 1
+
+		@setState(
+			strengthPassword: strengthPassword
+		)
+
+	checkPasswordMatch: ->
+		{ password, passwordConfirm } = @state
+
+		if password == passwordConfirm
+			match = true
+		else
+			match = false
+
+		@setState(
+			passwordMatch: match
+		)
+
+	render: ->
+		{ user } = @props
+		{ password, passwordConfirm, strengthPassword, passwordMatch } = @state
+
+		if !_.isEmpty(password)
+			@checkPasswordStrength()
+			stringStrengthPassword = strengthPassword
+		else
+			stringStrengthPassword = null
+
+		if !_.isEmpty(passworConfirm)
+			@checkPasswordMatch()
+			stringMatch = if passwordMatch == true then "Password Cocok" else "Password Tidak Cocok"
+		else
+			stringMatch = null
+
+		strengthPasswordClassName = classNames(
+			{"red": strengthPassword == 1},
+			{"orange" : strengthPassword == 2},
+			{"green": strengthPassword == 3}
+		)
+
+		passwordMatchClassName = classNames(
+			{"red" : passwordMatch == false},
+			{"green": passwordMatch == true}
+		)
+
+		<div className="container form-signup text-center">
+			<form type="post">
+				<div className="form-group">
+					<input type="email" name="user[email]" className="form-control" placeholder="Email" required={true}  />
+				</div>
+				<div className="form-group">
+					<input type="password" name="user[password]" className="form-control" placeholder="password" onChange={@onChangePassword} />
+					<p className={strengthPasswordClassName}>{stringStrengthPassword}</p>
+				</div>
+				<div className="form-group">
+					<input type="password" name="user[password_confirmation]" className="form-control" placeholder="konfirmasi password" onChange={@onChangePasswordConfirm} />
+					<p className={passwordMatchClassName}>{stringMatch}</p>
+				</div>
+				<div className="form-group">
+					<button type="submit" className="btn btn-md btn-success" >Mendaftar</button>
+				</div>
+				<input type="hidden" name="user[role]" value={user.role} />
+				<input type="hidden" name="form-mobile" value={true} />
+			</form>
+		</div>
+
+
+Menu = React.createClass
+	render: ->
+		<div className="menu menu-list">
+				<div className="row text-center">
+					<div className="col-sm-12 col-md-12 col-lg-12">
+						<i className="fa fa-lock fa-2x"></i>
+						<input className="form-control" name="user[username]" />
+						<input className="form-control" name="user[password]" />
+						<button type="submit" className="btn btn-sm btn-primary" />
+						<a href="javasript:void(0)">lupa password ?</a>
+					</div>
+				</div>
+				<div className="line-up">
+					<div className="col-sm-12 col-md-12 col-lg-12">
+						<ul>
+							<li>Mau jadi babysitter ?</li>
+							<li>Mau jadi Ortu ?</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+
+HomepagesMobile = React.createClass
+	
+	getInitialState: ->
+		showMenu: HomepagesMobileStore.showMenu
+		showForm: HomepagesMobileStore.showForm
+		showLoginForm: HomepagesMobileStore.showLoginForm
+		numberInfo: HomepagesMobileStore.numberInfo
+		infos: HomepagesMobileStore.infos
+		user: HomepagesMobileStore.user
+		activeButton: HomepagesMobileStore.activeButton
+
+	componentDidMount: ->
+		HomepagesMobileStore.addChangeListener(@onChange)
+		@setInfo()
+		
+	componentWillUnmount: ->
+		HomepagesMobileStore.removeChangeListener(@onChange)
+
+	onChange: ->
+		@setState(
+			showMenu: HomepagesMobileStore.showMenu
+			showForm: HomepagesMobileStore.showForm
+			showLoginForm: HomepagesMobileStore.showLoginForm
+			numberInfo: HomepagesMobileStore.numberInfo
+			infos: HomepagesMobileStore.infos
+			user: HomepagesMobileStore.user
+			activeButton: HomepagesMobileStore.activeButton
+		)
+			
+	clickButtonMenu: ->
+		dispatcher.dispatch
+			actionType: "homepage-mobile-change-header"
+			attributes: {showMenu: !@state.showMenu}
+
+	onClickShowForm: (event) ->
+		role = event.target.value
+		if role == "babysitter"
+			attributesActiveButton = {babysitter: true, parent: false}
+		else if role == "parent"
+			attributesActiveButton = {babysitter: false, parent: true}
+
+		dispatcher.dispatch
+			actionType: "homepage-mobile-change-header"
+			attributes: {showForm: true, showLoginForm: false}
+		dispatcher.dispatch
+			actionType: "homepage-mobile-change-user"
+			attributes: {role: role}
+		dispatcher.dispatch
+			actionType: "homepage-mobile-change-active-button"
+			attributes: attributesActiveButton
+
+	setInfo: ->
+		infos = [
+			{id: 0, ikonName: "fa-user fa-4x", description: "memudahkan anda mencari pengasuh yang tepat untuk buah hati anda"},
+			{id: 1, ikonName: "fa-thumbs-up fa-4x", description: "Dapatkan Harga dan Layanan Terbaik untuk Buah Hati Anda"},
+			{id: 2, ikonName: "fa-leaf fa-4x", description: "Tak perlu kawatir mengenai Keamanan dan Kenyamanan"}
+		]
+		dispatcher.dispatch
+			actionType: "homepage-set-infos"
+			infos: infos
+
+	render: ->
+		{ showMenu, showForm, showLoginForm,  numberInfo, infos, user, activeButton} = @state
+		{ clickButtonMenu } = @
+		buttonMenuClassName=classNames(
+			{"menu-strip": showMenu == false},
+			{"menu-close": showMenu == true}
+		)
+		
+		buttonBabysitterClassName = classNames("btn btn-lg",{"aktif": activeButton.babysitter == true})
+		buttonParentClassName = classNames("btn btn-lg",{"aktif": activeButton.parent == true})
+		console.log("parent", buttonParentClassName)
+		console.log("babysitter", buttonBabysitterClassName)
+		<div className="container text-center homepage-mobile mobile">
+			<h4 className="logo">Bibibebi</h4>
+			<div className="box-signup blue text-center">
+				<div className="row">
+					<div className="col-xs-6 text-center">
+						<div className="ikon-option">
+							<i className="fa fa-blind"></i>
+						</div>
+					</div>
+					<div className="col-xs-6 text-center">
+						<div className="ikon-option">
+							<i className="fa fa-child"></i>
+						</div>	
+					</div>
+				</div>
+			</div>
+			<div className="box-signup white text-center">
+				<div className="row">
+					<div className="col-xs-6 text-center">
+						<button className={buttonBabysitterClassName} value="babysitter" onClick={@onClickShowForm}>
+							Babysitter  <i className="fa fa-leaf"></i>
+						</button>
+					</div>
+					<div className="col-xs-6 text-center">
+						<button className={buttonParentClassName} value="parent" onClick={@onClickShowForm}>
+							<i className="fa fa-leaf"></i>  Orang Tua
+						</button>	
+					</div>
+				</div>			
+				{
+					if showForm
+						<FormSignUp user={user} />
+				}
+				{
+					if showLoginForm
+						<FormLogin />
+				}
+			</div>
+			<h5>Anda Belum Mendaftar ?</h5>
+			<h6 style={color: "lightblue"}>klik tombol diatas untuk mendaftar</h6>
+			{
+				if showForm == false && showLoginForm == false
+					<Information numberInfo={numberInfo} infos={infos} />
+			}
+			<ButtonLogin />
+		</div>
+
+	
+window.HomepagesMobile = HomepagesMobile

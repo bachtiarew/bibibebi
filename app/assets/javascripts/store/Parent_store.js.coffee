@@ -32,6 +32,7 @@ window.ParentStore = _.assign(new EventEmitter(), {
 		@emitChange()
 
 	emitChange: ->
+		console.log("harusnya kena emit")
 		@emit(CHANGE_EVENT)
 
 	addChangeListener: (callback) ->
@@ -49,9 +50,10 @@ dispatcher.register (payload) ->
 		ParentStore.removeItem(payload.childItem)
 	else if payload.actionType == 'set-parent'
 		_.assign(ParentStore.parent, payload.parent)
+		console.log("harusnya sih kena 1")
 		_.assign(ParentStore.parent, payload.pictures)
 		ParentStore.setChilds(payload.childs)
-
+		console.log("harusnya sih kena 2")
 		ParentStore.emitChange()
 
 

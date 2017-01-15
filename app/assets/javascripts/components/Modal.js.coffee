@@ -1,5 +1,5 @@
 Modal = React.createClass
-	
+		
 	getInitialState: ->
 		error: null
 		validEmail: false
@@ -7,6 +7,7 @@ Modal = React.createClass
 		passwordConfirmValidation: null
 		passwordValidationColor: null
 		passwordConfirmValidationColor: null
+		requesting: HomepageStore.requesting
 
 	getParamsSignUp: ->
 		data = {}
@@ -237,11 +238,12 @@ Modal = React.createClass
 			attributes: {phone_number: inputPhoneNumber}
 
 	render: ->
-		{status, modal, user, requesting} = @props
+		{status, modal, user} = @props
+		{ requesting } = @state
 		{passwordValidation, passwordConfirmValidation, 
 		 passwordValidationColor, passwordConfirmValidationColor,
 		 error, validEmail, validPhoneNumber} = @state
-
+		
 		overlayClass = classNames("overlay",
 			{"hide": (modal == false)},
 			{"show": (modal == true)}
@@ -299,7 +301,7 @@ Modal = React.createClass
 					<div className="col-sm-4">
 						<div className="form-group">
 							<label>Nama Depan</label>
-							<input id="firstname" type="text" className={@inputRequired(requesting.submitting, user.firstname)} placeholder="Masukan Nama Depan Anda" onBlur={@inputChange} />	
+							<input id="firstname" type="text" className={@inputRequired(requesting.submitting, user?.firstname)} placeholder="Masukan Nama Depan Anda" onBlur={@inputChange} />	
 						</div>
 		
 						<div className="form-group">
@@ -308,8 +310,8 @@ Modal = React.createClass
 						</div>
 						<div className="form-group">
 							<label>Tempat & Tgl Lahir</label>
-							<input type="text" id="bornplace" className={@inputRequired(requesting.submitting, user.bornplace)} onBlur={@inputChange} placeholder="Place your born" required/>
-							<input type="date" id="borndate" className={@inputRequired(requesting.submitting, user.bordate)} onChange={@inputChange} placeholder="YYYY-MM-DD" />
+							<input type="text" id="bornplace" className={@inputRequired(requesting.submitting, user?.bornplace)} onBlur={@inputChange} placeholder="Place your born" required/>
+							<input type="date" id="borndate" className={@inputRequired(requesting.submitting, user?.bordate)} onChange={@inputChange} placeholder="YYYY-MM-DD" />
 						</div>
 					</div>
 					<div className="col-sm-4 form-border">
@@ -334,27 +336,27 @@ Modal = React.createClass
 						</div>
 						<div className="form-group">
 							<label>No Telepon</label>
-							<input type="tel" id="phone_number" className={@inputRequired(requesting.submitting, user.phone_number)} ref="phoneNumber" onBlur={@inputChange} onChange={@onValidatePhoneNumber} placeholder="No Telepon anda" />
+							<input type="tel" id="phone_number" className={@inputRequired(requesting.submitting, user?.phone_number)} ref="phoneNumber" onBlur={@inputChange} onChange={@onValidatePhoneNumber} placeholder="No Telepon anda" />
 							<p className="weak">
 								{
-									if !validPhoneNumber && user.phone_number != null && user.phone_number != ""
+									if !validPhoneNumber && user?.phone_number != null && user?.phone_number != ""
 										"Nomor Telephone harus di isi angka"
 								}
 							</p>
 						</div>
 						<div className="form-group">
 							<label>Alamat</label>
-							<textarea id="address" className={@inputRequired(requesting.submitting, user.address)} rows=5 onBlur={@inputChange} placeholder="Ketik disini..." />
+							<textarea id="address" className={@inputRequired(requesting.submitting, user?.address)} rows=5 onBlur={@inputChange} placeholder="Ketik disini..." />
 						</div>
 					</div>
 					<div className="col-sm-4">
 						<div className="form-group">
 							<label>Email</label>
-							<input type="email" id="email" className={@inputRequired(requesting.submitting, user.email)} ref="emailSignUp" onBlur={@inputChange} onChange={@onValidateEmail} placeholder="Masukan email anda" required/>
+							<input type="email" id="email" className={@inputRequired(requesting.submitting, user?.email)} ref="emailSignUp" onBlur={@inputChange} onChange={@onValidateEmail} placeholder="Masukan email anda" required/>
 							<p className="weak">
 								{
 									
-									if !validEmail && user.email != null && user.email != ""
+									if !validEmail && user?.email != null && user?.email != ""
 										"Alamat Email tidak benar"
 								}
 							</p>

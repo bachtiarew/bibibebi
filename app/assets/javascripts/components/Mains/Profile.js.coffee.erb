@@ -6,6 +6,24 @@ Child = React.createClass
 		child: @props.child
 
 	render: ->
+		{ child } = @state
+		{ name, gender, description } = child
+
+		<div className="profile-child">
+			<row>
+				<div className="col-sm-8 col-md-8 col-lg-8">
+				{ name }
+				</div>
+				<div className="col-sm-4 col-md-4 col-lg-4">
+					{
+						if pictureUrl?
+							<img src={pictureUrl} />
+						else
+							<i className="fa fa-camera fa-2x"></i>
+					}
+				</div>
+			</row>
+		</div>
 
 
 BabysitterSkills = React.createClass
@@ -86,7 +104,7 @@ Profile = React.createClass
 
 	componentDidMount: ->
 		BabysitterStore.addChangeListener(@onChange)
-		ParenStore.addChangeListener(@_onChange)
+		ParentStore.addChangeListener(@_onChange)
 
 	componentWillUnmount: ->
 		BabysitterStore.removeChangeListener(@onChange)
@@ -114,66 +132,89 @@ Profile = React.createClass
 		{ user, pictures } = babysitter
 		{ firstname, lastname, borndate, bornplace, gender, address, phone_number, role } = user
 		{ id, pictureId, pictureableId, pictureableType, pictureUrl } = pictures[0]
-
-		if _.isEmpty(babysitter)
-			<div className="blank-page text-center">
-				<div>
-					<h1>No Profile</h1>
-					<h3>you can select the thumbnail to view profile</h3>
-					<i className="fa fa-file"></i>
+		
+		<div style={border: "1px"} className="profile">
+			<div className="row">
+				<div className="col-sm-5 logo-img text-center">
+					{
+						if pictureUrl?
+							<img src={pictureUrl} />
+						else
+							<i className="fa fa-camera fa-4x"></i>
+					}
+				</div>
+				<div className="col-sm-7 label-profile">
+					<p className="name"><strong>{firstname} {lastname}</strong></p>
+					<Rateable babysitter={babysitter} rating={rating?} />
+					<h4>Rating.{ if rating? then rating else 0 }.0</h4>
+					<div className="pull-right">
+						<label className="cost">{price}K</label>
+						<label className="per">/bulan</label>
+					</div>
 				</div>
 			</div>
-		else
-			<div style={border: "1px"} className="profile">
-				<div className="row">
-					<div className="col-sm-5 logo-img text-center">
-						{
-							if pictureUrl?
-								<img src={pictureUrl} />
-							else
-								<i className="fa fa-camera fa-4x"></i>
-						}
-					</div>
-					<div className="col-sm-7 label-profile">
-						<p className="name"><strong>{firstname} {lastname}</strong></p>
-						<Rateable babysitter={babysitter} rating={rating?} />
-						<h4>Rating.{ if rating? then rating else 0 }.0</h4>
-						<div className="pull-right">
-							<label className="cost">{price}K</label>
-							<label className="per">/bulan</label>
-						</div>
-					</div>
-				</div>
-				<div className="detail">
-						<h5>No NIK : {nik}</h5>
-						<h5>Tempat, Tgl lahir : {bornplace}, {borndate}</h5>
-						<h5>usia : {age} tahun</h5>
-						<h5>NO Telp : {phone_number}</h5>
-						<h5>Alamat : {address}</h5>
-					
-				</div>
-				<div className="description">
-					<p>{description}</p>
-				</div>
+			<div className="detail">
+					<h5>No NIK : {nik}</h5>
+					<h5>Tempat, Tgl lahir : {bornplace}, {borndate}</h5>
+					<h5>usia : {age} tahun</h5>
+					<h5>NO Telp : {phone_number}</h5>
+					<h5>Alamat : {address}</h5>
 				
-				<BabysitterSkills />
-				<div className="button-action pull-right">
-					<button className="btn btn-md btn-success">Recruit</button>
-					<button className="btn btn-md btn-default">Save into List</button>
-				</div>
 			</div>
+			<div className="description">
+				<p>{description}</p>
+			</div>
+			
+			<BabysitterSkills />
+			<div className="button-action pull-right">
+				<button className="btn btn-md btn-success">Recruit</button>
+				<button className="btn btn-md btn-default">Save into List</button>
+			</div>
+		</div>
 
 
 	parentProfile: ->
 		{ parent , childs } = @state
-		{ user, pictures } = parent 
+		{ user, pictures } = parent
 		{ firstname, lastname, borndate, bornplace, gender, address, phone_number, role } = user
 		{ id, pictureId, pictureableType, pictureUrl } = pictures[0]
 
 		itemChild = (e, key) ->
-			<Childs key={key} child={e} />
+			<Child key={key} child={e} />
 
-		if _.isEmpty(parent)
+
+		<div style={border: "1px"} className="profile">
+			<div className="row">
+				<div className="col-sm-5 logo-img text-center">
+					{
+						if pictureUrl?
+							<img src={pictureUrl} />
+						else
+							<i className="fa fa-camera fa-4x"></i>
+					}
+				</div>
+				<div className="col-sm-7 label-profile">
+					<p className="name"><strong>{firstname} {lastname}</strong></p>
+				</div>
+			</div>
+			<div className="detail">
+					<h5>Tempat, Tgl lahir : {bornplace}, {borndate}</h5>
+					<h5>usia : {age} tahun</h5>
+					<h5>NO Telp : {phone_number}</h5>
+					<h5>Alamat : {address}</h5>
+			</div>
+			{childs.map(itemChild)}			
+			<div className="button-action pull-right">
+				<button className="btn btn-md btn-success">Send Message</button>
+				<button className="btn btn-md btn-default">Save To List</button>
+			</div>
+		</div>
+
+	render: ->
+		{ currentUser, babysitter, parent } = @state
+		{ role } = currentUser
+		
+		if _.isEmpty(babysitter) || _.isEmpty(parent)
 			<div className="blank-page text-center">
 				<div>
 					<h1>No Profile</h1>
@@ -182,37 +223,12 @@ Profile = React.createClass
 				</div>
 			</div>
 		else
-			<div style={border: "1px"} className="profile">
-				<div className="row">
-					<div className="col-sm-5 logo-img text-center">
-						{
-							if pictureUrl?
-								<img src={pictureUrl} />
-							else
-								<i className="fa fa-camera fa-4x"></i>
-						}
-					</div>
-					<div className="col-sm-7 label-profile">
-						<p className="name"><strong>{firstname} {lastname}</strong></p>
-					</div>
-				</div>
-				<div className="detail">
-						<h5>Tempat, Tgl lahir : {bornplace}, {borndate}</h5>
-						<h5>usia : {age} tahun</h5>
-						<h5>NO Telp : {phone_number}</h5>
-						<h5>Alamat : {address}</h5>
-				</div>
-				{childs.map(itemChild)}			
-				<div className="button-action pull-right">
-					<button className="btn btn-md btn-success">Send Message</button>
-					<button className="btn btn-md btn-default">Save To List</button>
-				</div>
-			</div>
+			if role == "babysitter"
+				@parentProfile()
+			else if role == "parent"
+				@babysitterProfile()
+			
 
-
-
-	render: ->
-		{ currentUser } = @states
 
 		
 

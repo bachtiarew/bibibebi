@@ -216,14 +216,13 @@ Homepages = React.createClass
 		status: null
 		modal: false
 		loginStatus: false
-		requesting: false
-		user: {}	
+		requesting: HomepageStore.requesting
+		user: HomepageStore.user
 
 	componentDidMount: ->
 		HomepageStore.createBlankForm()
 		HomepageStore.status = null
 		HomepageStore.modal = false
-		HomepageStore.requesting = false
 		HomepageStore.addChangeListener(@onChange)
 
 
@@ -239,8 +238,9 @@ Homepages = React.createClass
 		)
 
 	render: ->
-	  {status, modal, user,requesting} = @state
-	  <div className="container-fluid homepages">
+	  {status, modal, user, requesting} = @state
+	  console.log("user", @state.user)
+	  <div className="container-fluid homepages desktop">
 	  	<Header/>
 	  	<ImageContainer/>
 	  	<Banner/>
@@ -251,8 +251,7 @@ Homepages = React.createClass
 	  	<Footer/>
 	  	<Modal status={status}
 	  			modal={modal}
-	  			requesting={requesting}
-	  			user={user}/>	  			
+	  			user={user} />	  			
 	  </div>
   	
 

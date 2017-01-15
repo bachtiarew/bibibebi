@@ -82,8 +82,8 @@ class ParentsController < ApplicationController
 				}
 			}
 		end
-		@child_pictures = child_picture
-		respond_to.do |format|
+
+		respond_to do |format|
 			format.js do
 				render :show
 			end

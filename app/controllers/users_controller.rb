@@ -72,6 +72,11 @@ class UsersController < ApplicationController
 	
 	end
 
+	#controller for handle application on mobile version
+	def create_mobile
+		
+	end
+
 	#any params must be permitted before save to database
 	private
 	def user_params
