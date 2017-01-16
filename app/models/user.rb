@@ -1,7 +1,8 @@
 class User < ActiveRecord::Base
 	ratyrate_rater
 	#for field validation : field should'n be empty
-	validates :firstname, :lastname, :gender, :bornplace, :borndate, :address, :email, :password, :password_confirmation, presence: true
+	validates :email, :password, :password_confirmation, presence: true 
+	validates :firstname, :lastname, :gender, :bornplace, :borndate, :address, presence: true , if: :is_mobile?
 	#validation for password : confirmation must matched
 	validates :password, confirmation: true
 	#validation for email : email that register must uniqueness
@@ -36,5 +37,28 @@ class User < ActiveRecord::Base
 		self.try(:ortu) ? true : false
 	end
 
+	#for mobile
+	def is_mobile?
+		@is_mobile = false
+	end
 
+	def is_mobile!
+		@is_mobile = true
+	end
+
+	def user_complete?
+		if self.firstname.present? && self.lastname.present? && self.bornplace.present? && self.borndate.present? && self.address.present? && self.gender.present? && self.phone_number.present?
+			return true
+		else
+			return false
+		end
+	end
+
+	def has_finish_user?
+		if self.role == "babysitter"
+			self.user_complete? && self.has_babysitter? ? "babysitter_finish" : "babysitter_not_finish"
+		elsif 
+			self.user_complete? && self.has_parent? ? "parent_finish" : "parent_not_finish"
+		end
+	end
 end

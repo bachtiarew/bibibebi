@@ -86,18 +86,38 @@ FormUser = React.createClass
 		</div>
 
 FormLogin = React.createClass
+	
+	getInitialState: ->
+		email: null
+		password: null
+
+	onChangeEmail: (event) ->
+		@setState(email: event.target.value)
+
+	onChangePassword: (event) ->
+		@setState(password: event.target.value)
+
 	render: ->
+		{ csrfToken } = @props
+		{ email, password } = @state
+
+		if !_.isEmpty(email) && !_.isEmpty(password)
+			disableStatus = false
+		else
+			disableStatus = true
+
 		<div className="container form-signup text-center">
-			<form type="post">
+			<form type="get" action="/users/login_mobile">
 				<div className="form-group">
-					<input type="text" name="user[email]" className="form-control" placeholder="Email" />
+					<input type="text" name="user[email]" className="form-control" placeholder="Email" onChange={@onChangeEmail} required={true} />
 				</div>
 				<div className="form-group">
-					<input type="password" name="user[password]" className="form-control" placeholder="Password" />
+					<input type="password" name="user[password]" className="form-control" placeholder="Password" onChange={@onChangePassword} />
 				</div>
 				<div className="form-group">
-					<button type="submit" className="btn btn-md btn-success">Masuk</button>
+					<button type="submit" className="btn btn-lg" disabled={disableStatus}>Masuk</button>
 				</div>
+				<input type="hidden" name="authenticity_token" value={csrfToken} />
 				<input type="hidden" name="form-mobile" value={true} />
 			</form>
 		</div>
@@ -105,86 +125,83 @@ FormLogin = React.createClass
 FormSignUp = React.createClass
 	
 	getInitialState: ->
-		strengPassword: null
-		passwordMatch: false
 		password: null
 		passwordConfirm: null
+		email: null
 
 	onChangePassword: (event) ->
 		@setState(password: event.target.value)
+		@checkPasswordStrength()
 
 	onChangePasswordConfirm: (event) ->
 		@setState(passwordConfirm: event.target.value)
- 
-	checkPasswordStrength: ->
-		{ password } = @state
-		strengthPassword = null
-		if password.length >= 5 && password.length < 10
-			strengthPassword = 2
-		else if password.length >= 10
-			strengthPassword = 3
-		else
-			strengthPassword = 1
+		@checkPasswordMatch() 		
 
-		@setState(
-			strengthPassword: strengthPassword
-		)
-
-	checkPasswordMatch: ->
-		{ password, passwordConfirm } = @state
-
-		if password == passwordConfirm
-			match = true
-		else
-			match = false
-
-		@setState(
-			passwordMatch: match
-		)
+	onChangeEmail: (event) ->
+		@setState(email: event.target.value)
 
 	render: ->
-		{ user } = @props
-		{ password, passwordConfirm, strengthPassword, passwordMatch } = @state
+		{ user, csrfToken } = @props
+		{ password, passwordConfirm, email } = @state
 
 		if !_.isEmpty(password)
-			@checkPasswordStrength()
-			stringStrengthPassword = strengthPassword
+			if password.length >= 5 && password.length < 10
+				strengthPassword = 2
+				stringStrengthPassword =  "Password Sedang"
+			else if password.length >= 10
+				strengthPassword = 3
+				stringStrengthPassword  = "Password Kuat"
+			else
+				strengthPassword = 1
+				stringStrengthPassword = "Password Lemah"
 		else
+			strengthPassword = null
 			stringStrengthPassword = null
 
-		if !_.isEmpty(passworConfirm)
-			@checkPasswordMatch()
+		if !_.isEmpty(passwordConfirm)
+			if password == passwordConfirm
+				passwordMatch = true
+			else
+				passwordMatch = false
+
 			stringMatch = if passwordMatch == true then "Password Cocok" else "Password Tidak Cocok"
 		else
+			match = false
 			stringMatch = null
 
-		strengthPasswordClassName = classNames(
-			{"red": strengthPassword == 1},
-			{"orange" : strengthPassword == 2},
-			{"green": strengthPassword == 3}
+		strengthPasswordClassName = classNames("text-left",
+			{"weak": strengthPassword == 1},
+			{"normal" : strengthPassword == 2},
+			{"strong": strengthPassword == 3}
 		)
 
-		passwordMatchClassName = classNames(
-			{"red" : passwordMatch == false},
-			{"green": passwordMatch == true}
+		passwordMatchClassName = classNames("text-left",
+			{"weak" : passwordMatch == false},
+			{"strong": passwordMatch == true}
 		)
+
+		if !_.isEmpty(password) && !_.isEmpty(passwordConfirm) && !_.isEmpty(email) && password == passwordConfirm
+			disableStatus = false
+		else
+			disableStatus = true
 
 		<div className="container form-signup text-center">
-			<form type="post">
+			<form type="get" action="/users/create_mobile">
 				<div className="form-group">
-					<input type="email" name="user[email]" className="form-control" placeholder="Email" required={true}  />
+					<input type="email" name="user[email]" onChange={@onChangeEmail} className="form-control" placeholder="Email" required={true}  />
 				</div>
 				<div className="form-group">
-					<input type="password" name="user[password]" className="form-control" placeholder="password" onChange={@onChangePassword} />
-					<p className={strengthPasswordClassName}>{stringStrengthPassword}</p>
+					<input type="password" name="user[password]" className="form-control" placeholder="password" value={password} onChange={@onChangePassword} />
+					<p style={fontSize: "10px"} className={strengthPasswordClassName}>{stringStrengthPassword}</p>
 				</div>
 				<div className="form-group">
-					<input type="password" name="user[password_confirmation]" className="form-control" placeholder="konfirmasi password" onChange={@onChangePasswordConfirm} />
-					<p className={passwordMatchClassName}>{stringMatch}</p>
+					<input type="password" name="user[password_confirmation]" className="form-control" placeholder="konfirmasi password" value={passwordConfirm} onChange={@onChangePasswordConfirm} />
+					<p style={fontSize: "10px"} className={passwordMatchClassName}>{stringMatch}</p>
 				</div>
 				<div className="form-group">
-					<button type="submit" className="btn btn-md btn-success" >Mendaftar</button>
+					<button type="submit" className="btn btn-md btn-success" disabled={disableStatus} >Mendaftar</button>
 				</div>
+				<input type="hidden" name="authenticity_token" value={csrfToken} />
 				<input type="hidden" name="user[role]" value={user.role} />
 				<input type="hidden" name="form-mobile" value={true} />
 			</form>
@@ -276,6 +293,7 @@ HomepagesMobile = React.createClass
 			infos: infos
 
 	render: ->
+		{ csrf_token } = @props
 		{ showMenu, showForm, showLoginForm,  numberInfo, infos, user, activeButton} = @state
 		{ clickButtonMenu } = @
 		buttonMenuClassName=classNames(
@@ -285,8 +303,7 @@ HomepagesMobile = React.createClass
 		
 		buttonBabysitterClassName = classNames("btn btn-lg",{"aktif": activeButton.babysitter == true})
 		buttonParentClassName = classNames("btn btn-lg",{"aktif": activeButton.parent == true})
-		console.log("parent", buttonParentClassName)
-		console.log("babysitter", buttonBabysitterClassName)
+		
 		<div className="container text-center homepage-mobile mobile">
 			<h4 className="logo">Bibibebi</h4>
 			<div className="box-signup blue text-center">
@@ -318,11 +335,11 @@ HomepagesMobile = React.createClass
 				</div>			
 				{
 					if showForm
-						<FormSignUp user={user} />
+						<FormSignUp user={user} csrfToken={csrf_token} />
 				}
 				{
 					if showLoginForm
-						<FormLogin />
+						<FormLogin csrfToken={csrf_token} />
 				}
 			</div>
 			<h5>Anda Belum Mendaftar ?</h5>

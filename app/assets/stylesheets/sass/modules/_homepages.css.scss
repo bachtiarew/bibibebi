@@ -1,6 +1,12 @@
 $dark-blue: #021025;
 
+.weak{color: red}
 
+.normal{color: orange}
+
+.strong{color: green}
+
+.red-border{border-color: red}
 
 .box-information{
 	margin: 30px 0px 0px 0px;
@@ -476,13 +482,6 @@ $dark-blue: #021025;
 				text-align: right;
 			}
 
-			.weak{color: red}
-
-			.normal{color: orange}
-
-			.strong{color: green}
-
-			.red-border{border-color: red}
 		}
 
 		.panel-footer{

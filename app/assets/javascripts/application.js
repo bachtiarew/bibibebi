@@ -31,8 +31,10 @@
 //= require components/Homepages/Greeting
 //= require components/Homepages/Frame
 //= require components/Parents/ParentsApp
+//= require components/Parents/ParentFormMobile
 //= require components/Mains/Thumbnail
 //= require components/Mains/Sidebar
 //= require components/Mains/Profile
 //= require components/Mains/Rateable
+//= require components/Babysitter/BabysitterFormMobile
 //= require_tree .

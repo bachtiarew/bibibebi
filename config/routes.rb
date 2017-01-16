@@ -5,7 +5,12 @@ Rails.application.routes.draw do
   get "users/logout"
   get "homepages/coba"
   post "users/login"
-  resources :users
+  resources :users do
+    collection do
+      get :create_mobile
+      get :login_mobile
+    end
+  end
   resources :babysitters do 
     collection do
       get :update_rate

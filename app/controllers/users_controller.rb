@@ -35,6 +35,31 @@ class UsersController < ApplicationController
 
 	end
 
+	#handle login for mobile version
+	def login_mobile
+		email = params[:user][:email]
+		password = params[:user][:password]
+		@user = User.find_by(email: email)
+		if @user && @user.authenticate(password)
+			flash[:notice] = "Anda berhasil masuk"
+			session[:user_id] = @user.id
+			status = @user.has_finish_user?
+			byebug
+			if status == "parent_finish"
+				redirect_to parents_path
+			elsif status == "babysitter_finish"
+				redirect_to babysitters_path
+			elsif status == "parent_not_finish"
+				redirect_to new_parent_path(mobile: true)
+			elsif status == "babysitter_not_finish"
+				redirect_to new_babysitter_path(mobile: true)
+			end	
+		else
+			flash[:alert] = "Email atau password anda salah, silahkan coba kembali"
+			redirect_to root_path
+		end				
+	end
+
 	def new
 		@user = User.new
 	end
@@ -60,6 +85,25 @@ class UsersController < ApplicationController
 
 	end
 
+	#controller for handle application on mobile version
+	def create_mobile
+		role = params[:user][:role]
+		@user = User.new(user_mobile_params)
+		@user.is_mobile!
+		if @user.save
+			UserMailer.welcome_email(@user).deliver_now
+			session[:user_id] = @user.id
+			if role == "babysitter"
+				redirect_to new_babysitter_path(mobile: true)
+			elsif role == "parent"
+				redirect_to new_parent_path(mobile: true)
+			end
+		else
+			@hasIn = true
+			render "Homepages/index"
+		end
+	end
+
 	def coba
 		nama = params[:user][:name]
 		jsonku = {nama: nama, age: 24}
@@ -68,13 +112,6 @@ class UsersController < ApplicationController
 		respond_to do |format|	
 			format.json { render json: @user }
 		end		
-		
-	
-	end
-
-	#controller for handle application on mobile version
-	def create_mobile
-		
 	end
 
 	#any params must be permitted before save to database
@@ -84,5 +121,9 @@ class UsersController < ApplicationController
 		params.require(:user).permit(:firstname, :lastname, :gender, :bornplace, :borndate, :email, :password, :password_confirmation, :role, :address, :phone_number)
 	end
 
+	#user params untuk versi mobile
+	def user_mobile_params
+		params.require(:user).permit(:email, :password, :password_confirmation, :role)	
+	end
 
 end

@@ -1,6 +1,11 @@
 <div id="container" ></div>
-<%= react_component "Greeting" %>
-<%= react_component "HomepagesMobile" %>
+<% if @hasIn.nil? %>
+	<%= react_component "Greeting" %>
+<% end %>
+<% if @user.try(:errors).present? %>
+	<%= react_component "ErrorMessage" %>
+<% end %>
+<%= react_component "HomepagesMobile", csrf_token: form_authenticity_token %>
 <%= react_component "Homepages" %>
 <%= react_component "Modal" %>
 
@@ -13,12 +18,13 @@
 				numberInfo: parseInt(number)
 			});
 		});
+		<% if @hasIn.nil? %>
+			var hideGreeting = function(){
+				$(".greeting").hide()
+			};
 
-		var hideGreeting = function(){
-			$(".greeting").hide()
-		};
-
-		setTimeout(hideGreeting, 4000);
+			setTimeout(hideGreeting, 4000);
+		<% end %>
 	});
 
 </script>

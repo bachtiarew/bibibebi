@@ -1,46 +1,53 @@
-<%= render 'error' %>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    Babysitter Registration
+<% if params[:mobile] == "true" %>
+  <div class="container">
+  <h1>hello babysitter</h1>
   </div>
-  <div class="panel-body">
-    <%= form_for :babysitter, url: babysitters_path do |f| %>
-    <div class="form-group">
-      <%= f.label :nik , "Identity Number" %>
-      <%= f.text_field :nik, placeholder: "Your Identity number", class: "form-control" %>
+  <%= react_component "BabysitterFormMobile" crsf_token: form_authenticity_token %>
+<% else %>
+  <%= render 'error' %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Babysitter Registration
     </div>
+    <div class="panel-body">
+      <%= form_for :babysitter, url: babysitters_path do |f| %>
+      <div class="form-group">
+        <%= f.label :nik , "Identity Number" %>
+        <%= f.text_field :nik, placeholder: "Your Identity number", class: "form-control" %>
+      </div>
 
-    <div class="form-group">
-      <%= f.label :age, "Age" %>
-      <%= f.number_field :age, placeholder: "Your Age", class: "form-control" %>
-    </div>
+      <div class="form-group">
+        <%= f.label :age, "Age" %>
+        <%= f.number_field :age, placeholder: "Your Age", class: "form-control" %>
+      </div>
 
-      <% @skill.each do |skill| %>
-      <%= check_box_tag "babysitter[skill_ids][]", skill.id %>
-      <%= label_tag(skill.id, skill.name) %>
+        <% @skill.each do |skill| %>
+        <%= check_box_tag "babysitter[skill_ids][]", skill.id %>
+        <%= label_tag(skill.id, skill.name) %>
+        <% end %>
+
+
+
+      <div class="form-group">
+        <%= f.label :description , "Skill Description" %>
+        <%= f.text_area :description, class: "form-control", rows: 7 %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :price, "Harga Jasa" %>
+        <%= f.number_field :price %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :photos, "Upload Picture" %>
+          <%= f.file_field :photos ,class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Submit", class: "btn btn-md btn-info" %>
+      </div>
+
       <% end %>
-
-
-
-    <div class="form-group">
-      <%= f.label :description , "Skill Description" %>
-      <%= f.text_area :description, class: "form-control", rows: 7 %>
     </div>
-
-    <div class="form-group">
-      <%= f.label :price, "Harga Jasa" %>
-      <%= f.number_field :price %>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :photos, "Upload Picture" %>
-        <%= f.file_field :photos ,class: "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= f.submit "Submit", class: "btn btn-md btn-info" %>
-    </div>
-
-    <% end %>
   </div>
-</div>
+<% end %>
