@@ -1,8 +1,5 @@
 <% if params[:mobile] == "true" %>
-  <div class="container">
-  <h1>hello babysitter</h1>
-  </div>
-  <%= react_component "BabysitterFormMobile" crsf_token: form_authenticity_token %>
+  <%= react_component "BabysitterFormMobile", crsf_token: form_authenticity_token %>
 <% else %>
   <%= render 'error' %>
   <div class="panel panel-default">
@@ -21,7 +18,7 @@
         <%= f.number_field :age, placeholder: "Your Age", class: "form-control" %>
       </div>
 
-        <% @skill.each do |skill| %>
+        <% @skills.each do |skill| %>
         <%= check_box_tag "babysitter[skill_ids][]", skill.id %>
         <%= label_tag(skill.id, skill.name) %>
         <% end %>
@@ -51,3 +48,25 @@
     </div>
   </div>
 <% end %>
+
+<script >
+
+  <% if params[:mobile] == "true" %>
+    dispatcher.dispatch({
+      actionType: "babysitter-mobile-set-user",
+      attributes: <%= json_for(@user).html_safe %>
+    })
+
+  <% end %>
+
+  dispatcher.dispatch({
+    actionType: "babysitter-mobile-set-babysitter",
+    attributes: <%= json_for(@babysitter).html_safe %>
+  })
+      
+  dispatcher.dispatch({
+    actionType: "babysitter-mobile-set-skills",
+    skills: <%= json_for(@skills).html_safe %>
+  })
+  
+</script>

@@ -15,6 +15,11 @@ module Admins
         end
       end
 
+      def destroy
+        @skill = Skill.find(params[:id])
+        @skill.destroy
+        redirect_to new_admins_skill_path
+      end
 
       private
       def skill_params

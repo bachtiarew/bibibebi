@@ -44,7 +44,7 @@ class UsersController < ApplicationController
 			flash[:notice] = "Anda berhasil masuk"
 			session[:user_id] = @user.id
 			status = @user.has_finish_user?
-			byebug
+			
 			if status == "parent_finish"
 				redirect_to parents_path
 			elsif status == "babysitter_finish"

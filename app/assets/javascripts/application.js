@@ -27,14 +27,14 @@
 //= require homepages
 //= require components/AlertApp
 //= require components/Homepages/Homepages
-//= require components/Homepages/HomepagesMobile
+//= require components/Homepages/homepages_mobile
 //= require components/Homepages/Greeting
 //= require components/Homepages/Frame
 //= require components/Parents/ParentsApp
-//= require components/Parents/ParentFormMobile
+//= require components/Parents/parent_form_mobile
 //= require components/Mains/Thumbnail
 //= require components/Mains/Sidebar
 //= require components/Mains/Profile
 //= require components/Mains/Rateable
-//= require components/Babysitter/BabysitterFormMobile
+//= require components/Babysitter/babysitter_form_mobile
 //= require_tree .

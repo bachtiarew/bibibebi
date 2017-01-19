@@ -1,4 +1,4 @@
-ParentFormMobile = React.create.class
+ParentFormMobile = React.createClass
 	getInitialState: ->
 
 	componentDidMount: ->
@@ -9,7 +9,7 @@ ParentFormMobile = React.create.class
 		<div className="container">
 			<div className="header">
 				<i className="fa fa-child"></i>
-				<p style={color: "lightblue", fontSize: 16px}></p>
+				<p style={color: "lightblue", fontSize: "16px"}></p>
 			</div>
 			<div className="body">
 				<div className="box-completed-data">

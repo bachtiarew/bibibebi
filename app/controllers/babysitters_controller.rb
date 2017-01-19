@@ -9,7 +9,10 @@ class BabysittersController < ApplicationController
 
 	def new
 		@babysitter = Babysitter.new
-		@skill = Skill.all
+		@skills = Skill.all
+		if params[:mobile] == "true"
+			@user = User.find(current_user.id)
+		end
 	end
 
 	def create
@@ -30,6 +33,19 @@ class BabysittersController < ApplicationController
 		else
 			render_to 'new'
 		end
+	end
+
+	#handle create babysitter for mobile
+	def create_mobile
+		@user = User.new(user_params)
+		@babysitter = Babysitter.new(babysitter_params)
+		
+		if @user.save && @babysitter.save
+			save_picture!(@babsyitter.id, "Babysitter", params[:babysitter][:pictures])
+		else
+			render :new, mobile: true 	
+		end
+		
 	end
 
 	def save_picture! (id, type, url)
@@ -114,4 +130,9 @@ class BabysittersController < ApplicationController
 	def picture_params
 		params.require(:picture).permit(:picture_url, :pictureable_id, :pictureable_type, )
 	end
+
+	def user_params
+		params.require(:user).permit(:firstname, :lastname, :bornplace, :borndate, :gender, :address, :phone_number)
+	end
+
 end

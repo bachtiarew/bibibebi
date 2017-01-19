@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
   # end
 
   helper_method :current_user
+  helper_method :json_for
+  helper_method :hash_for
 
   def current_user
     @current_user ||= User.find(session[:user_id])
@@ -37,6 +39,22 @@ class ApplicationController < ActionController::Base
         redirect_to root_path
       end 
     end
+  end
+
+  def json_for(target, serializer = nil, options = {})
+    return nil unless target
+    serializer ||= target.active_model_serializer
+    options[:scope] ||= current_user
+    options[:url_options] ||= url_options
+    serializer.new(target, options).to_json
+  end
+
+  def hash_for(target, serializer = nil, options = {})
+    return nil unless target
+    serializer ||= target.active_model_serializer
+    options[:scope] ||= current_user
+    options[:url_options] ||= url_options
+    serializer.new(target, options).as_json
   end
 	
 end

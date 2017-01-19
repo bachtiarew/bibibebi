@@ -500,12 +500,20 @@ $dark-blue: #021025;
 	display: none;
 }
 
+#greeting{
+	display: none;
+}
+
 @media screen and (max-width: 480px) {
     .desktop{
         display: none;
     }
 
     .mobile{
+    	display: block;
+    }
+
+    #greeting{
     	display: block;
     }
 }

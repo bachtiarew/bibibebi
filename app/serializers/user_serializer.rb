@@ -1,7 +1,7 @@
 class UserSerializer < ApplicationSerializer
   
-  has_one: babysitter
-  has_one: parent
+  has_one :babysitter
+  has_one :ortu
   
   attributes(
   	:firstname,
