@@ -1,3 +1,32 @@
+AttachmentFile = React.createClass
+	
+	getInitialState: ->
+		attachmentSrc: ""
+
+	onChangeSelectedInput: (event) ->
+		attachment = event.target.files[0]
+		formData = new FormData()
+		formData.append("picture", attachment)
+
+		url = URL.createObjectURL(attachment)
+		@setState(attachmentSrc: url)
+
+	render: ->
+		{ attachmentSrc } = @state
+
+		<div className="text-center thumbnail-avatar">
+			<input type="file" className="form-control" name="babysitter[picture_url]" onChange={@onChangeSelectedInput} />
+			{
+				if attachmentSrc == "" || attachmentSrc == null
+					<div className="image-preview">	
+						<i className="fa fa-picture"></i>
+					</div>
+				else
+					<img src={attachmentSrc} className="image-preview" />		
+			}
+			<input type="hidden" name="babysitter[remote_picture_url_url]" value={attachmentSrc} />
+		</div>
+
 BabysitterFormMobile = React.createClass
 	propTypes:
 		csrf_token: React.PropTypes.string
@@ -14,17 +43,28 @@ BabysitterFormMobile = React.createClass
 	componentWillUnmount: ->
 		BabysitterFormMobileStore.removeChangeListener(@onChange)
 
+	matched: (skill) ->
+		{ babysitter } = @state
+		{ babysitter_skills } = babysitter
+		unless _.isEmpty(babysitter_skills)
+			_.find(babysitter_skills, (e) -> 
+				if e.id == skill.id then true else false
+			)
+		else
+			return false
+
 	formSkill: ->
-		console.log("tampil donk")
 		{ skills } = @state
 		arrIkonSkill = ["fa-user", "fa-leaf", "fa-star", "fa-bath", "fa-user"]
 
-		skill = (e, key) ->
-			console.log("key", key)
-			skillName = "babysitter[skill][]"
+		skill = (e, key) =>
+			skillName = "babysitter[skill_ids][]"
 			skillClassName = classNames("fa " + arrIkonSkill[key] + " fa-2x")
+
+			matched = @matched(e) 
+
 			<tr key={key} className="skill-box" onClick={@onCheckService}>
-				<td><input type="checkbox" value={e.id} name={skillName} /></td>
+				<td><input type="checkbox" value={e.id} name={skillName} checked={matched} /></td>
 				<td><i className={skillClassName}></i></td>
 				<td>{e.name}</td>
 				<td className="description">{e.description}</td>
@@ -37,11 +77,19 @@ BabysitterFormMobile = React.createClass
 	onClickService: ->
 		@setState(formSkillShow: !@state.formSkillShow)
 
+	getAttachmentCache: (attachments, type) ->
+	    unless _.isEmpty(attachments)
+	      attachments.map (a) ->
+	        if type == "image"
+	          a.picture_url_cache
+	        else
+	          a.document_cache
+
 	render: ->
 		{ csrf_token } = @props
 		{ user, babysitter, skills, formSkillShow } = @state
 		{ firstname, lastname, borndate, bornplace, gender, address, phone_number } = user
-		{ nik, age, pictures, description } = babysitter
+		{ nik, age, pictures, description, price } = babysitter
 		 
 		<div className="container text-center babysitter-mobile">
 			<h4 className="logo">Bibibebi</h4>
@@ -51,7 +99,7 @@ BabysitterFormMobile = React.createClass
 			</div>
 			<div className="body">
 				<div className="box-complete-data">
-					<form type="get" action="/babysitters/create_mobile">
+					<form method="post" action="/babysitters/create_mobile">
 						<div className="form-group">
 							<input type="text" className="form-control" name="babysitter[nik]" value={nik} placeholder="No Identitas" />
 						</div>
@@ -79,13 +127,37 @@ BabysitterFormMobile = React.createClass
 						<div className="form-group">
 							<input type="number" className="form-control" value={age} name="babysitter[age]" placeholder="Usia" />
 						</div>
-						<div className="form-group">	
-							<input type="file" className="form-control"  name="babysitter[pictures]" />
-							<br/>
-							<div className="thumbnail-avatar" />
+						<div className="form-group">
+							<div className="col-xs-12">
+							{
+								if false
+									<AttachmentForm attrName="babysitter[picture]"
+					                  inputName="picture_url"
+					                  attachmentType="image"
+					                  carrierwaveCaches={@getAttachmentCache(pictures, "image")}
+					                  initialAttachments={pictures}
+					                  displayLabel="Unggah Foto Profil" />
+								else
+									<AttachmentFile />
+							}
+							</div>
 						</div>
 						<div className="form-group">
-							<input type="file" className="form-control" name="babysitter[documents]" />
+							<div className="col-xs-12">
+								{
+									if false
+										<AttachmentForm attrName="babysitter[document]"
+										  inputName="document"
+										  attachmentType="file"
+										  carrierwaveCaches={@getAttachmentCache(documents, "file)")}
+										  initialAttachments={documents}
+										  displayLabel="Unggah File Pendukung" />
+									else
+										<a href="javascript:void(0)" style={width: "100%", fontSize: "14px", marginBottom: "20px"} className="btn btn-md" disabled={true}>
+											<strong>Unggah File Pendukung</strong>
+										</a>
+								}
+							</div>
 						</div>
 						<div className="form-group">
 							<textarea className="form-control" name="user[address]" value={address} placeholder="Ketik disini alamat rumah anda" />
@@ -98,6 +170,9 @@ BabysitterFormMobile = React.createClass
 								if formSkillShow == true
 									@formSkill()
 							}
+						</div>
+						<div className="form-group">
+							<input type="number" className="form-control" name="babysitter[price]" value={price} placeholder="Harga" />
 						</div>
 						<div className="form-group">
 							<textarea type="text" className="form-control" rows=5 name="babysitter[description]" value={description} placeholder="ketik disini deskripsi diri anda" />

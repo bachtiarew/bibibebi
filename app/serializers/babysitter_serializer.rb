@@ -7,7 +7,17 @@ class BabysitterSerializer < ApplicationSerializer
 		:nik,
 		:age,
 		:description,
-		:user_id
+		:user_id,
+		:price,
+
+	#virtual attributes
+		:babysitter_skills
 		)
 
+	#virtual attributes
+
+	def babysitter_skills
+		object.skills
+	end
+	
 end

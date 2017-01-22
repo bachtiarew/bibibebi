@@ -1,0 +1,310 @@
+{ PropTypes } = React
+
+getUniqueKey = ->
+    @lastTimestamp ||= 0
+
+    if window.performance && window.performance.now
+      timestamp = parseInt(window.performance.now() * 1000000)
+      if timestamp <= @lastTimestamp
+        timestamp = @lastTimestamp + 1
+      @lastTimestamp = timestamp
+      timestamp
+    else
+      timestamp = Date.now()
+      if timestamp <= @lastTimestamp
+        timestamp = @lastTimestamp + 1
+      @lastTimestamp = timestamp
+      timestamp
+
+notIE = navigator.appName != "Microsoft Internet Explorer"
+
+buildAttachment = (id = null, src = null, name = null, cache_value = null, value = null) =>
+  { id: id, key: getUniqueKey(), src: src, name: name, cache_value: cache_value, value: value, destroy: null }
+
+getNameFile = (url) =>
+  console.log("url cak", url)
+  regex = /[^/]+$/g
+  return ((url || "").match(regex) || [])[0]
+
+AttachmentForm = React.createClass
+  propTypes:
+    inputName: PropTypes.string
+    attrName: PropTypes.string
+    attachmentType: PropTypes.string.isRequired # image || file
+    initialAttachments: PropTypes.array
+    carrierwaveCaches: PropTypes.array
+    documentType: PropTypes.string
+    isMultipleAttachments: PropTypes.bool
+    displayLabel: PropTypes.string
+    onDidChangeInputFile: PropTypes.func
+    allowedFile: PropTypes.array
+    allowedImage: PropTypes.array
+    reloadComponent: PropTypes.bool
+
+  getDefaultProps: ->
+    {
+      initialAttachments: []
+      carrierwaveCaches: []
+      documentType: 'Attachment'
+      isMultipleAttachments: true
+      displayLabel: null
+      allowedFile: ['txt','doc','docx','pdf','rtf','xls','xlsx']
+      allowedImage: ['jpeg','jpg','png']
+      reloadComponent: false
+    }
+
+  getInitialState: ->
+    {
+      attachments: []
+      canShowThumbnail: @props.attachmentType == "image" && notIE
+    }
+
+  componentDidMount: ->
+    {initialAttachments, inputName, carrierwaveCaches, attachmentType} = @props
+    _attachments = []
+    for attachment, idx in initialAttachments
+      {id, url, key} = attachment
+      id = if id == "" then null else id
+      if key == undefined
+        _attachment = buildAttachment(id, url, getNameFile(url), carrierwaveCaches[idx])
+      else
+        _attachment = attachment
+
+      _attachments.push(_attachment)
+
+    @createBlankAttachment(_attachments)
+
+  # just trick, please send attr reloadComponent: true if want to execute this too.
+  # if you want to execute this func, initialAttachments will be required or you will lost your selectedFiles
+  componentWillReceiveProps: (nextProps) ->
+    if nextProps.reloadComponent
+      attachments = nextProps.initialAttachments
+      if attachments.length > 0
+        attachments = _.filter(attachments, (attachment) -> attachment.src)
+
+      @createBlankAttachment(attachments)
+
+  _handleAttachment: (key) ->
+    attachment = _.find(@state.attachments, 'key', key)
+
+    if attachment.src == null
+      @removeAttachment(key)
+
+    document.body.onfocus = null
+
+  createBlankAttachment: (attachments) ->
+    {isMultipleAttachments} = @props
+    arrAttachments = _.map(attachments, (e) -> !e.destroy)
+
+    if isMultipleAttachments || attachments.length == 0
+      attachments.push(buildAttachment())
+
+    attachments.sort (a, b) -> a.key unless notIE
+    @setState(attachments: attachments)
+
+  getIndexAttachments: (key) ->
+    @state.attachments.map((e) -> e.key).indexOf(key)
+
+  removeAttachment: (key) ->
+    {isMultipleAttachments} = @props
+    {attachments} = @state
+    attachment = _.find(attachments, (e) -> e.key == key)
+    updatedData = {}
+    if attachment.id
+      i = @getIndexAttachments(key)
+
+      updatedData[i] = { destroy: { $set: true } }
+      attachments = React.addons.update(attachments, updatedData)
+
+      @setState({ attachments: attachments })
+    else
+      _.remove(attachments, (_attachment) -> _attachment == attachment)
+
+      @setState({ attachments: attachments })
+
+    @props.onDidChangeInputFile?(attachments, attachment)
+
+    if isMultipleAttachments == false
+      @createBlankAttachment(if attachment.id then updatedData else attachments)
+
+  selectAttachment: ->
+    {isMultipleAttachments} = @props
+    {attachments} = @state
+
+    arrAvailable = []
+    _.map(attachments, (_attachment) ->
+      arrAvailable.push(_attachment) if !_.isEmpty(_attachment.src) && !_attachment.destroy
+    )
+
+    if !isMultipleAttachments && arrAvailable.length > 0
+      Alert.displayError('Can only Attach 1 File.')
+
+      return false
+    else
+      formAddPicture = $(ReactDOM.findDOMNode(@))
+      forms = $(formAddPicture).closest('.form-group').find('input[type="file"]')
+      form = forms.last()
+      # http://stackoverflow.com/questions/9885684/on-form-submit-file-field-clears-in-internet-explorer-9
+      if notIE
+        form.trigger 'click'
+      else
+        Alert.displayError("Internet Explorer Doesn't Support this button. Please click browse file!")
+
+  onChangeInputFile: (key, event) ->
+    console.log("key  asbdnaksda", key)
+    console.log("event  asbdnaksda", event)
+    try
+      file = event.target.files[0]
+    catch e
+      file = event.target
+
+    console.log("file asdas", file)
+    if file
+      {attachments, canShowThumbnail} = @state
+      {attachmentType, allowedFile, allowedImage} = @props
+
+      i = @getIndexAttachments(key)
+
+      updatedData = {}
+      try
+        valueTarget = event.target.result
+      catch e
+        valueTarget = null
+
+      fileName = file.name
+      srcUrl = if notIE then URL.createObjectURL(file) else null
+
+      fileType = fileName.split('.').splice(-1).toString()
+      allowedImageUpperCase = _.map(allowedImage, (e) -> e.toUpperCase()).concat(allowedImage)
+      if ($.inArray(fileType, allowedImageUpperCase) < 0 && attachmentType == 'image') || ($.inArray(fileType, allowedFile) < 0 && attachmentType == "file")
+        @removeAttachment(key)
+        @createBlankAttachment(attachments)
+        false
+        Alert.displayError('File type are not Allowed!')
+        return
+      
+      updatedData[i] = {
+        value: { $set: valueTarget  },
+        name: { $set: fileName },
+        src: { $set: srcUrl }
+      }
+
+      updatedData = React.addons.update(attachments, updatedData)
+
+      @props.onDidChangeInputFile?(updatedData)
+
+      @createBlankAttachment(updatedData)
+
+    else
+
+      @removeAttachment(key)
+
+  render: ->
+        
+    { attachments, canShowThumbnail } = @state
+    { inputName, attrName, attachmentType, displayLabel } = @props
+
+    boxAttachmentClassName = classNames(
+      'thumbnail-avatar': canShowThumbnail
+      'clearfix': true
+    )
+    attachmentLabel = if _.isEmpty(displayLabel) then "Attach #{_.capitalize(attachmentType)}(s)" else displayLabel
+
+    className = classNames(
+      'attachment-form': true
+      'form-group': true
+      'ie-mode': !notIE
+    )
+    
+    console.log("attachments", attachments)
+
+    <div className={className}>
+      {
+        if notIE == false
+          <p>
+            <label className="control-label">{attachmentLabel}</label>
+          </p>
+        else
+          <p>
+            <a style={width: "100%", fontSize: "14px"} href="javascript:void(0)" onClick={@selectAttachment}
+               className="btn btn-md">
+              <strong>{attachmentLabel}</strong>
+            </a>
+          </p>
+      }
+      <div className={boxAttachmentClassName}>
+        {attachments.map(@renderAttachment)}
+      </div>
+    </div>
+
+  renderAttachment: (attachment, index) ->
+    { canShowThumbnail } = @state
+    { inputName, attrName, attachmentType } = @props
+
+    boxInlineClassName = classNames(
+      'box-picture-item': canShowThumbnail
+      'inline'
+    )
+    removeButtonClassName = classNames(
+      'btn-remove-attach': canShowThumbnail
+      'btn-remove-file': !canShowThumbnail
+    )
+    fieldsClassName = classNames(
+      'fields': true
+      'fields-attachment': !canShowThumbnail
+      'fields-picture': canShowThumbnail
+      'hidden': (notIE && !attachment.name) || attachment.destroy
+    )
+
+    documentTypeValue = if attachment.name == null then "" else attachment.document_type || @props.documentType
+    fileInputClassName = "hidden"
+    styleContainerItem = "0px"
+    widthInputFile = "auto"
+    styleLabelWidth = "auto"
+    styleLabelPosition = "relative"
+
+    if notIE == false # IE doesn't allowed hidden element for submitting form file
+      fileInputClassName = "fields"
+      styleContainerItem = if attachment.name == null then styleContainerItem else "15px 0 0"
+      widthInputFile = "200px"
+      styleLabelWidth = if attachment.name == null then styleLabelWidth else "100%"
+      styleLabelPosition = if attachment.name == null then styleLabelPosition else "absolute"
+
+    <div key="#{attachment.key}" className={fieldsClassName}>
+      <div className={boxInlineClassName} style={position: "relative", margin: styleContainerItem}>
+        <input name="#{attrName}[][#{inputName}]"
+          type="file" className={fileInputClassName} ref="#{attachment.key}_input_file"
+          onChange={@onChangeInputFile.bind(@, attachment.key)}/>
+        <input type="hidden" name="#{attrName}[][#{inputName}_cache]"
+          value={attachment.cache_value} />
+        <input type="hidden" name="#{attrName}[][_destroy]"
+          value={attachment.destroy} />
+        <input type="hidden" name="#{attrName}[][id]"
+          value={attachment.id} />
+        <input type="hidden" name="#{attrName}[][remote_#{inputName}]" value={attachment.src} />
+        {
+          if attachmentType == "file"
+            <input type="hidden" 
+                   name="#{attrName}[#{attachment.key}][document_type]"
+                   value={documentTypeValue} />
+        }
+        <div style={position: styleLabelPosition, top: 0, backgroundColor: "#f2f2f2", width: styleLabelWidth, height: styleLabelWidth}>
+          {
+            if attachment.value || attachment.cache_value || attachment.name
+              <a className={removeButtonClassName} href="javascript:void(0)"
+                 onClick={@removeAttachment.bind(@, attachment.key)}>
+                <i className="fa fa-times-circle" />
+              </a>
+          }
+          {
+            if canShowThumbnail
+              <img src={attachment.src} className="image-preview" />
+            else
+              <a className="text-black attachment-name">{attachment.name}</a>
+          }
+        </div>
+      </div>
+    </div>
+
+
+window.AttachmentForm = AttachmentForm

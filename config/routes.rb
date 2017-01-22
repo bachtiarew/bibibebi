@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :babysitters do 
     collection do
       get :update_rate
-      get :create_mobile
+      post :create_mobile
     end
   end
   get "parents/get_user", to: "parents#get_user"

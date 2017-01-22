@@ -25,6 +25,7 @@
 //= require components
 //= require_tree ./store
 //= require homepages
+//
 //= require components/AlertApp
 //= require components/Homepages/Homepages
 //= require components/Homepages/homepages_mobile
@@ -37,4 +38,6 @@
 //= require components/Mains/Profile
 //= require components/Mains/Rateable
 //= require components/Babysitter/babysitter_form_mobile
+//= require components/Babysitter/attachment_form
+//= require components/Babysitter/key_generator
 //= require_tree .

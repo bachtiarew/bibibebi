@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
 	ratyrate_rater
 	#for field validation : field should'n be empty
-	validates :email, :password, :password_confirmation, presence: true 
+	validates :email, :password, :password_confirmation, presence: true , if: :sign_up?
 	validates :firstname, :lastname, :gender, :bornplace, :borndate, :address, presence: true , if: :is_mobile?
 	#validation for password : confirmation must matched
 	validates :password, confirmation: true
@@ -44,6 +44,14 @@ class User < ActiveRecord::Base
 
 	def is_mobile!
 		@is_mobile = true
+	end
+
+	def sign_up?
+		@sign_up = false
+	end
+
+	def sign_up!
+		@sign_up = true
 	end
 
 	def user_complete?
