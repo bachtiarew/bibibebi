@@ -34,13 +34,13 @@ BabysitterRow = React.createClass
 
 ParentList = React.createClass
 	getInitialState: ->
-		parents: ParentsMobileStore.parents
+		parents: MainpageMobileStore.parents
 
 	render: ->
 		{ parents } = @state
 		parent = (e, key) ->
 			<ParentRow />
-			
+
 		<div className="mainpage-list">
 			<div className="row">
 				{parents.map(parent)}
@@ -50,7 +50,7 @@ ParentList = React.createClass
 BabysitterList = React.createClass
 	
 	getInitialState: ->
-		babysitters: BabysittersMobileStore.babysitters
+		babysitters: MainpageMobileStore.babysitters
 
 	render: ->
 		{ babysitters } = @state
@@ -66,24 +66,25 @@ BabysitterList = React.createClass
 BabysitterHeader = React.createClass
 
 	getInitialState: ->
-		babysitter: BabysitterFormMobileStore.babysitter
+		babysitter: MainpageMobileStore.babysitter
 
 	render: ->
 		{ babysitter } = @state
 		{ user }  = @props
 		{ firstname, lastname, borndate, bornplace, gender, address, phone_number } = user
 		{ price, nik, age, pictures } = babysitter
+
 		<div className="mainpage-mobile-header">
 			<div className="row">
 				<div className="col-md-2">
-					<img src={pictures[0]} className="photo-profile" />
+					<img src="" className="photo-profile" />
 				</div>
 				<div className="col-md-4">
 					<Rating />
 					<label>Rp.{price},00</label>
 				</div>
 				<div className="col-md-5">
-					<label>{firtname} {lastname}</label>
+					<label>{firstname} {lastname}</label>
 					<label>{phone_number}</label>
 					<label>{address}</label>
 				</div>
@@ -93,24 +94,23 @@ BabysitterHeader = React.createClass
 ParentHeader = React.createClass
 	
 	getInitialState: ->
-		parent: ParentMobileStore.parent
+		parent: MainpageMobileStore.parent
 
 	render: ->
 		{ parent } = @state
 		{ user } = @props
-		{ nik, age, description, pictures} = parent
 		{ firstname, lastname, bornplace, borndate, address, gender, phone_number } = user
 
 		<div className="mainpage-mobile-header">
 			<div className="row">
 				<div className="col-md-2">
-					<img src={pictures} className="photo-profile" />
+					<img src="" className="photo-profile" />
 				</div>
 				<div className="col-md-4">
-					<label>{nik}</label>
+					<label></label>
 				</div>
 				<div className="col-md-5">
-					<label>{firtname} {lastname}</label>
+					<label>{firstname} {lastname}</label>
 					<label>{phone_number}</label>
 					<label>{address}</label>
 				</div>
@@ -118,20 +118,21 @@ ParentHeader = React.createClass
 		</div>
 
 MainpageMobile = React.createClass
-	propTypes:
-		currentUser: React.PropTypes.object
+	
+	getInitialState: ->
+		currentUser: MainpageMobileStore.user
 
 	render: ->
-		{ currentUser } = @props
+		{ currentUser } = @state
 
 		<div className="container mainpage-mobile">
 			<h4 className="logo">Bibibebi</h4>
 			<div className="header">
 				{
 					if currentUser.role == "babysitter"
-						<BabysitterHeader />
+						<BabysitterHeader user={currentUser} />
 					else
-				}		<ParentHeader />
+				}		<ParentHeader user={currentUser} />
 			</div>
 			<div className="body">
 				{

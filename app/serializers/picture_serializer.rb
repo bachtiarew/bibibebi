@@ -1,8 +1,8 @@
 class PictureSerializer < ApplicationSerializer
 
 	attributes(
-		:id
-		:picture_id,
+		:id,
+		:pictureable_id,
 		:pictureable_type,
 		:picture_url
 		)

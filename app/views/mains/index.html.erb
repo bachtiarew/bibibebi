@@ -1,3 +1,21 @@
+<script>
+	<% if @user.role == "babysitter" %>
+		dispatcher.dispatch({
+			actionType: "mainpage-mobile-set-babysitter",
+			user: <%= json_for(@user).html_safe %>,
+			babysitter: <%= json_for(@babysitter).html_safe %>,
+			parents: <%= json_for(@parents).html_safe %>,
+		})
+	<% else %>
+		dispatcher.dispatch({
+			actionType: "mainpage-mobile-set-parent",
+			user: <%= json_for(@user).html_safe %>,
+			parent: <%= json_for(@parent).html_safe %>,
+			baysitters: <%= json_for(@babysitters).html_safe %>
+		})
+	<% end %>
+</script>
+
 <% if params[:mobile] == "true" %>
 	<%= react_component "MainpageMobile", currentUser: current_user, csrf_token: form_authenticity_token %>
 <% else %>
@@ -27,21 +45,3 @@
 <% else %>
 	<h2>yes iam parent </h2>cmd
 <% end %> -->
-
-<script>
-	<% if @user.role == "babysitter" %>
-		dispatcher.dispatch({
-			actionType: "mainpage-mobile-set-babysitter",
-			user: <%= json_for(@user).html_safe %>,
-			babysitter: <%= json_for(@babysitter).html_safe %>,
-			parents: <%= json_for(@parents).html_safe %>,
-		})
-	<% else %>
-		dispatcher.dispatch({
-			actionType: "mainpage-mobile-set-parent",
-			user: <%= json_for(@user).html_safe %>,
-			parent: <%= json_for(@parent).html_safe %>,
-			baysitters: <%= json_for(@babysitters).html_safe %>
-		})
-	<% end %>
-</script>

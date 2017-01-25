@@ -5,21 +5,20 @@ class MainsController < ApplicationController
 			redirect_to root_path
 		end
 		@user = current_user
-		thumb_role = current_user.role == "parent" ? "babysitter" : "parent"
-		
+			
 		unless params[:mobile] == "true"
+			thumb_role = current_user.role == "parent" ? "babysitter" : "parent"
 			thumbs = User.where(role: thumb_role)
 			
 			@thumbs = thumbs.as_json( except: [:password_digest], include: :babysitter)
 		else
-			if thumb_role == "babysitter"
-				@babysitter = current_user.parent
+			if @user.role == "babysitter"
+				@babysitter = current_user.babysitter
 				@parents = Ortu.all
 			else
-				@parent = current_user.parent
+				@parent = current_user.ortu
 				@babysitter = Babysitte.all
 			end
-
 		end
 	end
 
