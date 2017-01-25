@@ -11,20 +11,21 @@ AttachmentFile = React.createClass
 		url = URL.createObjectURL(attachment)
 		@setState(attachmentSrc: url)
 
+	onSelectedPicture: ->
+		$("#babysitter-photo").click()
+
 	render: ->
 		{ attachmentSrc } = @state
 
 		<div className="text-center thumbnail-avatar">
-			<input type="file" className="form-control" name="babysitter[picture_url]" onChange={@onChangeSelectedInput} />
+			<a href="javascript:void(0)" style={width: "100%", fontSize: "14px", marginBottom: "20px"} className="btn btn-md" onClick={@onSelectedPicture}>
+				<strong>Unggah Photo Profil</strong>
+			</a>
+			<input type="file" id="babysitter-photo" className="hidden" name="babysitter[picture_url]" onChange={@onChangeSelectedInput} />
 			{
-				if attachmentSrc == "" || attachmentSrc == null
-					<div className="image-preview">	
-						<i className="fa fa-picture"></i>
-					</div>
-				else
+				unless attachmentSrc == "" || attachmentSrc == null
 					<img src={attachmentSrc} className="image-preview" />		
 			}
-			<input type="hidden" name="babysitter[remote_picture_url_url]" value={attachmentSrc} />
 		</div>
 
 BabysitterFormMobile = React.createClass
@@ -99,89 +100,77 @@ BabysitterFormMobile = React.createClass
 			</div>
 			<div className="body">
 				<div className="box-complete-data">
-					<form method="post" action="/babysitters/create_mobile">
-						<div className="form-group">
-							<input type="text" className="form-control" name="babysitter[nik]" value={nik} placeholder="No Identitas" />
+					<div className="form-group">
+						<input type="text" className="form-control" name="babysitter[nik]" value={nik} placeholder="No Identitas" required={true} />
+					</div>
+					<div className="form-group">
+						<input type="text" className="form-control"  name="user[firstname]" value={firstname} placeholder="Nama Depan" required={true} />
+					</div>
+					<div className="form-group">
+						<input type="text" className="form-control" name="user[lastname]" value={lastname} placeholder="Nama Belakang" required={true} />
+					</div>
+					<div className="form-group">
+						<input type="text" className="form-control" name="user[bornplace]" value={bornplace} placeholder="Tempat lahir" required={true} />
+					</div>
+					<div className="form-group">
+						<input type="date" className="form-control" name="user[borndate]" value={borndate} placeholder="DD-MM-YYYY" required={true} />
+					</div>
+					<div className="form-group">
+						<select className="form-control" value={gender} name="user[gender]" required={true}>
+							<option value="male">Pria</option>
+							<option value="female">Wanita</option>
+						</select>
+					</div>
+					<div className="form-group">
+						<input type="number" className="form-control" name="user[phone_number]" value={phone_number} placeholder="No Telepon" required={true} />
+					</div>
+					<div className="form-group">
+						<input type="number" className="form-control" value={age} name="babysitter[age]" placeholder="Usia" required={true} />
+					</div>
+					<div className="form-group">
+						<div className="col-xs-12">	
+							<AttachmentFile />
 						</div>
-						<div className="form-group">
-							<input type="text" className="form-control"  name="user[firstname]" value={firstname} placeholder="Nama Depan" />
-						</div>
-						<div className="form-group">
-							<input type="text" className="form-control" name="user[lastname]" value={lastname} placeholder="Nama Belakang" />
-						</div>
-						<div className="form-group">
-							<input type="text" className="form-control" name="user[bornplace]" value={bornplace} placeholder="Tempat lahir" />
-						</div>
-						<div className="form-group">
-							<input type="date" className="form-control" name="user[borndate]" value={borndate} placeholder="DD-MM-YYYY" />
-						</div>
-						<div className="form-group">
-							<select className="form-control" value={gender} name="user[gender]">
-								<option value="male">Pria</option>
-								<option value="female">Wanita</option>
-							</select>
-						</div>
-						<div className="form-group">
-							<input type="number" className="form-control" name="user[phone_number]" value={phone_number} placeholder="No Telepon"/>
-						</div>
-						<div className="form-group">
-							<input type="number" className="form-control" value={age} name="babysitter[age]" placeholder="Usia" />
-						</div>
-						<div className="form-group">
-							<div className="col-xs-12">
+					</div>
+					<div className="form-group">
+						<div className="col-xs-12">
 							{
 								if false
-									<AttachmentForm attrName="babysitter[picture]"
-					                  inputName="picture_url"
-					                  attachmentType="image"
-					                  carrierwaveCaches={@getAttachmentCache(pictures, "image")}
-					                  initialAttachments={pictures}
-					                  displayLabel="Unggah Foto Profil" />
+									<AttachmentForm attrName="babysitter[document]"
+									  inputName="document"
+									  attachmentType="file"
+									  carrierwaveCaches={@getAttachmentCache(documents, "file)")}
+									  initialAttachments={documents}
+									  displayLabel="Unggah File Pendukung" />
 								else
-									<AttachmentFile />
-							}
-							</div>
-						</div>
-						<div className="form-group">
-							<div className="col-xs-12">
-								{
-									if false
-										<AttachmentForm attrName="babysitter[document]"
-										  inputName="document"
-										  attachmentType="file"
-										  carrierwaveCaches={@getAttachmentCache(documents, "file)")}
-										  initialAttachments={documents}
-										  displayLabel="Unggah File Pendukung" />
-									else
-										<a href="javascript:void(0)" style={width: "100%", fontSize: "14px", marginBottom: "20px"} className="btn btn-md" disabled={true}>
-											<strong>Unggah File Pendukung</strong>
-										</a>
-								}
-							</div>
-						</div>
-						<div className="form-group">
-							<textarea className="form-control" name="user[address]" value={address} placeholder="Ketik disini alamat rumah anda" />
-						</div>
-						<div className="form-group">
-							<a href="javascript:void(0)" style={width: "100%"} className="btn btn-md" onClick={@onClickService}>
-								<strong>Layanan Extra</strong>
-							</a>
-							{
-								if formSkillShow == true
-									@formSkill()
+									<a href="javascript:void(0)" style={width: "100%", fontSize: "14px", marginBottom: "20px"} className="btn btn-md" disabled={true}>
+										<strong>Unggah File Pendukung</strong>
+									</a>
 							}
 						</div>
-						<div className="form-group">
-							<input type="number" className="form-control" name="babysitter[price]" value={price} placeholder="Harga" />
-						</div>
-						<div className="form-group">
-							<textarea type="text" className="form-control" rows=5 name="babysitter[description]" value={description} placeholder="ketik disini deskripsi diri anda" />
-						</div>
-						<div className="form-group">
-							<button type="submit" className="btn btn-lg">Lanjut</button> 
-						</div>
-						<input type="hidden" name="authenticity_token" value={csrf_token} />
-					</form>
+					</div>
+					<div className="form-group">
+						<textarea className="form-control" name="user[address]" value={address} placeholder="Ketik disini alamat rumah anda" required={true} />
+					</div>
+					<div className="form-group">
+						<a href="javascript:void(0)" style={width: "100%"} className="btn btn-md" onClick={@onClickService}>
+							<strong>Layanan Extra</strong>
+						</a>
+						{
+							if formSkillShow == true
+								@formSkill()
+						}
+					</div>
+					<div className="form-group">
+						<input type="number" className="form-control" name="babysitter[price]" value={price} placeholder="Harga" required={true} />
+					</div>
+					<div className="form-group">
+						<textarea type="text" className="form-control" rows=5 name="babysitter[description]" value={description} placeholder="ketik disini deskripsi diri anda" required={true} />
+					</div>
+					<div className="form-group">
+						<button type="submit" className="btn btn-lg">Lanjut</button> 
+					</div>
+					<input type="hidden" name="authenticity_token" value={csrf_token} />
 				</div>
 			</div>
 		</div>

@@ -56,7 +56,6 @@ FormChildItems = React.createClass
 
 	RemoveItem: (event) ->
 		event.preventDefault()
-		console.log("run remove item")
 		dispatcher.dispatch({ 
 			actionType: 'child-item-remove'
 			childItem: @props.childItem

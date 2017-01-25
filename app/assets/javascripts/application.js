@@ -37,6 +37,7 @@
 //= require components/Mains/Sidebar
 //= require components/Mains/Profile
 //= require components/Mains/Rateable
+//= require components/Mains/mainpage_mobile
 //= require components/Babysitter/babysitter_form_mobile
 //= require components/Babysitter/attachment_form
 //= require components/Babysitter/key_generator
