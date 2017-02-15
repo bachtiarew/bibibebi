@@ -1,3 +1,99 @@
+.text-big{
+	font-size: 14px;
+}	
+
+.text-middle{
+	font-size: 12px;
+}
+
+.text-small{
+	font-size: 10px;
+}
+
+.mainpage-mobile{
+	background-color: #00112b;
+	color: #fff;
+
+	.babysitter-rating{
+		height: 40px;
+		padding: 5px 5px 5px 5px;
+	}
+
+	.mainpage-mobile-header{
+		border: 5px solid #fff;
+		padding: 5px 5px 5px 5px;
+	}
+
+	label{
+		margin-top: -5px;
+	}
+
+	.photo-profile{
+		height: 70px;
+		width: 70px;
+		border: none;
+		margin: 5px 0px 5px 0px;
+	}
+
+	.mainpage-mobile-footer{
+		.col-xs-12, .col-xs-6, .row{
+			border: 1px solid #fff;
+			font-size: 10px;
+			text-align: left;
+		}
+		
+		tr, th{
+			border: 1px solid #fff;
+			font-size: 10px;
+		}
+
+		button.btn {
+			border-radius: 0px;
+			border: 2px solid #fff;
+			color: #fff;
+			background-color: none;
+		}
+	}
+
+	.mainpage-list{
+		padding: 10px 20px 20px 20px;
+		background-color: #fff;
+		height: 450px;
+		overflow-y: visible;
+
+		.parent-row{
+			color: #00112b;
+		}
+
+		.parent-row-active{
+			background-color: #00112b;
+			color: #fff;
+		}
+
+		.parent-row, .parent-row-active{
+			padding: 5px 5px 5px 5px;
+			border: 2px solid #00112b;
+			margin: 0px 0px 10px 0px;
+			cursor: pointer;
+
+			.table{
+				max-height: 70px;
+			}
+
+			th{
+				border: none;
+			}
+
+			img{
+				width: 70px;
+				height: 70px;
+				border: 2px solid #00112b;
+			}
+		}
+
+	}
+}
+
 .mainpages{
 	margin-top: -15px;
 
@@ -229,4 +325,22 @@
 
 	}
 
+}
+
+#mainpage, .navbar{
+    display: block;
+}
+
+#mainpage-mobile{
+	display: none;
+}
+
+@media screen and (max-width: 480px) {
+    #mainpage, .navbar{
+        display: none;
+    }
+
+    #mainpage-mobile{
+    	display: block;
+    }
 }

@@ -1,5 +1,15 @@
+<script>
+	dispatcher.dispatch({
+		actionType: "mainpage-mobile-set-babysitter",
+		user: <%= json_for(@user).html_safe %>,
+		babysitter: <%= json_for(@babysitter).html_safe %>,
+		parents: <%= json_for(@parents).html_safe %>,
+	})
+</script>
+
 <%= render "layouts/navbar" %>
-<div class="mainpages">
+<%= react_component "MainpageMobile", currentUser: current_user, csrf_token: form_authenticity_token %>
+<div id="mainpage" class="mainpages">
 	<div class="row">
 		<div class="col-sm-2 sidebar-frame">
 			<%= react_component "Sidebar", person: get_babysitter, skills: @skills, picture: @picture %>
@@ -12,3 +22,7 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	$(".babysitter-rating").html("<%=j render 'layouts/display_babysitter_rate' %>")
+</script>

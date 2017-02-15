@@ -4,6 +4,7 @@ class BabysitterSerializer < ApplicationSerializer
 	# has_and_belongs_to_many :skills
 
 	attributes(
+		:id,
 		:nik,
 		:age,
 		:description,

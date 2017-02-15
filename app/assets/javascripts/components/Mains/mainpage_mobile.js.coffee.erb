@@ -1,19 +1,77 @@
-Rating = React.createClass
-	render: ->
-		<div className="rating">
+Rating = React.createClass	
 
-		</div>
+	getInitialState: ->
+		avgRate: @props.avgRate  
+
+	generateStar: ->
+		{ avgRate } = @state
+		avgRate = if avgRate == null || avgRate == undefined then 0 else avgRate
+
+		star = (full, half, blank) ->
+			console.log("full", full)
+			console.log("half", half)
+			console.log("blank", blank)
+			<div className="babysitter-rating" style={color: "#fff"}>
+				{	
+					unless full == 0
+						for i in [1..full]
+							<i className="fa fa-star fa-1x"></i>
+				}
+				{
+					unless half == 0
+						for i in [1..half]
+							<i className="fa fa-star-half fa-1x"></i>
+				}
+				{	
+					unless blank == 0
+						for i in [1..blank]
+							<i className="fa fa-star-o fa-1x"></i>
+				}
+			</div>
+
+		console.log("avgRate", avgRate)
+		halfStar = if avgRate % 1 == 0 then 0 else 1
+		fullStar = Math.ceil(avgRate)
+		blankStar = 5 - Math.ceil(avgRate)
+		blankStar = blankStar - 1 if halfStar > 0
+
+		star(fullStar, halfStar, blankStar)
+
+	render: ->
+		@generateStar()
 
 ParentRow = React.createClass
+	propTypes:
+		parent: React.PropTypes.object
+
+	onClickParentChoosed: (parent) ->
+		dispatcher.dispatch
+			actionType: "mainpage-mobile-set-parent-choosed"
+			attributes: parent
+
 	render: ->
-		{ key } = @props
-		<div key={key} className="col-xs-12">
+		{ parent } = @props
+		{ userParent, kids, pictures } = parent
+		
+		parentRowClassName = classNames("col-xs-12",
+			{"parent-row" : if parent?.choosed then false else true},
+			{"parent-row-active" : if parent?.choosed then true else false}
+		)
+
+		console.log("parent rowClass name", parentRowClassName)
+		
+		<div className={parentRowClassName} onClick={@onClickParentChoosed.bind(this, parent)}>
 			<div className="row">
 				<div className="col-xs-8">
-					
+					<table className="table">
+						<thead>
+							<tr><th className="text-big">{userParent.firstname} {userParent.lastname}</th></tr>
+							<tr><th className="text-small">{userParent.phone_number}</th></tr>
+						</thead>
+					</table>					
 				</div>
 				<div className="col-xs-4">
-					<img src="" />
+					<img src={pictures[0].picture_url.picture_url.url} />
 				</div>
 			</div>
 		</div>
@@ -39,7 +97,8 @@ ParentList = React.createClass
 	render: ->
 		{ parents } = @state
 		parent = (e, key) ->
-			<ParentRow />
+			
+			<ParentRow key={key} parent={e} />
 
 		<div className="mainpage-list">
 			<div className="row">
@@ -76,73 +135,100 @@ BabysitterHeader = React.createClass
 
 		<div className="mainpage-mobile-header">
 			<div className="row">
-				<div className="col-md-2">
-					<img src="" className="photo-profile" />
+				<div className="col-xs-3">
+					<img src={pictures[0].picture_url.picture_url.url} className="photo-profile" />
 				</div>
-				<div className="col-md-4">
-					<Rating />
-					<label>Rp.{price},00</label>
+				<div className="col-xs-4 text-right">
+					<Rating avgRate={babysitter.avgRate} />
+					<label className="price">Rp.{price * 1000},00</label>
 				</div>
-				<div className="col-md-5">
-					<label>{firstname} {lastname}</label>
-					<label>{phone_number}</label>
-					<label>{address}</label>
+				<div className="col-xs-5 text-right">
+					<label className="text-big">{firstname} {lastname}</label><br />
+					<label className="text-small">{phone_number}</label><br />
+					<label className="text-small">{address}</label>
 				</div>
 			</div>
 		</div>
 
-ParentHeader = React.createClass
+BabysitterActionButton = React.createClass
 	
 	getInitialState: ->
-		parent: MainpageMobileStore.parent
+		requesting: false
+
+	onClickViewProfile: ->
+		{ parentChoosed } = @props
+		
+		$.ajax
+			url: "/parents/" + parentChoosed.id
+			dataType: "json"
+			beforeSend: ->
+				@setState(requesting: true)
+			success: (data) ->
+			
+			error: ->
+
+		@setState(requesting: false)
+
+	onClickProfile: ->
+		{ parentChoosed } = @props
+		window.location = "/parents/" + parentChoosed.id
+
+	onClickMyProfile: ->
+		{ babysitter } = @props
+		console.log("babysitter", babysitter.id)
+		window.location = "/babysitters/" + babysitter.id 
+
+	onClickLogout: ->
+		window.location = "/users/logout"
 
 	render: ->
-		{ parent } = @state
-		{ user } = @props
-		{ firstname, lastname, bornplace, borndate, address, gender, phone_number } = user
+		{ parentChoosed } = @props
+		buttonStyle={margin: "5px 10px 5px 10px", backgroundColor: "#00112b"}
 
-		<div className="mainpage-mobile-header">
-			<div className="row">
-				<div className="col-md-2">
-					<img src="" className="photo-profile" />
-				</div>
-				<div className="col-md-4">
-					<label></label>
-				</div>
-				<div className="col-md-5">
-					<label>{firstname} {lastname}</label>
-					<label>{phone_number}</label>
-					<label>{address}</label>
-				</div>
-			</div>
+		<div>
+			<button onClick={@onClickMyProfile} style={buttonStyle} className="btn btn-md">
+			<i className="fa fa-user"></i> Profilku
+			</button>
+			<button onClick={@onClickLogout} style={buttonStyle} className="btn btn-md">
+			<i className="fa fa-lock"></i> Keluar
+			</button>
+			{
+				unless _.isEmpty(parentChoosed)
+					<button onClick={@onClickProfile} style={buttonStyle} className="btn btn-md">Lihat Profile</button>
+			}
 		</div>
 
 MainpageMobile = React.createClass
 	
 	getInitialState: ->
 		currentUser: MainpageMobileStore.user
+		parentChoosed: MainpageMobileStore.parentChoosed
+		babysitter: MainpageMobileStore.babysitter
+
+	componentDidMount: ->
+		MainpageMobileStore.addChangeListener(@onChange)
+
+	componentWillUnmount: ->
+		MainpageMobileStore.removeChangeListener(@onChange)
+
+	onChange: ->
+		@setState(
+			parentChoosed: MainpageMobileStore.parentChoosed
+		)
 
 	render: ->
-		{ currentUser } = @state
+		{ currentUser, parentChoosed, babysitter } = @state
 
-		<div className="container mainpage-mobile">
+		<div id="mainpage-mobile" className="container text-center mainpage-mobile">
 			<h4 className="logo">Bibibebi</h4>
-			<div className="header">
-				{
-					if currentUser.role == "babysitter"
-						<BabysitterHeader user={currentUser} />
-					else
-				}		<ParentHeader user={currentUser} />
+			<div className="header">	
+				<BabysitterHeader user={currentUser} />
 			</div>
 			<div className="body">
-				{
-					if currentUser.role == "babysitter"
-						<ParentList />
-					else
-						<BabysitterList />
-				}
+				<ParentList />
 			</div>
-			<div className="footer">
+			<div className="footer mainpage-mobile-footer">
+				<BabysitterActionButton parentChoosed={parentChoosed} babysitter={babysitter} />
 			</div>
 		</div>
 

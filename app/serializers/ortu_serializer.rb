@@ -3,6 +3,12 @@ class OrtuSerializer < ApplicationSerializer
 	has_many :kids
 
 	attributes(
-		:id
+		:id,
+		:userParent
 	)
+
+	def userParent
+		object.user
+	end
+
 end

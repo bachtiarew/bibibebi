@@ -4,8 +4,13 @@ class ParentsController < ApplicationController
 	before_action :set_pictures, only:[:index]
 
 	def index
-		@parent = current_user.ortu
-		@picture = Picture.find_by(pictureable_id: @parent.id, pictureable_type: "Ortu")
+		unless params[:mobile] == "true"
+			@parent = current_user.ortu
+			@picture = Picture.find_by(pictureable_id: @parent.id, pictureable_type: "Ortu")
+		else
+			@parent = current_user.ortu
+			@babysitters = Babysitter.all
+		end
 	end
 
 	def new
@@ -84,6 +89,7 @@ class ParentsController < ApplicationController
 		end
 
 		respond_to do |format|
+			format.html { render :show }
 			format.js do
 				render :show
 			end

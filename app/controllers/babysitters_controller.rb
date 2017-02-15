@@ -2,9 +2,11 @@ class BabysittersController < ApplicationController
 	before_action :current_user
 
 	def index
+		@user = current_user
 		@babysitter = current_user.babysitter	
 		@skills = @babysitter.skills
 		@picture = Picture.find_by(pictureable_id: @babysitter.id, pictureable_type: "Babysitter")
+		@parents = Ortu.all
 	end
 
 	def new
@@ -62,7 +64,7 @@ class BabysittersController < ApplicationController
 
 		@babysitter.skills = selected_skills unless selected_skills.blank?
 		save_picture!(@babysitter.id, "Babysitter", params[:babysitter][:picture_url])
-		redirect_to mains_index_path
+		redirect_to babysitters_path
 	end
 
 	def save_picture! (id, type, url)
@@ -102,6 +104,7 @@ class BabysittersController < ApplicationController
 			}
 		end
 		respond_to do |format|
+			format.html {render :show}
 			format.js do
 				render :show
 			end

@@ -10,7 +10,8 @@ class UserSerializer < ApplicationSerializer
   	:bornplace,
   	:address,
   	:phone_number,
-  	:email
+  	:email,
+    :role
   	)
 
 end

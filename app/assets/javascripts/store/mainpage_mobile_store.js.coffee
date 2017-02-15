@@ -8,6 +8,14 @@ window.MainpageMobileStore = _.assign(new EventEmitter(),{
 	parent: {}
 	babysitters: []
 	parents: []
+	parentChoosed: {}
+	babysitterChoosed: {}
+
+	setParentChoosed: (parentChoosed) ->
+		console.log("parent choosed", parentChoosed)
+		_.each(@parents, (e) ->
+			e.choosed = if e.id == parentChoosed.id then true else null 
+		)
 
 	emitChange: ->
 		@emit(CHANGE_EVENT)
@@ -32,4 +40,8 @@ dispatcher.register (payload) ->
 		_.assign(MainpageMobileStore, payload.parent)
 		MainpageMobileStore.babysitters = payload.babysitters
 		MainpageMobileStore.emitChange()
-		
+	
+	if payload.actionType == "mainpage-mobile-set-parent-choosed"
+		_.assign(MainpageMobileStore.parentChoosed, payload.attributes)
+		MainpageMobileStore.setParentChoosed(payload.attributes)
+		MainpageMobileStore.emitChange()

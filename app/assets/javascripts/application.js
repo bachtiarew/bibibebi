@@ -27,18 +27,25 @@
 //= require homepages
 //
 //= require components/AlertApp
+//
 //= require components/Homepages/Homepages
 //= require components/Homepages/homepages_mobile
 //= require components/Homepages/Greeting
 //= require components/Homepages/Frame
+//
 //= require components/Parents/ParentsApp
 //= require components/Parents/parent_form_mobile
+//= require components/Parents/parent_child_profile_mobile
+//
 //= require components/Mains/Thumbnail
 //= require components/Mains/Sidebar
 //= require components/Mains/Profile
 //= require components/Mains/Rateable
 //= require components/Mains/mainpage_mobile
+//
 //= require components/Babysitter/babysitter_form_mobile
 //= require components/Babysitter/attachment_form
 //= require components/Babysitter/key_generator
+//= require components/Babysitter/babysitter_profile_mobile
+//
 //= require_tree .

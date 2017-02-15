@@ -1,44 +1,51 @@
-<div class="well">
-	<h2>Babysitter Profile</h2>
-</div>
-<div class="container">
-	<div class="row">
-		<div class="col-sm-12">
-			<%= rating_for @babysitter, "quality", disable_after_rate: true, imdb_avg: true %>
+<% if params[:mobile] == 'true' %>
+	<%= react_component "BabysitterProfileMobile" %>
+<% else %>
+	<div class="well">
+		<h2>Babysitter Profile</h2>
+	</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-12">
+				<% if current_user.role == "babysitter" %>
+					<%= rating_for @babysitter, "quality", imdb_avg: true %>
+				<% else %>
+					<%= rating_for @babysitter, "quality", disable_after_rate: true %>
+				<% end %>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-8">
+				<div class="form-group">
+					<h4><strong>Identity Number :</strong></h4>
+					<h5><%= @babysitter.nik %></h5>
+				</div>
 
+				<div class="form-group">
+					<h4><strong>Age :</strong></h4>
+					<h5><%= @babysitter.age %></h5>
+				</div>
+
+				<div class="form-group">
+					<h4><strong>Description :</strong></h4>
+					<h5><%= @babysitter.description %></h5>
+				</div>
+
+				<div class="form-group">
+					<h4><strong>Skills :</strong></h4>
+					<ul>
+						<% @skills.each do |skill| %>
+						<li><%= skill.name %></li>
+						<% end %>
+					</ul>
+				</div>
+			</div>
+
+			<div class="col-md-4 text-right">
+				<img style="width:250px;height:250px;" src=<%= @babysitter.pictures[0].picture_url.url %> >
+			</div>
 		</div>
 	</div>
-	<div class="row">
-		<div class="col-md-8">
-			<div class="form-group">
-				<h4><strong>Identity Number :</strong></h4>
-				<h5><%= @babysitter.nik %></h5>
-			</div>
-
-			<div class="form-group">
-				<h4><strong>Age :</strong></h4>
-				<h5><%= @babysitter.age %></h5>
-			</div>
-
-			<div class="form-group">
-				<h4><strong>Description :</strong></h4>
-				<h5><%= @babysitter.description %></h5>
-			</div>
-
-			<div class="form-group">
-				<h4><strong>Skills :</strong></h4>
-				<ul>
-					<% @skills.each do |skill| %>
-					<li><%= skill.name %></li>
-					<% end %>
-				</ul>
-			</div>
-		</div>
-
-		<div class="col-md-4 text-right">
-			<img style="width:250px;height:250px;" src=<%= @babysitter.photos.url %> >
-		</div>
-	</div>
-</div>
-<%= link_to "Update Profile" , edit_babysitter_path(@babysitter) %> <br>
-<%= link_to "Delete Profile" ,babysitter_path(@babysitter), method: :delete, data: {confirm: "Are you sure to delete your profile ?"} %> <br>
+	<%= link_to "Update Profile" , edit_babysitter_path(@babysitter) %> <br>
+	<%= link_to "Delete Profile" ,babysitter_path(@babysitter), method: :delete, data: {confirm: "Are you sure to delete your profile ?"} %> <br>
+<% end %>
