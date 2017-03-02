@@ -1,50 +1,80 @@
-<%= render 'error' %>
-<div class="panel panel-default">
-  <div class="panel-heading">
-    Babysitter Registration
-  </div>
-  <div class="panel-body">
-    <%= form_for :babysitter, url: babysitter_path(@babysitter), method: :patch do |f| %>
-    <div class="form-group">
-      <%= f.label :nik , "Identity Number" %>
-      <%= f.text_field :nik, placeholder: "Your Identity number", class: "form-control" %>
+<% if params[:mobile] == "true" %>
+  <%= form_for :babysitter, url: babysitter_path(@babysitter), method: :patch do |f| %>
+    <%= f.file_field :picture_ur, class: "hidden" %>
+    <%= react_component "BabysitterFormMobile", csrf_token: form_authenticity_token %>
+  <% end %>
+<% else %>
+  <%= render 'error' %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      Babysitter Registration
     </div>
+    <div class="panel-body">
+      <%= form_for :babysitter, url: babysitter_path(@babysitter), method: :patch do |f| %>
+      <div class="form-group">
+        <%= f.label :nik , "Identity Number" %>
+        <%= f.text_field :nik, placeholder: "Your Identity number", class: "form-control" %>
+      </div>
 
-    <div class="form-group">
-      <%= f.label :age, "Age" %>
-      <%= f.number_field :age, placeholder: "Your Age", class: "form-control" %>
-    </div>
+      <div class="form-group">
+        <%= f.label :age, "Age" %>
+        <%= f.number_field :age, placeholder: "Your Age", class: "form-control" %>
+      </div>
 
 
-    <div class="form-group">
-      <% @skill.each do |skill| %>
-      <input type="checkbox" name="babysitter[skills_ids][]" value=<%= skill.id %>
-        <% @babysitter_skills.each do |b_skill| %>
-          <% if b_skill.id == skill.id %>
-              <%= "checked" %>
-              <% break %>
-          <% end %>
-        <% end %>>
-        <%= label_tag(skill.id, skill.name) %>
+      <div class="form-group">
+        <% @skill.each do |skill| %>
+        <input type="checkbox" name="babysitter[skills_ids][]" value=<%= skill.id %>
+          <% @babysitter_skills.each do |b_skill| %>
+            <% if b_skill.id == skill.id %>
+                <%= "checked" %>
+                <% break %>
+            <% end %>
+          <% end %>>
+          <%= label_tag(skill.id, skill.name) %>
+        <% end %>
+      </div>
+
+
+
+      <div class="form-group">
+        <%= f.label :description , "Skill Description" %>
+        <%= f.text_area :description, class: "form-control", rows: 7 %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :photos, "Upload Picture" %>
+          <%= f.file_field :photos ,class: "form-control" %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit "Submit", class: "btn btn-md btn-info" %>
+      </div>
+
       <% end %>
     </div>
-
-
-
-    <div class="form-group">
-      <%= f.label :description , "Skill Description" %>
-      <%= f.text_area :description, class: "form-control", rows: 7 %>
-    </div>
-
-    <div class="form-group">
-      <%= f.label :photos, "Upload Picture" %>
-        <%= f.file_field :photos ,class: "form-control" %>
-    </div>
-
-    <div class="form-group">
-      <%= f.submit "Submit", class: "btn btn-md btn-info" %>
-    </div>
-
-    <% end %>
   </div>
-</div>
+<% end %>
+
+<script>
+  dispatcher.dispatch({
+    actionType: "babysitter-mobile-set-user",
+    attributes: <%= json_for(@user).html_safe %>  
+  })
+
+  dispatcher.dispatch({
+    actionType: "babysitter-mobile-set-babysitter",
+    attributes: <%= json_for(@babysitter).html_safe %>
+  })
+
+  dispatcher.dispatch({
+      actionType: "babysitter-mobile-set-skills",
+      skills: <%= json_for(@skills).html_safe %>
+   })
+
+  dispatcher.dispatch({
+    actionType: "babysitter-change-edit-mode",
+    editMode: true
+  })
+
+</script>

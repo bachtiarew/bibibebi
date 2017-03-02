@@ -58,6 +58,9 @@ gem 'nested_form'
 # queue processing /schedule engine
 gem 'sidekiq', '3.2.5'
 
+#cache strategy
+gem 'redis-rails'
+
 # use for rating
 gem 'ratyrate'
 # Use Capistrano for deployment

@@ -1,4 +1,4 @@
-Rating = React.createClass	
+RatingAverage = React.createClass	
 
 	getInitialState: ->
 		avgRate: @props.avgRate  
@@ -6,11 +6,9 @@ Rating = React.createClass
 	generateStar: ->
 		{ avgRate } = @state
 		avgRate = if avgRate == null || avgRate == undefined then 0 else avgRate
+		console.log("avgRate", avgRate)
 
 		star = (full, half, blank) ->
-			console.log("full", full)
-			console.log("half", half)
-			console.log("blank", blank)
 			<div className="babysitter-rating" style={color: "#fff"}>
 				{	
 					unless full == 0
@@ -29,15 +27,19 @@ Rating = React.createClass
 				}
 			</div>
 
-		console.log("avgRate", avgRate)
 		halfStar = if avgRate % 1 == 0 then 0 else 1
 		fullStar = Math.ceil(avgRate)
 		blankStar = 5 - Math.ceil(avgRate)
 		blankStar = blankStar - 1 if halfStar > 0
 
+		console.log("fullStar", fullStar)
+		console.log("halfStar", halfStar)
+		console.log("blankStar", blankStar)
+
 		star(fullStar, halfStar, blankStar)
 
 	render: ->
+		console.log("kena lho harusnya")
 		@generateStar()
 
 ParentRow = React.createClass
@@ -57,8 +59,6 @@ ParentRow = React.createClass
 			{"parent-row" : if parent?.choosed then false else true},
 			{"parent-row-active" : if parent?.choosed then true else false}
 		)
-
-		console.log("parent rowClass name", parentRowClassName)
 		
 		<div className={parentRowClassName} onClick={@onClickParentChoosed.bind(this, parent)}>
 			<div className="row">
@@ -131,15 +131,17 @@ BabysitterHeader = React.createClass
 		{ babysitter } = @state
 		{ user }  = @props
 		{ firstname, lastname, borndate, bornplace, gender, address, phone_number } = user
-		{ price, nik, age, pictures } = babysitter
+		{ price, nik, age, pictures, avgRate } = babysitter
 
+		avgRate = if avgRate.avg then avgRate.avg else 0
+		
 		<div className="mainpage-mobile-header">
 			<div className="row">
 				<div className="col-xs-3">
 					<img src={pictures[0].picture_url.picture_url.url} className="photo-profile" />
 				</div>
 				<div className="col-xs-4 text-right">
-					<Rating avgRate={babysitter.avgRate} />
+					<RatingAverage avgRate={parseInt(avgRate)} />
 					<label className="price">Rp.{price * 1000},00</label>
 				</div>
 				<div className="col-xs-5 text-right">
@@ -175,8 +177,7 @@ BabysitterActionButton = React.createClass
 
 	onClickMyProfile: ->
 		{ babysitter } = @props
-		console.log("babysitter", babysitter.id)
-		window.location = "/babysitters/" + babysitter.id 
+		window.location = "/babysitters/" + babysitter.id + "?mobile=true" 
 
 	onClickLogout: ->
 		window.location = "/users/logout"

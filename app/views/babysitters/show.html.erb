@@ -1,5 +1,5 @@
 <% if params[:mobile] == 'true' %>
-	<%= react_component "BabysitterProfileMobile" %>
+	<%= react_component "BabysitterProfileMobile", current_user: current_user, csrf_token: form_authenticity_token  %>
 <% else %>
 	<div class="well">
 		<h2>Babysitter Profile</h2>
@@ -49,3 +49,9 @@
 	<%= link_to "Update Profile" , edit_babysitter_path(@babysitter) %> <br>
 	<%= link_to "Delete Profile" ,babysitter_path(@babysitter), method: :delete, data: {confirm: "Are you sure to delete your profile ?"} %> <br>
 <% end %>
+<script>
+	dispatcher.dispatch({
+		actionType: "set-babysitter-mobile",
+		babysitter: <%= json_for(@babysitter).html_safe %>
+	})
+</script>

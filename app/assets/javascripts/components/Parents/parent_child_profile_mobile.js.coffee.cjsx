@@ -28,8 +28,7 @@ ParentChildProfileMobile = React.createClass
 							<tbody>
 								<tr><td><h3>{firstname} {lastname}</h3></td></tr>
 								<tr><td><h4>{phone_number}</h4></td></tr>
-								<tr><td>{address}</td>
-								<tr></tr>
+								<tr><td>{address}</td></tr>
 							</tbody>
 						</table>
 					</div>
@@ -37,7 +36,7 @@ ParentChildProfileMobile = React.createClass
 				<div className="row">
 					{childs.map(child)}
 				</div>
-				<ChildProfile child={detailChild}/>
+				<ChildProfile child={detailChild} />
 			</div>
 		</div>
 
@@ -56,9 +55,9 @@ ChildProfile = React.createClass
 				<div className="col-md-8">
 					<table className="table">
 						<tbody>
-						<tr><td>{name}</td></tr>
-						<tr><td>{gender}, {age}</td></tr>
-						<tr><td><p>{description}</p></td></tr>
+							<tr><td>{name}</td></tr>
+							<tr><td>{gender}, {age}</td></tr>
+							<tr><td><p>{description}</p></td></tr>
 						</tbody>
 					</table>
 				</div>

@@ -112,24 +112,30 @@ class BabysittersController < ApplicationController
 	end
 
 	def edit
+	@user = current_user
 	@babysitter = Babysitter.find(params[:id])
-	@skill = Skill.all
-	@babysitter_skills = @babysitter.skills
+	@skills = Skill.all
+	# @babysitter_skills = @babysitter.skills
+	
+	respond_to do |format|
+		format.html { render :edit }
+		format.js { render "edit.js"}
+	end
+
 	end
 	
 	def update
 		if current_user
 			params[:babysitter][:user_id] = session[:user_id]
 		end
-	
-	skill_ids = params[:babysitter].delete("skills_ids")
-	selected_skills = skill_ids.collect{ |skil_id| Skill.find(skil_id)}
-	@babysitter = Babysitter.find(params[:id])	
+		skill_ids = params[:babysitter].delete("skill_ids")
+		selected_skills = skill_ids.collect{ |skil_id| Skill.find(skil_id)}
+		@babysitter = Babysitter.find(params[:id])	
 		
 		if 	@babysitter.update_attributes(babysitter_params)
 			@babysitter.skills = selected_skills
 			flash[:notice]="Your baby profile has been updated"
-			redirect_to mains_index_path
+			redirect_to babysitter_path
 		else
 			flash[:alert]="your baby profile failed to update"
 			redirect_to edit_babysitter_path
