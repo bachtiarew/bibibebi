@@ -1,5 +1,15 @@
+<script>
+	dispatcher.dispatch({
+		actionType: "mainpage-mobile-set-parent",
+		user: <%= json_for(@user).html_safe %>,
+		parent: <%= json_for(@parent).html_safe %>,
+		babysitters: <%= json_for(@babysitters).html_safe %>
+	})
+</script>
+
 <%= render "layouts/navbar" %>
-<div class="mainpages">
+<%= react_component "MainpageMobile", currentUser: current_user, csrf_token: form_authenticity_token %>
+<div id="mainpage" class="mainpages">
 	<div class="row">
 		<div class="col-sm-2 sidebar-frame">
 		<%= react_component "Sidebar", person: get_parent, kids: get_kids(@parent.id), picture: @picture %>

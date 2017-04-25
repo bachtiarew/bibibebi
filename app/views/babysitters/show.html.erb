@@ -1,5 +1,12 @@
+<script>
+	dispatcher.dispatch({
+		actionType: "profile-mobile-store-set-babysitter",
+		babysitter: <%= json_for(@babysitter).html_safe %>,
+		currentUser: <%= json_for(current_user).html_safe %>,
+	})
+</script>
 <% if params[:mobile] == 'true' %>
-	<%= react_component "BabysitterProfileMobile", current_user: current_user, csrf_token: form_authenticity_token  %>
+	<%= react_component "ProfileMobile", csrf_token: form_authenticity_token  %>
 <% else %>
 	<div class="well">
 		<h2>Babysitter Profile</h2>
@@ -20,6 +27,7 @@
 					<h4><strong>Identity Number :</strong></h4>
 					<h5><%= @babysitter.nik %></h5>
 				</div>
+
 
 				<div class="form-group">
 					<h4><strong>Age :</strong></h4>
@@ -49,9 +57,3 @@
 	<%= link_to "Update Profile" , edit_babysitter_path(@babysitter) %> <br>
 	<%= link_to "Delete Profile" ,babysitter_path(@babysitter), method: :delete, data: {confirm: "Are you sure to delete your profile ?"} %> <br>
 <% end %>
-<script>
-	dispatcher.dispatch({
-		actionType: "set-babysitter-mobile",
-		babysitter: <%= json_for(@babysitter).html_safe %>
-	})
-</script>

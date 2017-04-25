@@ -50,10 +50,12 @@ dispatcher.register (payload) ->
 		ParentStore.removeItem(payload.childItem)
 	else if payload.actionType == 'set-parent'
 		_.assign(ParentStore.parent, payload.parent)
-		console.log("harusnya sih kena 1")
 		_.assign(ParentStore.parent, payload.pictures)
 		ParentStore.setChilds(payload.childs)
-		console.log("harusnya sih kena 2")
 		ParentStore.emitChange()
-
+	else if payload.actionType == "set-parent-only"
+		parent = {ortu: {}}
+		_.assign(parent, payload.parent)
+		ParentStore.parent = parent.ortu
+		ParentStore.emitChange()
 

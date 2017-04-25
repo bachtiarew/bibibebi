@@ -2,3 +2,30 @@
 	margin:none;
 }
 
+.parent-profile-mobile{
+	background-color: #00112b;
+	color: #fff;
+}
+
+.parent-profile-mobile .body { background-color: #fff; color: #00112b; }
+.parent-profile-mobile .body img { border: 2px solid #00112b; border-radius: 50%; width: 100px; height: 100px;}
+.parent-profile-mobile .body table.table tbody tr td { border: none !important; padding: 5px !important; }
+.child-frame {
+	 width: 60px; height: 60px; border: 2px solid #00112b; border-radius: 50%; line-height: 60px; cursor: pointer;
+
+	 img {
+	 	width: 100%; height: 100%;
+	 }
+ }
+
+.child-photo-frame {
+	padding: 5px 5px 5px 5px;
+	border: 2px solid #00112b;
+	border-radius: 0px;
+	width: 100px;
+	height: 200px;
+
+	img {width: 100%; height: 100%;}
+}
+
+

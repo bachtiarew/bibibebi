@@ -3,13 +3,18 @@ RatingAverage = React.createClass
 	getInitialState: ->
 		avgRate: @props.avgRate  
 
+	getDefaultProps: ->
+		heightStyle: null
+
 	generateStar: ->
+		{ heightStyle } = @props
 		{ avgRate } = @state
-		avgRate = if avgRate == null || avgRate == undefined then 0 else avgRate
-		console.log("avgRate", avgRate)
+		avgRate = if avgRate == null || avgRate == undefined then 0 else Number(avgRate.avg)
+		
+		ratingStyle = if heightStyle then {color: "lightblue", height: heightStyle} else {color: "lightblue"}
 
 		star = (full, half, blank) ->
-			<div className="babysitter-rating" style={color: "#fff"}>
+			<div className="babysitter-rating" style={ratingStyle}>
 				{	
 					unless full == 0
 						for i in [1..full]
@@ -27,19 +32,19 @@ RatingAverage = React.createClass
 				}
 			</div>
 
-		halfStar = if avgRate % 1 == 0 then 0 else 1
+
+		if 	avgRate
+			halfStar = 0
+		else
+			halfStar = if avgRate % 1 == 0 then 0 else 1
+
 		fullStar = Math.ceil(avgRate)
 		blankStar = 5 - Math.ceil(avgRate)
 		blankStar = blankStar - 1 if halfStar > 0
 
-		console.log("fullStar", fullStar)
-		console.log("halfStar", halfStar)
-		console.log("blankStar", blankStar)
-
 		star(fullStar, halfStar, blankStar)
 
 	render: ->
-		console.log("kena lho harusnya")
 		@generateStar()
 
 ParentRow = React.createClass
@@ -55,37 +60,76 @@ ParentRow = React.createClass
 		{ parent } = @props
 		{ userParent, kids, pictures } = parent
 		
-		parentRowClassName = classNames("col-xs-12",
-			{"parent-row" : if parent?.choosed then false else true},
-			{"parent-row-active" : if parent?.choosed then true else false}
+		parentRowClassName = classNames("parent-row",
+			{"not-active" : if parent?.choosed then false else true},
+			{"active" : if parent?.choosed then true else false}
 		)
-		
+
+		displayAddress = (address) ->
+			display = if address.length > 35 then address.substring(0, 32) + "..." else address
+			return display
+
 		<div className={parentRowClassName} onClick={@onClickParentChoosed.bind(this, parent)}>
 			<div className="row">
-				<div className="col-xs-8">
+				<div className="col-xs-3">
+					<img src={pictures[0].picture_url.picture_url.url} />
+				</div>
+				<div className="col-xs-3 parent-list-middle">
+					<label className="child-count">{kids.length}</label> Childs
+				</div>
+				<div className="col-xs-6">
 					<table className="table">
 						<thead>
-							<tr><th className="text-big">{userParent.firstname} {userParent.lastname}</th></tr>
+							<tr><th className="text-big">{userParent.firstname}</th></tr>
 							<tr><th className="text-small">{userParent.phone_number}</th></tr>
+							<tr><th className="text-small">{displayAddress(userParent.address)}</th></tr>
 						</thead>
 					</table>					
-				</div>
-				<div className="col-xs-4">
-					<img src={pictures[0].picture_url.picture_url.url} />
 				</div>
 			</div>
 		</div>
 
 BabysitterRow = React.createClass
+	
+	onClickBabysitterChoosed: (babysitter) ->
+		dispatcher.dispatch
+			actionType: "mainpage-mobile-set-babysitter-choosed"
+			attributes: babysitter
+
 	render: ->
-		{ key } = @props
-		<div key={key} className="col-xs-12">
+		{ babysitter, key } = @props
+		{ pictures, babysitter_skills, avgRate, firstname, phone_number, address } = babysitter
+
+		babysitterRowClassName = classNames("parent-row",
+			{"not-active" : if babysitter?.choosed then false else true},
+			{"active" : if babysitter?.choosed then true else false}
+		)
+
+		displayAddress = (address) ->
+			display = if address.length > 35 then address.substring(0, 32) + "..." else address
+			return display
+
+		<div className={babysitterRowClassName} onClick={@onClickBabysitterChoosed.bind(this, babysitter)}>
 			<div className="row">
-				<div className="col-xs-8">
-					
+				<div className="col-xs-3">
+					<img src={pictures[0].picture_url.picture_url.url} />
 				</div>
-				<div className="col-xs-4">
-					<img src="" />
+				<div className="col-xs-3 parent-list-middle">
+					<div style={lineHeight: "18px"} className="text-left">
+						<label className="child-count">{babysitter_skills.length}</label> Services
+					</div>
+					<div style={lineHeight: "18px"} className="text-left">
+						<RatingAverage avgRate={avgRate} />
+					</div>
+				</div>
+				<div className="col-xs-6">
+					<table className="table">
+						<thead>
+							<tr><th className="text-big">{firstname}</th></tr>
+							<tr><th className="text-small">{phone_number}</th></tr>
+							<tr><th className="text-small">{displayAddress(address)}</th></tr>
+						</thead>
+					</table>					
 				</div>
 			</div>
 		</div>
@@ -101,9 +145,7 @@ ParentList = React.createClass
 			<ParentRow key={key} parent={e} />
 
 		<div className="mainpage-list">
-			<div className="row">
-				{parents.map(parent)}
-			</div>
+			{parents.map(parent)}
 		</div>
 
 BabysitterList = React.createClass
@@ -114,12 +156,10 @@ BabysitterList = React.createClass
 	render: ->
 		{ babysitters } = @state
 		babysitter = (e, key) ->
-			<BabysitterRow />
+			<BabysitterRow babysitter={e} key={key} />
 
 		<div className="mainpage-list">
-			<div className="row">
-				{babysitters.map(babysitter)}
-			</div>
+			{babysitters.map(babysitter)}
 		</div>
 
 BabysitterHeader = React.createClass
@@ -141,7 +181,7 @@ BabysitterHeader = React.createClass
 					<img src={pictures[0].picture_url.picture_url.url} className="photo-profile" />
 				</div>
 				<div className="col-xs-4 text-right">
-					<RatingAverage avgRate={parseInt(avgRate)} />
+					<RatingAverage avgRate={avgRate} />
 					<label className="price">Rp.{price * 1000},00</label>
 				</div>
 				<div className="col-xs-5 text-right">
@@ -204,7 +244,10 @@ MainpageMobile = React.createClass
 	getInitialState: ->
 		currentUser: MainpageMobileStore.user
 		parentChoosed: MainpageMobileStore.parentChoosed
+		babysitterChoosed: MainpageMobileStore.babysitterChoosed
 		babysitter: MainpageMobileStore.babysitter
+		navbarUrl: MainpageMobileStore.navbarUrl
+		parent: MainpageMobileStore.parent
 
 	componentDidMount: ->
 		MainpageMobileStore.addChangeListener(@onChange)
@@ -215,22 +258,146 @@ MainpageMobile = React.createClass
 	onChange: ->
 		@setState(
 			parentChoosed: MainpageMobileStore.parentChoosed
+			babysitterChoosed: MainpageMobileStore.babysitterChoosed
 		)
 
+	onClickGoToUrl: (indexNavbar) ->
+		{ navbarUrl, babysitter, currentUser, parent } = @state
+
+		if currentUser.role == "babysitter"
+			url = if indexNavbar == 1 then navbarUrl.babysitter[indexNavbar] + babysitter.id + "?mobile=true" else navbar.babysitter[indexNavbar]
+		else if currentUser.role == "parent"
+			url = if indexNavbar == 1 then navbarUrl.parent[indexNavbar] + parent.id + "?mobile=true" else navbarUrl.parent[indexNavbar]
+
+		window.location = url
+
 	render: ->
-		{ currentUser, parentChoosed, babysitter } = @state
+		{ currentUser, parentChoosed, babysitter, parent } = @state
 
 		<div id="mainpage-mobile" className="container text-center mainpage-mobile">
 			<h4 className="logo">Bibibebi</h4>
-			<div className="header">	
-				<BabysitterHeader user={currentUser} />
+			<div className="mainpage-mobile-navbar">
+				<div className="row">
+					<div className="col-xs-2 col-xs-offset-1">
+						<div className="menu-frame active">
+							<i className="fa fa-home" onClick={@onClickGoToUrl.bind(@, 0)} />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame">
+							<i className="fa fa-user" onClick={@onClickGoToUrl.bind(@, 1)} />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame">
+							<i className="fa fa-book" onClick={@onClickGoToUrl.bind(@, 2)} />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame">
+							<i className="fa fa-shopping-cart" onClick={@onClickGoToUrl.bind(@, 3)} />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame">
+							<i className="fa fa-commenting" onClick={@onClickGoToUrl.bind(@, 4)} />
+						</div>
+					</div>
+				</div>
 			</div>
 			<div className="body">
-				<ParentList />
+				{ 
+					if currentUser.role == "babysitter"
+						<ParentList />
+					else if currentUser.role == "parent"
+						<BabysitterList />
+				}
 			</div>
 			<div className="footer mainpage-mobile-footer">
-				<BabysitterActionButton parentChoosed={parentChoosed} babysitter={babysitter} />
+				{
+					if false
+						<BabysitterActionButton parentChoosed={parentChoosed} babysitter={babysitter} />
+					else
+						<SearchFilter />
+				}
+				
 			</div>
 		</div>
 
+SearchFilter = React.createClass
+	
+	getInitialState: ->
+		choosed: {status: false, name: null}
+
+	filterDisplay: (options) ->
+		option = (city, key) ->
+			<option key={key} value={city.id}>city.name</option>
+
+		blankOption = ->
+		 <option value=""> Pilih Kota</option>
+
+		inlineStyle={fontSize: "16px", margin: "0px 5px 0px 5px", color: "#00112b", marginTop: "10px", cursor: "pointer"}
+		colStyle={border: "none",padding: "0px"}
+
+		<div style={border: "none", margin: "0px 5px 0px 5px", backgroundColor: "#fff", borderRadius: "5px"} className="row">
+			<div style={colStyle} className="col-xs-5">
+				<select className="form-control option-filter" name="filter_kota">
+					{blankOption()}
+					{options.map(option)}
+				</select>
+			</div>
+			<div  style={colStyle} className="col-xs-5">
+				<input style={paddingRight: "0px"} type="number" className="form-control option-filter" name="filter_child_mount" placeholder="jumlah anak" />
+			</div>
+			<div style={colStyle} className="col-xs-2 text-center">
+				<i style={inlineStyle} className="fa fa-filter" />
+				<i style={inlineStyle} className="fa fa-times" onClick={@onClickOption.bind(@, {status: false, name: null})} />
+			</div>
+		</div>	
+
+
+	searchDisplay: ->
+		inlineStyle={fontSize: "16px", zIndex: "1", position: "relative", top: "-7px", color: "#00112b", right: "10px", margin: "0px 5px 0px 0px", cursor: "pointer"}
+		<div>
+			<input type="text" className="form-control text-right" placeholder="cari orang tua" />
+			<i style={inlineStyle} className="fa fa-search" />
+			<i style={inlineStyle} className="fa fa-times" onClick={@onClickOption.bind(this, {status: false, name: null})} />
+		</div>
+
+	onClickOption: (option) ->
+		@setState(choosed: {status: option.status, name: option.name})
+
+	onClickLogout: ->
+		window.location = "/users/logout"
+
+	render: ->
+		{ choosed } = @state
+
+		searchFilterClassName = classNames("mainpage-search-filter",
+			{"text-right": choosed.status == true},
+			{"text-center": choosed.status == false}
+		)
+
+		<div className={searchFilterClassName}>
+			{
+				unless choosed.status
+					<i className="fa fa-search option" onClick={@onClickOption.bind(@, {status: true, name: "search"})} />
+			}
+			{
+				unless choosed.status
+					<i className="fa fa-filter option" onClick={@onClickOption.bind(@, {status: true, name: "filter"})} />
+			}
+			{
+				unless choosed.status
+					<i className="fa fa-lock option" onClick={@onClickLogout} />
+			}
+			{	
+				if choosed.name == "search"
+					@searchDisplay()
+				else if choosed.name == "filter"
+					@filterDisplay([])
+			}
+		</div>
+
 window.MainpageMobile = MainpageMobile
+window.RatingAverage = RatingAverage

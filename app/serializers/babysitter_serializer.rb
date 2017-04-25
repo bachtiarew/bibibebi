@@ -31,11 +31,11 @@ class BabysitterSerializer < ApplicationSerializer
 	end
 
 	def firstname
-		object.user.firstname
+		object.user.firstname.titlecase
 	end
 
 	def lastname
-		object.user.lastname
+		object.user.lastname.titlecase
 	end
 
 	def borndate

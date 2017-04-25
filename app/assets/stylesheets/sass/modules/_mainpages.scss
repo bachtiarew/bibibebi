@@ -1,5 +1,7 @@
 .text-big{
-	font-size: 14px;
+	font-family: Creampuff, sans-serif;
+	font-size: 18px;
+	font-weight: normal;
 }	
 
 .text-middle{
@@ -13,6 +15,12 @@
 .mainpage-mobile{
 	background-color: #00112b;
 	color: #fff;
+	padding: 0px;
+
+	.logo{
+		font-family: "creampuff";
+		color: lightblue;
+	}
 
 	.babysitter-rating{
 		height: 40px;
@@ -24,6 +32,24 @@
 		padding: 5px 5px 5px 5px;
 	}
 
+	.mainpage-mobile-navbar {
+		background-color: #fff;
+		line-height: 50px;
+		
+		.col-md-5 {
+			cursor: pointer;
+		}
+
+		.active {background-color: #00112b !important;}
+		
+		.menu-frame {
+			text-align: center; line-height: 36px; width: 36px; 
+			background-color: lightblue; border-radius: 50%; margin: 10px 0px 10px 0px; cursor: pointer;}
+
+		i{font-size: 22px; color: #fff;}
+	}
+
+	
 	label{
 		margin-top: -5px;
 	}
@@ -36,10 +62,11 @@
 	}
 
 	.mainpage-mobile-footer{
-		.col-xs-12, .col-xs-6, .row{
+		.col-xs-12, .col-xs-6,  .row{
 			border: 1px solid #fff;
 			font-size: 10px;
 			text-align: left;
+			background-color: #00112b;
 		}
 		
 		tr, th{
@@ -53,31 +80,36 @@
 			color: #fff;
 			background-color: none;
 		}
+
+		.mainpage-search-filter {
+			margin-bottom: 10px;
+			.form-control { width: 97%; line-height: 25px; font-size: 12px; border-radius: 5px; text-align:right; padding-right: 50px; margin: auto; color: #00112b; margin-bottom: -20px;}
+			
+			.option-filter {background-color: none !important;font-size: 10px !important; border-radius: 0px !important;padding: 3px !important; border: none !important;color: #00112b;margin-bottom: 0px !important;}
+
+			.option {font-size: 24px; margin: 0px 10px 0px 10px; color: lightblue; cursor: pointer;}
+			
+		}
 	}
 
 	.mainpage-list{
-		padding: 10px 20px 20px 20px;
-		background-color: #fff;
-		height: 450px;
+		padding: 10px 5px 10px 5px;
+		background-color: #00112b;
+		height: 500px;
 		overflow-y: visible;
 
 		.parent-row{
-			color: #00112b;
-		}
-
-		.parent-row-active{
-			background-color: #00112b;
-			color: #fff;
-		}
-
-		.parent-row, .parent-row-active{
 			padding: 5px 5px 5px 5px;
-			border: 2px solid #00112b;
+			border: 2px solid lightblue;
 			margin: 0px 0px 10px 0px;
 			cursor: pointer;
+			font-family: segoe ui;
+			border-radius: 10px;
+			
 
 			.table{
 				max-height: 70px;
+				margin-bottom: 0px !important;;
 			}
 
 			th{
@@ -85,11 +117,33 @@
 			}
 
 			img{
-				width: 70px;
-				height: 70px;
-				border: 2px solid #00112b;
+				width: 60px;
+				height: 60px;
+				border: 2px solid lightblue;
+				border-radius: 50%;
+				margin: auto;
 			}
+
+			.col-xs-3, .col-xs-6{line-height: 60px;}
+
+			.col-xs-3.parent-list-middle {
+				border-left: 1px dashed lightblue !important;
+				font-size: 12px;
+				label.child-count {font-size: 16px;}
+			}
+
+			table.table thead tr th{ padding: 2px 2px 2px 2px; text-align: right;}
+
 		}
+
+		.not-active {
+			color: lightblue;
+		}
+
+		.active {
+			color: #00112b;
+			background-color: lightblue;
+		}	
 
 	}
 }

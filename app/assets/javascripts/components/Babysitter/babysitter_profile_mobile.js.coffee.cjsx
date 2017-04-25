@@ -124,8 +124,8 @@ BabysitterSkillsMobile = React.createClass
 	getInitialState: ->
 		skills: @props.skills
 		skillIcon: BabysitterStore.skillIcon
-		showDetailSkill: false
-		detailSkill: {}
+		showDetailSkill: true
+		detailSkill: @props.skills[0]
 
 	getIcon: (skill) ->
 		{ skillIcon } = @state
@@ -142,9 +142,14 @@ BabysitterSkillsMobile = React.createClass
 	render: ->
 		{ skills, detailSkill, showDetailSkill } = @state
 		
+
 		skill = (skill, key) =>
+			skillFrameClassName = classNames( "skill-frame",
+				{"visited" : skill.id == detailSkill?.id}
+			)
+
 			<div key={key} className="col-xs-3 text-center">
-				<div className="skill-frame" onClick={@onClickDetailSkill.bind(this, skill)}>
+				<div className={skillFrameClassName} onClick={@onClickDetailSkill.bind(this, skill)}>
 					{@getIcon(skill)}
 				</div>
 			</div>
@@ -164,22 +169,23 @@ BabysitterSkillsMobile = React.createClass
 			</div>
 			{
 				if showDetailSkill == true
-					<div className="modal">
-						<div className="modal-header">
-							<button className="close" onClick={@onHide}>
-								<span>x</span>
-							</button>
-							<div className="modal-title">
-								Detail Skill
-							</div>
-						</div>
-						<div className="modal-body">
-							<p>{detailSkill.description}</p>
-						</div>
-						<div className="modal-fotter">
-							<button className="btn btn-sm btn-default" onClick={@onHide}>
-							Close</button>
-						</div>
+					<div className="detail-skill">
+						<table className="table text-left">
+							<tbody>
+								<tr>
+									<td><label>Score:</label></td>
+									<td><strong>{detailSkill.score}</strong></td>
+									<td><label>Layanan:</label></td>
+									<td><strong>{detailSkill.name}</strong></td>
+								</tr>
+								<tr><td colspan="4"><label>Description:</label></td></tr>
+								<tr>
+									<td colSpan="4">
+										<p>{detailSkill.description}</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
 			}
 		</div>
@@ -189,13 +195,19 @@ RatingAverage = React.createClass
 	getInitialState: ->
 		avgRate: @props.avgRate  
 
+	getDefaultProps: ->
+		heightStyle: null
+
 	generateStar: ->
+		{ heightStyle } = @props
 		{ avgRate } = @state
 		avgRate = if avgRate == null || avgRate == undefined then 0 else avgRate
 		console.log("avgRate", avgRate)
 
+		ratingStyle = if heightStyle then {color: "#00112b", height: heightStyle } else {color: "#00112b"}
+
 		star = (full, half, blank) ->
-			<div className="babysitter-rating" style={color: "#00112b"}>
+			<div className="babysitter-rating" style={ratingStyle}>
 				{	
 					unless full == 0
 						for i in [1..full]

@@ -51,7 +51,7 @@ class UsersController < ApplicationController
 				redirect_to babysitters_path
 			elsif status == "parent_not_finish"
 				redirect_to new_parent_path(mobile: true)
-			elsif status == "babysitter_not_finish"
+			elsif status == "babysitter_not_finish"	
 				redirect_to new_babysitter_path(mobile: true)
 			end	
 		else

@@ -2,12 +2,189 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+
+.babysitter-profile-mobile .body { background-color: #fff; color: #00112b; }
+.babysitter-profile-mobile .body img { border: 2px solid #00112b; border-radius: 50%; width: 100px; height: 100px;}
+.babysitter-profile-mobile .body table.table tbody tr td { border: none !important; padding: 5px !important; }
+.skill-frame { width: 60px; height: 60px; border: 2px solid #00112b; border-radius: 50%; line-height: 60px; cursor: pointer; }
+.skill-frame:hover, .visited { background-color: #00112b; color: #fff; }
+
+.text-big{
+	font-family: Creampuff, sans-serif;
+	font-size: 18px;
+	font-weight: normal;
+}	
+
+.text-middle{
+	font-size: 12px;
+}
+
+.text-small{
+	font-size: 10px;
+}
+
 .babysitter-profile-mobile{
 	background-color: #00112b;
 	color: #fff;
 }
 
-.babysitter-profile-mobile .body { background-color: #fff; color: #00112b; }
-.babysitter-profile-mobile .body img { border: 2px solid #00112b; border-radius: 50%; width: 100px; height: 100px;}
-.babysitter-profile-mobile .body table.table tbody tr td { border: none !important; padding: 5px !important; }
-.skill-frame { width: 60px; height: 60px; border: 2px solid #00112b; border-radius: 50%; line-height: 60px; }
+.profile-mobile{
+	background-color: #00112b;
+	color: #fff;
+	padding: 0px !important;
+
+	.logo{
+		font-family: "creampuff";
+		color: lightblue;
+	}
+
+	.babysitter-rating{
+		height: 40px;
+		padding: 5px 5px 5px 5px;
+	}
+
+	.mainpage-mobile-header{
+		border: 5px solid #fff;
+		padding: 5px 5px 5px 5px;
+	}
+
+	.mainpage-mobile-navbar {
+		background-color: #fff;
+		line-height: 50px;
+		
+		.col-md-5 {
+			cursor: pointer;
+		}
+
+		.active {background-color: #00112b !important;}
+		
+		.menu-frame {
+			text-align: center; line-height: 36px; width: 36px; 
+			background-color: lightblue; border-radius: 50%; margin: 10px 0px 10px 0px; cursor: pointer;}
+
+		i{font-size: 22px; color: #fff;}
+	}
+
+	
+	label{
+		margin-top: -5px;
+	}
+
+	.photo-profile{
+		height: 70px;
+		width: 70px;
+		border: none;
+		margin: 5px 0px 5px 0px;
+	}
+
+	.mainpage-mobile-footer{
+		.col-xs-12, .col-xs-6,  .row{
+			border: 1px solid #fff;
+			font-size: 10px;
+			text-align: left;
+			background-color: #00112b;
+		}
+		
+		tr, th{
+			border: 1px solid #fff;
+			font-size: 10px;
+		}
+
+		button.btn {
+			border-radius: 0px;
+			border: 2px solid #fff;
+			color: #fff;
+			background-color: none;
+		}
+
+		.mainpage-search-filter {
+			margin-bottom: 10px;
+			.form-control { width: 97%; line-height: 25px; font-size: 12px; border-radius: 5px; text-align:right; padding-right: 50px; margin: auto; color: #00112b; margin-bottom: -20px;}
+			
+			.option-filter {background-color: none !important;font-size: 10px !important; border-radius: 0px !important;padding: 3px !important; border: none !important;color: #00112b;margin-bottom: 0px !important;}
+
+			.option {font-size: 24px; margin: 0px 10px 0px 10px; color: lightblue; cursor: pointer;}
+			
+		}
+	}
+
+	.mainpage-list{
+		padding: 10px 5px 10px 5px;
+		background-color: #00112b;
+		height: 500px;
+		overflow-y: visible;
+
+		.parent-row{
+			padding: 5px 5px 5px 5px;
+			border: 2px solid lightblue;
+			margin: 0px 0px 10px 0px;
+			cursor: pointer;
+			font-family: segoe ui;
+			border-radius: 10px;
+			
+
+			.table{
+				max-height: 70px;
+				margin-bottom: 0px !important;;
+			}
+
+			th{
+				border: none;
+			}
+
+			img{
+				width: 60px;
+				height: 60px;
+				border: 2px solid lightblue;
+				border-radius: 50%;
+				margin: auto;
+			}
+
+			.col-xs-3, .col-xs-9{line-height: 60px;}
+			.col-xs-9 {border-left: 1px dashed lightblue !important;}
+			.col-xs-3.parent-list-middle {
+				border-left: 1px dashed lightblue !important;
+				font-size: 12px;
+				label.child-count {font-size: 16px;}
+			}
+
+			table.table thead tr th{ padding: 2px 2px 2px 2px; text-align: right;}
+
+		}
+
+		.not-active {
+			color: lightblue;
+		}
+
+		.active {
+			color: #00112b;
+			background-color: lightblue;
+		}
+
+		.detail-information{
+			padding: 10px 10px 10px 10px;
+			border: 2px solid lightblue;
+			margin: 0px 0px 10px 0px;
+			border-radius: 10px;
+			color: lightblue;
+		}	
+
+		.babysitter-skill-frame{
+			width: 50px;
+			line-height: 50px;
+			border: 2px solid lightblue;
+			border-radius: 50%;
+			margin: 0px 0px 5px 0px;
+			cursor: pointer;
+
+			i{font-size: 20px;}
+		}
+
+		.detail-skill{
+			border-top: 2px dashed lightblue;
+			padding: 10px 10px 5px 10px;
+			color: lightblue;
+		}
+
+	}
+}

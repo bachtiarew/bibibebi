@@ -65,7 +65,7 @@ class User < ActiveRecord::Base
 	def has_finish_user?
 		if self.role == "babysitter"
 			self.user_complete? && self.has_babysitter? ? "babysitter_finish" : "babysitter_not_finish"
-		elsif 
+		elsif self.role == "parent"
 			self.user_complete? && self.has_parent? ? "parent_finish" : "parent_not_finish"
 		end
 	end
