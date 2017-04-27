@@ -6,6 +6,7 @@ ProfileMobile = React.createClass
 		babysitter: ProfileMobileStore.babysitter
 		iconSkills: ProfileMobileStore.iconSkills
 		skillChoosed: ProfileMobileStore.skillChoosed
+		kidChoosed: ProfileMobileStore.kidChoosed
 		navbarUrl: ProfileMobileStore.navbarUrl
 
 	componentDidMount: ->
@@ -20,6 +21,7 @@ ProfileMobile = React.createClass
 			parent: ProfileMobileStore.parent
 			babysitter: ProfileMobileStore.babysitter
 			skillChoosed: ProfileMobileStore.skillChoosed
+			kidChoosed: ProfileMobileStore.kidChoosed
 		)
 
 	onClickSkillChoosed: (skill) ->
@@ -139,10 +141,47 @@ ProfileMobile = React.createClass
 						</div>
 					</div>
 				</div>
+				<ProfileMobileActionButton />
 			</div>
 		</div>
 
-	parentDisplay: ->
+	parentDisplay: ->	
+		{ parent } = @state
+		{ pictures, firstname, lastname, gender, age, phone_number, address, description , bornplace, borndate, price } = parent
+
+		<div id="profile-mobile" className="container text-center profile-mobile">
+			<h4 className="logo">Bibibebi</h4>
+			<div className="mainpage-mobile-navbar">
+				<div className="row">
+					<div className="col-xs-2 col-xs-offset-1">
+						<div className="menu-frame">
+							<i className="fa fa-home" />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame active">
+							<i className="fa fa-user" />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame">
+							<i className="fa fa-book" />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame">
+							<i className="fa fa-shopping-cart" />
+						</div>
+					</div>
+					<div className="col-xs-2">
+						<div className="menu-frame">
+							<i className="fa fa-commenting" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
 
 	render: ->
 		{ currentUser } = @state
@@ -152,5 +191,16 @@ ProfileMobile = React.createClass
 
 		else if currentUser.role == "parent"
 			@parentDisplay()
+
+ProfileMobileActionButton = React.createClass
+	
+	render: ->
+		<div className="row profile-mobile-action-button">
+			<div className="col-xs-12">
+				<i className="fa fa-edit fa-2x" />
+				<i className="fa fa-lock fa-2x" />
+			</div>
+		</div>
+
 
 window.ProfileMobile = ProfileMobile		

@@ -10,6 +10,7 @@ class ParentsController < ApplicationController
 			@user = current_user
 			@babysitters = Babysitter.all
 		else
+			@user = current_user
 			@parent = current_user.ortu
 			@babysitters = Babysitter.all
 		end

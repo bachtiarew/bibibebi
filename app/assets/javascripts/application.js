@@ -19,6 +19,7 @@
 //= require lodash
 //= require classnames
 //= require flux
+//= require d3
 //= require fbemitter
 //= require react
 //= require react_ujs
@@ -47,5 +48,7 @@
 //= require components/Babysitter/attachment_form
 //= require components/Babysitter/key_generator
 //= require components/Babysitter/babysitter_profile_mobile
+//
+//= require components/Admin/admin_graph
 //
 //= require_tree .

@@ -7,6 +7,7 @@ window.ProfileMobileStore = _.assign(new EventEmitter(), {
 	parent: {}
 	babysitter: {}
 	skillChoosed: {}
+	kidChoosed: {}
 	iconSkills : [
 		{id: 5, icon: "fa fa-hourglass-end"},
 		{id: 6, icon: "fa fa-diamond"},

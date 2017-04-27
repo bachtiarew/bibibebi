@@ -268,7 +268,7 @@ MainpageMobile = React.createClass
 			url = if indexNavbar == 1 then navbarUrl.babysitter[indexNavbar] + babysitter.id + "?mobile=true" else navbar.babysitter[indexNavbar]
 		else if currentUser.role == "parent"
 			url = if indexNavbar == 1 then navbarUrl.parent[indexNavbar] + parent.id + "?mobile=true" else navbarUrl.parent[indexNavbar]
-
+		console.log("url", url)
 		window.location = url
 
 	render: ->
