@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   post "homepages/copas"
   post '/rate' => 'rater#create', as: 'rate'
   namespace :admins do
+    resources :graphs
     resources :skills
   end
 

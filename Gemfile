@@ -50,7 +50,9 @@ gem 'classnames-rails'
 # Authorization
 gem 'pundit'
 
-
+#use for graph
+# gem "d3js-rails"
+gem "d3-rails"
 # form handle
 gem 'simple_form'
 gem 'nested_form'
